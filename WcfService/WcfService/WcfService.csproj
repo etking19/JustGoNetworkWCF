@@ -95,10 +95,19 @@
     <Compile Include="AjaxService.svc.cs">
       <DependentUpon>AjaxService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ErrorCodes.cs" />
+    <Compile Include="Helper\Admins.cs" />
+    <Compile Include="Helper\Companies.cs" />
+    <Compile Include="Helper\Countries.cs" />
+    <Compile Include="Helper\General.cs" />
+    <Compile Include="Helper\Roles.cs" />
+    <Compile Include="Helper\States.cs" />
     <Compile Include="IAjaxService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\UtilNotification.cs" />
+    <Compile Include="Utility\UtilSms.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

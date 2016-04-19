@@ -1,10 +1,328 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Net;
+using System.ServiceModel.Web;
+using WcfService.Helper;
 
 namespace WcfService
 {
     public class AjaxService : IAjaxService
     {
+        public string AddAdmin(string username, string displayName, int companyId, int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddCompany(string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddCountry(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddDriver(string username, string displayName, string mykad)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddFleetType(string name, int capacity, string design)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddJob(string customerName, string customerContact, string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2, string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude, string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2, string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude, string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddJobPartner(string customerName, string customerContact, string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2, string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude, string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2, string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude, string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddRating(int jobId, float score)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddRole(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddState(int countryId, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AssignJob(int jobId, int deliveryCompanyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AssignJobPartner(int jobId, string driverUsername)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ChangePassword(string oldPassword, string newPassword)
+        {
+            IncomingWebRequestContext request = WebOperationContext.Current.IncomingRequest;
+            WebHeaderCollection headers = request.Headers;
+
+            string[] authentication = headers["Authorization"].Split(':');
+            if(authentication.Length != 2)
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EAuthenticationFormatErr });
+            }
+
+            int permission;
+            int result = Utils.ValidateToken(authentication[0], authentication[1], out permission);
+            if (result != ErrorCodes.ESuccess)
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = result });
+            }
+
+            return new General().ChangePassword(authentication[0], oldPassword, newPassword);
+        }
+
+        public string DeleteAdmin(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteAdmins(string[] usernames)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteCountries(int[] countryIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteCountry(int countryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteFleet(string identifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteFleets(string[] identifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteFleetType(int fleetId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteFleetTypes(int[] fleetIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteJob(int jobId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteJobs(int[] jobIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteState(int stateId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteStates(int[] stateIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditAdmin(string username, string displayName, int companyId, int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditCompany(int companyId, string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditCountry(int countryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditDriver(string username, string displayName, string mykad)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditFleetType(int fleetId, string name, int capacity, string design)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditJob(int jobId, string customerName, string customerContact, string pickupCustomerName, 
+            string pickupCustomerContact, string pickupAdd1, string pickupAdd2, string pickupPoscode, int pickupStateId, 
+            int pickupCountryId, float pickupLongitude, float pickupLatitude, string deliverCustomerName, string deliverCustomerContact, 
+            string deliverAdd1, string deliverAdd2, string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, 
+            float deliverLatitude, string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditRole(int roleId, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditState(int stateId, int countryId, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetAdmins()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetCompanies()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetCountries()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDeliveryErrorsEle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDrivers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetFleets()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetFleetTypes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetJobsPartner(Constants.EJobStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetLastTrackingPos(string driverUsername)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetLastTrackingPosbyList(string[] driverUsername)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPermissions()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPickUpErrorsEle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetRole(int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetRoles()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetStates(int countryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Login(string username, string password)
+        {
+            return new General().Login(username, password);
+        }
+
+        public string RemoveCompanies(int[] companyIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string RemoveCompany(int companyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string RemoveDriver(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string RemoveDrivers(string[] usernames)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string RemoveRole(int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string RemoveRoles(int[] roleIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResetPassword(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResetRating(string username)
+        {
+            throw new NotImplementedException();
+        }
+
         public string Test()
         {
             try
@@ -22,203 +340,109 @@ namespace WcfService
             return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success=true, ErrorCode = ErrorCodes.ESuccess });
         }
 
-        public string AddAsset(string adminId, string token, string assetName, string regNum, string capacity, string roadTax)
+        public string UpdateDeliveryOrder(int jobId, string base64DO)
         {
             throw new NotImplementedException();
         }
 
-        public string AddCompany(string adminId, string token, string name, string contact, string website, string description)
+        public string UpdateJobDeliveryError(int jobId, Constants.DeliveryError deliveryError)
         {
             throw new NotImplementedException();
         }
 
-        public string AddCompanyAdmin(string adminId, string token, string companyId, string username, string password, string email)
+        public string UpdateJobPickUpError(int jobId, Constants.PickUpError pickupError)
         {
             throw new NotImplementedException();
         }
 
-        public string AddJob(string adminId, string token, string customerName, string contactNum, string description, string destLongitude, string destLatitude, string add1, string add2, string add3, string poscode, int state, string deliveryDate, string deliveryTime, float quotation, bool cashOnDelivery, int assistance, int userId)
+        public string UpdateJobStatus(int jobId, Constants.EJobStatus jobStatus)
         {
             throw new NotImplementedException();
         }
 
-        public string AddUser(string adminId, string token, string firstName, string lastName, string position, int gender, string contactNum, string dob, int assetId)
+        public string UpdateJobStatusRemarks(int jobId, string remarks)
         {
             throw new NotImplementedException();
         }
 
-        public string ChangePassword(string adminId, string token, string oldPassword, string newPassword)
+        public string UpdateLocation(string username, float longitude, float latitude, float speed)
         {
             throw new NotImplementedException();
         }
+        /*
+       public string Login(string username, string password)
+       {
+           try
+           {
+               MySqlCommand command = new MySqlCommand("SELECT * FROM masteradmins where username=@0 and password=@1");
+               command.Parameters.AddWithValue("@0", username);
+               command.Parameters.AddWithValue("@1", password);
 
-        public string EditAsset(string adminId, string token, string assetId, string assetName, string regNum, string capacity, string roadTax)
-        {
-            throw new NotImplementedException();
-        }
+               MySqlDataReader reader = Utils.PerformSqlQuery(command);
+               if (reader.Read())
+               {
+                   int adminId = (int)reader["id"];
+                   int permission = (int)reader["permission"];
+                   string usernameRet = (string)reader["username"];
 
-        public string EditCompany(string adminId, string token, string companyId, string name, string contact, string website, string description)
-        {
-            throw new NotImplementedException();
-        }
+                   // generate the token for this user
+                   string newToken = Guid.NewGuid().ToString();
+                   string newValidity = Utils.GetCurrentUtcTime(1);
 
-        public string EditJob(string adminId, string token, string jobId, string customerName, string contactNum, string description, string destLongitude, string destLatitude, string add1, string add2, string add3, string poscode, int state, string deliveryDate, string deliveryTime, float quotation, bool cashOnDelivery, int assistance, int userId)
-        {
-            throw new NotImplementedException();
-        }
+                   // update token and validity
+                   MySqlCommand tokenCommand = new MySqlCommand("UPDATE masteradmins SET validity=@0, token=@1 where id=@2");
+                   tokenCommand.Parameters.AddWithValue("@0", newValidity);
+                   tokenCommand.Parameters.AddWithValue("@1", newToken);
+                   tokenCommand.Parameters.AddWithValue("@2", adminId);
+                   Utils.PerformSqlNonQuery(tokenCommand);
 
-        public string EditUser(string adminId, string token, string userId, string firstName, string lastName, string position, int gender, string contactNum, string dob, int assetId)
-        {
-            throw new NotImplementedException();
-        }
+                   Utils.CleanUp(reader, command);
+                   return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, ErrorCode = ErrorCodes.ESuccess,
+                       Payload = new Constants.AdminInfo() {
+                           AdminId = adminId,
+                           Permission = permission,
+                           Token = newToken,
+                           Username = usernameRet
+                       }
+                   });
 
-        public string GetAssets(string adminId, string token)
-        {
-            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success=true, ErrorCode = ErrorCodes.ESuccess, Payload = new Constants.Asset() { Name="test name", Capacity="10 tonne", RegNum="AAA123", RoadTaxExpiry="21 Mar 2016"} });
-        }
+               }
+           }
+           catch (Exception ex)
+           {
+               return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EGeneralError, ErrorMessage=ex.Message });
+           }
 
-        public string GetCompanies(string adminId, string token)
-        {
-            throw new NotImplementedException();
-        }
+           return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginCredential, ErrorMessage = "Failed to login" });
+       }
 
-        public string GetJobs(string adminId, string token)
-        {
-            throw new NotImplementedException();
-        }
+       public string UpdateLocation(string userId, float longitude, float latitude, float speed)
+       {
+           //TODO: get the asset id own by this driver today
+           // -1 if no asset assigned
+           try
+           {
+               MySqlCommand command = new MySqlCommand("INSERT into tracking_data (driver_id, longitude, latitude, speed, asset_id, creation_date) values (@driver_id, @longitude, @latitude, @speed, @asset_id, @creation_date)");
+               command.Parameters.AddWithValue("@driver_id", userId);
+               command.Parameters.AddWithValue("@longitude", longitude);
+               command.Parameters.AddWithValue("@latitude", latitude);
+               command.Parameters.AddWithValue("@speed", speed);
+               command.Parameters.AddWithValue("@asset_id", 888888);        // TODO:
+               command.Parameters.AddWithValue("@creation_date", Utils.GetCurrentUtcTime(0));
 
-        public string GetLastTrackingPos(string adminId, string token, string userId)
-        {
-            throw new NotImplementedException();
-        }
+               Utils.PerformSqlNonQuery(command);
+           }
+           catch (Exception ex)
+           {
+               return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EGeneralError, ErrorMessage = ex.Message });
+           }
 
-        public string GetLastTrackingPosbyList(string adminId, string token, string[] userIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetTasks(string userId, string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetUsers(string adminId, string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Login(string username, string password)
-        {
-            try
-            {
-                MySqlCommand command = new MySqlCommand("SELECT * FROM masteradmins where username=@0 and password=@1");
-                command.Parameters.AddWithValue("@0", username);
-                command.Parameters.AddWithValue("@1", password);
-
-                MySqlDataReader reader = Utils.PerformSqlQuery(command);
-                if (reader.Read())
-                {
-                    int adminId = (int)reader["id"];
-
-
-                    // generate the token for this user
-                    string newToken = Guid.NewGuid().ToString();
-                    string newValidity = Utils.GetCurrentUtcTime(1);
-
-                    // update token and validity
-                    MySqlCommand tokenCommand = new MySqlCommand("UPDATE masteradmins SET validity=@0, token=@1 where id=@2");
-                    tokenCommand.Parameters.AddWithValue("@0", newValidity);
-                    tokenCommand.Parameters.AddWithValue("@1", newToken);
-                    tokenCommand.Parameters.AddWithValue("@2", adminId);
-                    Utils.PerformSqlNonQuery(tokenCommand);
-
-                    return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, ErrorCode = ErrorCodes.ESuccess,
-                        Payload = new Constants.AdminInfo() {
-                            AdminId = adminId,
-                            Permission = (int)reader["permission"],
-                            Token = newToken,
-                            Username = (string)reader["username"]
-                        }
-                    });
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EGeneralError, ErrorMessage=ex.Message });
-            }
-
-            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginCredential, ErrorMessage = "Failed to login" });
-        }
-
-        public string RemoveAsset(string adminId, string token, string assetId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveAssets(string adminId, string token, string[] assetIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveCompanies(string adminId, string token, string[] companyIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveCompany(string adminId, string token, string companyId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveCompanyAdmin(string adminId, string token, string companyAdminId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveCompanyAdmins(string adminId, string token, string[] companyAdminIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveJob(string adminId, string token, string jobId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveJobs(string adminId, string token, string[] jobIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveUser(string adminId, string token, string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveUsers(string adminId, string token, string[] userIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string ResetPassword(string adminId, string token, string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UpdateDevOrder(string userId, string token, string taskId, string orderBase64)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UpdateLocation(string userId, string longitude, string latitude)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UpdateTask(string userId, string token, string taskId, int status)
-        {
-            throw new NotImplementedException();
-        }
+           return Constants.sJavaScriptSerializer.Serialize(new Constants.Result()
+           {
+               Success = true,
+               ErrorCode = ErrorCodes.ESuccess
+           });
+       }
+       */
     }
 }

@@ -32,7 +32,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/21/2016 19:42:47</publishTime>
     </File>
     <File Include="bin/WcfService.dll">
-      <publishTime>03/21/2016 19:52:13</publishTime>
+      <publishTime>03/29/2016 19:22:48</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>03/21/2016 19:42:48</publishTime>

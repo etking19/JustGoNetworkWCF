@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
+﻿using System.ServiceModel;
 
 namespace WcfService
 {
@@ -19,71 +13,121 @@ namespace WcfService
         */
         [OperationContract]
         string Login(string username, string password);
-        [OperationContract]
-        string ChangePassword(string adminId, string token, string oldPassword, string newPassword);
+        string ChangePassword(string oldPassword, string newPassword);
+        string ResetPassword(string username);
 
         /*
-        Asset management functions
+        Fleet management functions
         */
-        [OperationContract]
-        string GetAssets(string adminId, string token);
-        string AddAsset(string adminId, string token, string assetName, string regNum, string capacity, string roadTax);
-        string EditAsset(string adminId, string token, string assetId, string assetName, string regNum, string capacity, string roadTax);
-        string RemoveAsset(string adminId, string token, string assetId);
-        string RemoveAssets(string adminId, string token, string[] assetIds);
+        string GetFleets();
+        string AddFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate);
+        string EditFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate);
+        string DeleteFleet(string identifier);
+        string DeleteFleets(string[] identifier);
 
         /*
         User/Driver management functions
         */
-        string GetUsers(string adminId, string token);
-        string AddUser(string adminId, string token, string firstName, string lastName,
-            string position, int gender, string contactNum, string dob, int assetId);
-        string EditUser(string adminId, string token, string userId, string firstName, string lastName,
-            string position, int gender, string contactNum, string dob, int assetId);
-        string RemoveUser(string adminId, string token, string userId);
-        string RemoveUsers(string adminId, string token, string[] userIds);
+        string GetDrivers();
+        string AddDriver(string username, string displayName, string mykad);
+        string EditDriver(string username, string displayName, string mykad);
+        string RemoveDriver(string username);
+        string RemoveDrivers(string[] usernames);
+
+        string ResetRating(string username);
 
         /*
         Job management functions
         */
-        string GetJobs(string adminId, string token);
-        string AddJob(string adminId, string token, string customerName, string contactNum, string description,
-            string destLongitude, string destLatitude, string add1, string add2, string add3, string poscode, int state,
-            string deliveryDate, string deliveryTime, float quotation, bool cashOnDelivery, int assistance, int userId);
-        string EditJob(string adminId, string token, string jobId, string customerName, string contactNum, string description,
-            string destLongitude, string destLatitude, string add1, string add2, string add3, string poscode, int state,
-            string deliveryDate, string deliveryTime, float quotation, bool cashOnDelivery, int assistance, int userId);
-        string RemoveJob(string adminId, string token, string jobId);
-        string RemoveJobs(string adminId, string token, string[] jobIds);
+        string GetJobsPartner(Constants.EJobStatus status);
+        string AddJobPartner(string customerName, string customerContact,
+            string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2, 
+            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
+            string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2, 
+            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
+            string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks);
+        string EditJob(int jobId, string customerName, string customerContact,
+            string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2,
+            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
+            string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2,
+            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
+            string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks);
+        string DeleteJob(int jobId);
+        string DeleteJobs(int[] jobIds);
+
+        string AssignJobPartner(int jobId, string driverUsername);
 
         /*
         GPS tracking functions
         */
-        string GetLastTrackingPos(string adminId, string token, string userId);
-        string GetLastTrackingPosbyList(string adminId, string token, string[] userIds);
+        string GetLastTrackingPos(string driverUsername);
+        string GetLastTrackingPosbyList(string[] driverUsername);
 
         /*
         Master admin functions
         */
-        string GetCompanies(string adminId, string token);
-        string AddCompany(string adminId, string token, string name, string contact, string website, string description);
-        string EditCompany(string adminId, string token, string companyId, string name, string contact, string website, string description);
-        string RemoveCompany(string adminId, string token, string companyId);
-        string RemoveCompanies(string adminId, string token, string[] companyIds);
+        string GetCountries();
+        string AddCountry(string name);
+        string EditCountry(int countryId);
+        string DeleteCountry(int countryId);
+        string DeleteCountries(int[] countryIds);
 
-        string AddCompanyAdmin(string adminId, string token, string companyId, string username, string password, string email);
-        string RemoveCompanyAdmin(string adminId, string token, string companyAdminId);
-        string RemoveCompanyAdmins(string adminId, string token, string[] companyAdminIds);
+        string GetStates(int countryId);
+        string AddState(int countryId, string name);
+        string EditState(int stateId, int countryId, string name);
+        string DeleteState(int stateId);
+        string DeleteStates(int[] stateIds);
 
-        string ResetPassword(string adminId, string token, string username);
+        string GetFleetTypes();
+        string AddFleetType(string name, int capacity, string design);
+        string EditFleetType(int fleetId, string name, int capacity, string design);
+        string DeleteFleetType(int fleetId);
+        string DeleteFleetTypes(int[] fleetIds);
+
+        string GetCompanies();
+        string AddCompany(string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm);
+        string EditCompany(int companyId, string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm);
+        string RemoveCompany(int companyId);
+        string RemoveCompanies(int[] companyIds);
+
+        string GetRoles();
+        string GetPermissions();
+        string AddRole(string name);
+        string EditRole(int roleId, string name);
+        string RemoveRole(int roleId);
+        string RemoveRoles(int[] roleIds);
+
+        string GetAdmins();
+        string AddAdmin(string username, string displayName, int companyId, int roleId);
+        string EditAdmin(string username, string displayName, int companyId, int roleId);
+        string DeleteAdmin(string username);
+        string DeleteAdmins(string[] usernames);
 
         /*
         Client app functions
         */
-        string GetTasks(string userId, string token);
-        string UpdateTask(string userId, string token, string taskId, int status);
-        string UpdateDevOrder(string userId, string token, string taskId, string orderBase64);
+        string GetPickUpErrorsEle();
+        string GetDeliveryErrorsEle();
+        
+        string UpdateJobStatus(int jobId, Constants.EJobStatus jobStatus);
+        string UpdateJobPickUpError(int jobId, Constants.PickUpError pickupError);
+        string UpdateJobDeliveryError(int jobId, Constants.DeliveryError deliveryError);
+        string UpdateJobStatusRemarks(int jobId, string remarks);
+        string UpdateDeliveryOrder(int jobId, string base64DO);
+        string AddRating(int jobId, float score);
 
-        string UpdateLocation(string userId, string longitude, string latitude);
+        string UpdateLocation(string username, float longitude, float latitude, float speed);
+
+        /*
+        For future customer / Master admin
+        */
+        string AddJob(string customerName, string customerContact,
+            string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2,
+            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
+            string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2,
+            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
+            string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks);
+
+        string AssignJob(int jobId, int deliveryCompanyId);
     }
 }
