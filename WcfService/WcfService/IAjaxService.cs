@@ -70,6 +70,7 @@ namespace WcfService
         /*
         Master admin functions
         */
+        // --------- coutries ------
         [OperationContract]
         string GetCountries();
 
@@ -85,36 +86,72 @@ namespace WcfService
         [OperationContract]
         string DeleteCountries(int[] countryIds);
 
+        // --------- states ------
+        [OperationContract]
         string GetStates(int countryId);
+
+        [OperationContract]
         string AddState(int countryId, string name);
+
+        [OperationContract]
         string EditState(int stateId, int countryId, string name);
+
+        [OperationContract]
         string DeleteState(int stateId);
+
+        [OperationContract]
         string DeleteStates(int[] stateIds);
 
+        // --------- fleet types ------
+        [OperationContract]
         string GetFleetTypes();
+
+        [OperationContract]
         string AddFleetType(string name, int capacity, string design);
+
+        [OperationContract]
         string EditFleetType(int fleetId, string name, int capacity, string design);
+
+        [OperationContract]
         string DeleteFleetType(int fleetId);
+
+        [OperationContract]
         string DeleteFleetTypes(int[] fleetIds);
 
+        // --------- companies ------
+        [OperationContract]
         string GetCompanies();
+
+        [OperationContract]
+        string EnableCompany(int companyId, bool enabled);
+
+        [OperationContract]
         string AddCompany(string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm);
+
+        [OperationContract]
         string EditCompany(int companyId, string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm);
+
+        [OperationContract]
         string RemoveCompany(int companyId);
+
+        [OperationContract]
         string RemoveCompanies(int[] companyIds);
 
+        // --------- users ------
+        [OperationContract]
         string GetRoles();
-        string GetPermissions();
-        string AddRole(string name);
-        string EditRole(int roleId, string name);
-        string RemoveRole(int roleId);
-        string RemoveRoles(int[] roleIds);
 
-        string GetAdmins();
-        string AddAdmin(string username, string displayName, int companyId, int roleId);
-        string EditAdmin(string username, string displayName, int companyId, int roleId);
-        string DeleteAdmin(string username);
-        string DeleteAdmins(string[] usernames);
+        [OperationContract]
+        string GetUsers();
+
+        [OperationContract]
+        string EnableUser(int userId, bool enabled);
+
+        [OperationContract]
+        string AddUser(string username, string displayName, int[] permissions, int companyId);
+
+        [OperationContract]
+        string EditUser(int userId, string displayName, int[] permissions, int companyId);
 
         /*
         Client app functions

@@ -13,14 +13,13 @@ namespace WcfService.Helper
         {
             try
             {
-                string passwordOut;
-                Constants.Admin adminObj = new Admins().GetAdmin(username, out passwordOut);
+                Constants.User adminObj = new Users().GetUsersList().Find(x => x.Username == username);
                 if(adminObj == null)
                 {
                     return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginCredential });
                 }
 
-                if(String.Compare(passwordOut, password) != 0)
+                if(String.Compare(adminObj.Password, password) != 0)
                 {
                     return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginCredential });
                 }
@@ -30,10 +29,8 @@ namespace WcfService.Helper
                     return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended });
                 }
 
-                if(adminObj.Company.Enabled == false)
-                {
-                    return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended });
-                }
+                // TODO: check if user's company disabled
+
 
                 // generate the token for this user
                 string newToken = Guid.NewGuid().ToString();
@@ -54,6 +51,7 @@ namespace WcfService.Helper
                 // update the object
                 adminObj.Token = newToken;
                 adminObj.TokenValidity = newValidity;
+                adminObj.Password = "";
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, ErrorCode = ErrorCodes.ESuccess, Payload = adminObj });
             }
             catch (Exception ex)
@@ -67,9 +65,8 @@ namespace WcfService.Helper
             try
             {
                 // verify the old password
-                string passwordOut;
-                Constants.Admin adminObj = new Admins().GetAdmin(username, out passwordOut);
-                if(String.Compare(passwordOut, oldPassword) != 0)
+                Constants.User adminObj = new Users().GetUsersList().Find(x => x.Username == username);
+                if (String.Compare(adminObj.Password, oldPassword) != 0)
                 {
                     return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginOldPWNotMatched });
                 }
@@ -100,6 +97,11 @@ namespace WcfService.Helper
         {
             try
             {
+                // TODO: check if the account is enabled
+                // TODO: check if the user company is enabled
+
+
+
                 // check if the last request is within time limit
                 Dictionary<string, string> queryParam = new Dictionary<string, string>();
                 queryParam.Add("username", username);

@@ -57,7 +57,7 @@ namespace WcfService
             public int Id;
             public string Name;
             public int Capacity;
-            public string Design;
+            public string Type;
         }
 
         public class Company
@@ -75,22 +75,60 @@ namespace WcfService
 
         public class Role
         {
-            public int Id;
             public string Name;
-            public int Permission;
+            public EPermission Permission;
         }
 
-        public class Admin
+        public class User
         {
+            public int Id;
             public string Username;
+            public string Password;
             public string DisplayName;
-            public Company Company;
-            public Role Role;
             public string Token;
             public string TokenValidity;
             public bool Enabled;
+            public string LastLogin;
+            public string PushIdentifier;
+            public EPermission[] Permissions;
         }
-            
+
+        public class MasterAdmin
+        {
+            public int Id;
+            public int UserId;
+            public User UserObj;
+        }
+
+        public class LorryPartnerAdmin
+        {
+            public int Id;
+            public int UserId;
+            public int CompanyId;
+            public User UserObj;
+            public Company CompanyObj;
+        }
+
+        public class DriverAdmin
+        {
+            public int Id;
+            public int UserId;
+            public int CompanyId;
+            public User UserObj;
+            public Company CompanyObj;
+            public float Rating;
+            public string IdentityCard;
+        }
+
+        public class CorporatePartnerAdmin
+        {
+            public int Id;
+            public int UserId;
+            public int CompanyId;
+            public User UserObj;
+            public Company CompanyObj;
+        }
+
         public class PickUpError
         {
             public int Id;
@@ -114,18 +152,6 @@ namespace WcfService
             public FleetType FleetType;
             public DateTime RoadTaxExpiry;
             public DateTime ServiceDueDate;
-        }
-
-        public class Driver
-        {
-            public string Username;
-            public string DisplayName;
-            public string MyKad;
-            public float Rating;
-            public int JobCompleted;
-            public Company Company;
-            public Fleet Fleet;
-            public bool Enabled;
         }
 
         public class AddressInfo
@@ -159,7 +185,7 @@ namespace WcfService
             public int WorkerAssistance;
             public string Remarks;
 
-            public Driver Driver;
+            public DriverAdmin Driver;
             public float Rating;
 
             public EJobStatus JobStatus;

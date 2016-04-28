@@ -9,11 +9,6 @@ namespace WcfService
 {
     public class AjaxService : IAjaxService
     {
-        public string AddAdmin(string username, string displayName, int companyId, int roleId)
-        {
-            throw new NotImplementedException();
-        }
-
         public string AddCompany(string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm)
         {
             throw new NotImplementedException();
@@ -92,11 +87,6 @@ namespace WcfService
         }
 
         public string DeleteAdmin(string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string DeleteAdmins(string[] usernames)
         {
             throw new NotImplementedException();
         }
@@ -214,11 +204,6 @@ namespace WcfService
         }
 
         public string EditState(int stateId, int countryId, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetAdmins()
         {
             throw new NotImplementedException();
         }
@@ -519,6 +504,31 @@ namespace WcfService
             }
 
             return Constants.EPermission.Users;
+        }
+
+        public string EnableCompany(int companyId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EnableUser(int userId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddUser(string username, string displayName, int[] permissions, int companyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string EditUser(int userId, string displayName, int[] permissions, int companyId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
