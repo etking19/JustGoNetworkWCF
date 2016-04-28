@@ -39,8 +39,17 @@ namespace WcfService.Helper
                 string newToken = Guid.NewGuid().ToString();
                 string newValidity = Utils.GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
 
-                // update token and validity
-                Utils.RefreshToken(username, newToken, newValidity);
+                // update the last login date
+                Dictionary<string, string> destParam = new Dictionary<string, string>();
+                destParam.Add("username", username);
+
+                Dictionary<string, string> updateParams = new Dictionary<string, string>();
+                updateParams.Add("last_login_date", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+                updateParams.Add("token", newToken);
+                updateParams.Add("validity", DateTime.UtcNow.AddHours(Configuration.TOKEN_VALID_HOURS).ToString("yyyy-MM-dd HH:mm:ss"));
+
+                MySqlCommand command = Utils.GenerateEditCmd("admins", updateParams, destParam);
+                Utils.PerformSqlNonQuery(command);
 
                 // update the object
                 adminObj.Token = newToken;
@@ -75,8 +84,8 @@ namespace WcfService.Helper
                 MySqlCommand command = Utils.GenerateEditCmd("admins", updateParams, destParam);
                 Utils.PerformSqlNonQuery(command);
 
-                // send notification to user's phone
-                UtilNotification.SendMessage(username, "Password Changed", "Your password has changed. Please contact administrator if you did not perform the changes.");
+                // send notification
+                UtilSms.SendSms(username, "Just Logistic Berhad.%0A" + "Your password has changed. Please contact administrator if you did not perform this action.");
 
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, ErrorCode = ErrorCodes.ESuccess });
             }
@@ -87,10 +96,24 @@ namespace WcfService.Helper
 
         }
 
-        public string ResetPassword(string username)
+        public string ForgotPassword(string username)
         {
             try
             {
+                // check if the last request is within time limit
+                Dictionary<string, string> queryParam = new Dictionary<string, string>();
+                queryParam.Add("username", username);
+
+                MySqlCommand command = Utils.GenerateQueryCmd("admins", queryParam);
+                using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+                {
+                    TimeSpan ts = DateTime.UtcNow - DateTime.Parse(reader["last_pw_request"].ToString());
+                    if (ts.TotalMinutes < 20)
+                    {
+                        return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPasswordRequestErr, ErrorMessage = "Please request after 20 minutes." });
+                    }
+                }
+
                 // change the new password
                 Dictionary<string, string> destParam = new Dictionary<string, string>();
                 destParam.Add("username", username);
@@ -98,12 +121,13 @@ namespace WcfService.Helper
                 string newPassword = new Random().Next(100000, 999999).ToString();
                 Dictionary<string, string> updateParams = new Dictionary<string, string>();
                 updateParams.Add("password", newPassword);
+                updateParams.Add("last_pw_request", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
 
-                MySqlCommand command = Utils.GenerateEditCmd("admins", updateParams, destParam);
+                command = Utils.GenerateEditCmd("admins", updateParams, destParam);
                 Utils.PerformSqlNonQuery(command);
 
                 // send the updated password to user's phone
-                UtilSms.SendSms(username, "Your new password is " + newPassword + ". Please change the password after login.");
+                UtilSms.SendSms(username, "Just Logistic Berhad.%0A" + "Your new password is: " + newPassword);
 
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, ErrorCode = ErrorCodes.ESuccess });
             }

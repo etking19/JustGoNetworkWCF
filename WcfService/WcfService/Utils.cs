@@ -7,76 +7,6 @@ namespace WcfService
 {
     public class Utils
     {
-        public static string ValidateTokenNPermission(string adminId, string token, int expectedPermission)
-        {
-            int permission;
-            int result = ValidateToken(adminId, token, out permission);
-            if (result != ErrorCodes.ESuccess)
-            {
-                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = result, ErrorMessage = "Fail to login." });
-            }
-
-            if ((permission & (int)expectedPermission) != (int)expectedPermission)
-            {
-                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied, ErrorMessage = "Permission denied" });
-            }
-
-            return String.Empty;
-        }
-
-        public static int ValidateToken(string adminUsername, string token, out int permission)
-        {
-            permission = 0;
-            try
-            {
-                Dictionary<string, string> queryParams = new Dictionary<string, string>();
-                queryParams.Add("username", adminUsername);
-                MySqlCommand command = Utils.GenerateQueryCmd("admins", queryParams);
-                MySqlDataReader reader = Utils.PerformSqlQuery(command);
-
-                int errorCode = 0;
-                if (!reader.Read())
-                {
-                    errorCode = ErrorCodes.ELoginCredential;
-                }
-
-                if((int)reader["enabled"] == 0)
-                {
-                    errorCode = ErrorCodes.ELoginAccSuspended;
-                }
-
-                if(String.Compare((string)reader["token"], token) != 0)
-                {
-                    errorCode = ErrorCodes.ELoginExpired;
-                }
-
-                int result = DateTime.UtcNow.CompareTo(reader["validity"]);
-                if (result > 0)
-                {
-                    errorCode = ErrorCodes.ELoginExpired;
-                }
-
-                if(errorCode != 0)
-                {
-                    return errorCode;
-                }
-
-                // add validity time for token
-                RefreshToken(adminUsername);
-
-                // get the permission
-                permission = new Roles().GetRole((int)reader["role_id"]).Permission;
-                Utils.CleanUp(reader, command);
-
-                return ErrorCodes.ESuccess;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return ErrorCodes.EGeneralError;
-            }
-        }
-
         public static string GetCurrentUtcTime(int hourOffset)
         {
             return DateTime.UtcNow.AddHours(hourOffset).ToString("yyyy-MM-dd HH:mm:ss");
@@ -85,7 +15,7 @@ namespace WcfService
         public static int RefreshToken(string adminUsername, string newtoken, string newValidity)
         {
             // refresh for another hour
-            MySqlCommand tokenCommand = new MySqlCommand("UPDATE admins SET validity=@0 and token=@1 where username=@1");
+            MySqlCommand tokenCommand = new MySqlCommand("UPDATE users SET validity=@0 and token=@1 where username=@2");
             tokenCommand.Parameters.AddWithValue("@0", newValidity);
             tokenCommand.Parameters.AddWithValue("@1", newtoken);
             tokenCommand.Parameters.AddWithValue("@2", adminUsername);
@@ -98,7 +28,7 @@ namespace WcfService
             string newValidity = GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
 
             // refresh for another hour
-            MySqlCommand tokenCommand = new MySqlCommand("UPDATE admins SET validity=@0 where username=@1");
+            MySqlCommand tokenCommand = new MySqlCommand("UPDATE users SET validity=@0 where username=@1");
             tokenCommand.Parameters.AddWithValue("@0", newValidity);
             tokenCommand.Parameters.AddWithValue("@1", adminUsername);
 
@@ -131,6 +61,12 @@ namespace WcfService
         {
             reader.Close();
             command.Connection.Close();
+        }
+
+        public static MySqlCommand GenerateQueryCmd(string tableName)
+        {
+            string query = string.Format("SELECT * FROM {0}", tableName);
+            return new MySqlCommand(query);
         }
 
         public static MySqlCommand GenerateQueryCmd(string tableName, Dictionary<string, string> queryParam)

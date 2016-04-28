@@ -18,6 +18,6 @@ namespace WcfService
         public static int ELoginPermissionDenied = 202;
         public static int ELoginAccSuspended = 203;
         public static int ELoginOldPWNotMatched = 204;
-
+        public static int ELoginPasswordRequestErr = 205;
     }
 }

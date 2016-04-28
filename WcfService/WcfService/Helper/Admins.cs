@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Utility;
 
 namespace WcfService.Helper
 {
@@ -91,7 +92,26 @@ namespace WcfService.Helper
 
         public string AddAdmin(string username, string displayName, int companyId, int roleId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Dictionary<string, string> destParam = new Dictionary<string, string>();
+                destParam.Add("username", username);
+                destParam.Add("display_name", displayName);
+                destParam.Add("company_id", companyId.ToString());
+                destParam.Add("role_id", roleId.ToString());
+
+                MySqlCommand command = Utils.GenerateAddCmd(sDatabaseName, destParam);
+                Utils.PerformSqlNonQuery(command);
+
+                // TODO: send notification to user's phone
+                UtilNotification.SendMessage(username, "Account created", "New account created. Your password is: ");
+
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, ErrorCode = ErrorCodes.ESuccess });
+            }
+            catch (Exception ex)
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EGeneralError, ErrorMessage = ex.Message });
+            }
         }
 
         public string EditAdmin(string username, string displayName, int companyId, int roleId)

@@ -14,31 +14,31 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/14/2016 18:07:20</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
-      <publishTime>02/10/2015 23:05:26</publishTime>
+      <publishTime>10/02/2015 23:05:26</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF5.dll">
-      <publishTime>02/10/2015 23:05:09</publishTime>
+      <publishTime>10/02/2015 23:05:09</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF6.dll">
-      <publishTime>02/10/2015 23:05:30</publishTime>
+      <publishTime>10/02/2015 23:05:30</publishTime>
     </File>
     <File Include="bin/MySql.Fabric.Plugin.dll">
-      <publishTime>02/10/2015 23:05:13</publishTime>
+      <publishTime>10/02/2015 23:05:13</publishTime>
     </File>
     <File Include="bin/MySql.Web.dll">
-      <publishTime>02/10/2015 23:05:28</publishTime>
+      <publishTime>10/02/2015 23:05:28</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>03/21/2016 19:42:47</publishTime>
     </File>
     <File Include="bin/WcfService.dll">
-      <publishTime>03/29/2016 19:22:48</publishTime>
+      <publishTime>04/28/2016 12:33:18</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>03/21/2016 19:42:48</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/21/2016 19:33:11</publishTime>
+      <publishTime>04/28/2016 12:33:19</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Web;
 using WcfService.Helper;
@@ -20,7 +21,13 @@ namespace WcfService
 
         public string AddCountry(string name)
         {
-            throw new NotImplementedException();
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Countries().AddCountry(name);
         }
 
         public string AddDriver(string username, string displayName, string mykad)
@@ -75,23 +82,13 @@ namespace WcfService
 
         public string ChangePassword(string oldPassword, string newPassword)
         {
-            IncomingWebRequestContext request = WebOperationContext.Current.IncomingRequest;
-            WebHeaderCollection headers = request.Headers;
-
-            string[] authentication = headers["Authorization"].Split(':');
-            if(authentication.Length != 2)
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                (checkAuthentication() < Constants.EPermission.Users))
             {
-                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EAuthenticationFormatErr });
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
 
-            int permission;
-            int result = Utils.ValidateToken(authentication[0], authentication[1], out permission);
-            if (result != ErrorCodes.ESuccess)
-            {
-                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = result });
-            }
-
-            return new General().ChangePassword(authentication[0], oldPassword, newPassword);
+            return new General().ChangePassword(getUsernameFromAuth(), oldPassword, newPassword);
         }
 
         public string DeleteAdmin(string username)
@@ -106,12 +103,24 @@ namespace WcfService
 
         public string DeleteCountries(int[] countryIds)
         {
-            throw new NotImplementedException();
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Countries().DeleteCountries(countryIds);
         }
 
         public string DeleteCountry(int countryId)
         {
-            throw new NotImplementedException();
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Countries().DeleteCountry(countryId);
         }
 
         public string DeleteFleet(string identifier)
@@ -164,9 +173,15 @@ namespace WcfService
             throw new NotImplementedException();
         }
 
-        public string EditCountry(int countryId)
+        public string EditCountry(int countryId, string name)
         {
-            throw new NotImplementedException();
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Countries().EditCountry(countryId, name);
         }
 
         public string EditDriver(string username, string displayName, string mykad)
@@ -215,7 +230,13 @@ namespace WcfService
 
         public string GetCountries()
         {
-            throw new NotImplementedException();
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Countries().GetCountries();
         }
 
         public string GetDeliveryErrorsEle()
@@ -313,9 +334,9 @@ namespace WcfService
             throw new NotImplementedException();
         }
 
-        public string ResetPassword(string username)
+        public string ForgotPassword(string username)
         {
-            throw new NotImplementedException();
+            return new General().ForgotPassword(username);
         }
 
         public string ResetRating(string username)
@@ -325,6 +346,12 @@ namespace WcfService
 
         public string Test()
         {
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Constants.sConnectionString))
@@ -369,80 +396,129 @@ namespace WcfService
         {
             throw new NotImplementedException();
         }
-        /*
-       public string Login(string username, string password)
-       {
-           try
-           {
-               MySqlCommand command = new MySqlCommand("SELECT * FROM masteradmins where username=@0 and password=@1");
-               command.Parameters.AddWithValue("@0", username);
-               command.Parameters.AddWithValue("@1", password);
 
-               MySqlDataReader reader = Utils.PerformSqlQuery(command);
-               if (reader.Read())
-               {
-                   int adminId = (int)reader["id"];
-                   int permission = (int)reader["permission"];
-                   string usernameRet = (string)reader["username"];
+        private string getUsernameFromAuth()
+        {
+            IncomingWebRequestContext request = WebOperationContext.Current.IncomingRequest;
+            WebHeaderCollection headers = request.Headers;
 
-                   // generate the token for this user
-                   string newToken = Guid.NewGuid().ToString();
-                   string newValidity = Utils.GetCurrentUtcTime(1);
+            string[] authentication = headers["Authorization"].Split(':');
+            return authentication[0];
+        }
 
-                   // update token and validity
-                   MySqlCommand tokenCommand = new MySqlCommand("UPDATE masteradmins SET validity=@0, token=@1 where id=@2");
-                   tokenCommand.Parameters.AddWithValue("@0", newValidity);
-                   tokenCommand.Parameters.AddWithValue("@1", newToken);
-                   tokenCommand.Parameters.AddWithValue("@2", adminId);
-                   Utils.PerformSqlNonQuery(tokenCommand);
+        private Constants.EPermission checkAuthentication()
+        {
+            IncomingWebRequestContext request = WebOperationContext.Current.IncomingRequest;
+            WebHeaderCollection headers = request.Headers;
 
-                   Utils.CleanUp(reader, command);
-                   return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, ErrorCode = ErrorCodes.ESuccess,
-                       Payload = new Constants.AdminInfo() {
-                           AdminId = adminId,
-                           Permission = permission,
-                           Token = newToken,
-                           Username = usernameRet
-                       }
-                   });
+            string[] authentication = headers["Authorization"].Split(':');
+            if (authentication.Length != 2)
+            {
+                throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EAuthenticationFormatErr, ErrorMessage = "Expected header Authentication in correct format {username}:{token}" }));
+            }
 
-               }
-           }
-           catch (Exception ex)
-           {
-               return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EGeneralError, ErrorMessage=ex.Message });
-           }
+            string username = authentication[0];
+            string token = authentication[1];
 
-           return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginCredential, ErrorMessage = "Failed to login" });
-       }
+            // validate the username and token
+            Dictionary<string, string> queryParams = new Dictionary<string, string>();
+            queryParams.Add("username", username);
+            queryParams.Add("token", token);
 
-       public string UpdateLocation(string userId, float longitude, float latitude, float speed)
-       {
-           //TODO: get the asset id own by this driver today
-           // -1 if no asset assigned
-           try
-           {
-               MySqlCommand command = new MySqlCommand("INSERT into tracking_data (driver_id, longitude, latitude, speed, asset_id, creation_date) values (@driver_id, @longitude, @latitude, @speed, @asset_id, @creation_date)");
-               command.Parameters.AddWithValue("@driver_id", userId);
-               command.Parameters.AddWithValue("@longitude", longitude);
-               command.Parameters.AddWithValue("@latitude", latitude);
-               command.Parameters.AddWithValue("@speed", speed);
-               command.Parameters.AddWithValue("@asset_id", 888888);        // TODO:
-               command.Parameters.AddWithValue("@creation_date", Utils.GetCurrentUtcTime(0));
+            MySqlCommand command = Utils.GenerateQueryCmd("users", queryParams);
+            int userId = 0;
+            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            {
+                if(!reader.Read())
+                {
+                    return Constants.EPermission.NoRole;
+                }
 
-               Utils.PerformSqlNonQuery(command);
-           }
-           catch (Exception ex)
-           {
-               return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.EGeneralError, ErrorMessage = ex.Message });
-           }
+                if((int)reader["enabled"] == 0)
+                {
+                    throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Account disabled" }));
+                }
 
-           return Constants.sJavaScriptSerializer.Serialize(new Constants.Result()
-           {
-               Success = true,
-               ErrorCode = ErrorCodes.ESuccess
-           });
-       }
-       */
+                int result = DateTime.UtcNow.CompareTo(reader["validity"]);
+                if (result > 0)
+                {
+                    // token expired
+                    throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginExpired, ErrorMessage = "Login expired" }));
+                }
+
+                userId = (int)reader["id"];
+            }
+
+            // refresh the token validity
+            Utils.RefreshToken(username);
+
+            // check if user from master admin
+            queryParams = new Dictionary<string, string>();
+            queryParams.Add("user_id", userId.ToString());
+            command = Utils.GenerateQueryCmd("master_admins", queryParams);
+            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            {
+                if (reader.Read())
+                {
+                    return Constants.EPermission.MasterAdmins;
+                }
+            }
+
+            // check if user from lorry partners
+            queryParams = new Dictionary<string, string>();
+            queryParams.Add("user_id", userId.ToString());
+            command = Utils.GenerateQueryCmd("lorry_partners", queryParams);
+            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            {
+                if (reader.Read())
+                {
+                    var companyObj = new Companies().GetCompany((int)reader["company_id"]);
+                    if(companyObj.Enabled == false)
+                    {
+                        throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
+                    }
+
+                    return Constants.EPermission.LorryPartners;
+                }
+            }
+
+            // check if user from master admin
+            queryParams = new Dictionary<string, string>();
+            queryParams.Add("user_id", userId.ToString());
+            command = Utils.GenerateQueryCmd("drivers", queryParams);
+            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            {
+                if (reader.Read())
+                {
+                    var companyObj = new Companies().GetCompany((int)reader["company_id"]);
+                    if (companyObj.Enabled == false)
+                    {
+                        throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
+                    }
+
+                    return Constants.EPermission.Drivers;
+                }
+            }
+
+            // check if user from master admin
+            queryParams = new Dictionary<string, string>();
+            queryParams.Add("user_id", userId.ToString());
+            command = Utils.GenerateQueryCmd("corporate_partners", queryParams);
+            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            {
+                if (reader.Read())
+                {
+                    var companyObj = new Companies().GetCompany((int)reader["company_id"]);
+                    if (companyObj.Enabled == false)
+                    {
+                        throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
+                    }
+
+                    return Constants.EPermission.CorporatePartners;
+                }
+            }
+
+            return Constants.EPermission.Users;
+        }
     }
 }

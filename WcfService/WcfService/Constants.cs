@@ -10,21 +10,12 @@ namespace WcfService
 
         public enum EPermission
         {
-            General = 0x0000,
-
-            FleetManagement = 0x0001,
-            DriverManagement = 0x0002,
-            JobPartnerManagement = 0x0004,
-            PartnerTrackingManagement = 0x0008,
-
-            CountryManagement = 0x0010,
-            StateManagement = 0x0020,
-            FleetTypeManagement = 0x0040,
-            CompanyManagement = 0x0080,
-            RoleManagement = 0x0100,
-            AdminManagement = 0x0200,
-
-            Driver = 0x1000,
+            NoRole = 0x0000,
+            Users = 0x0001,
+            LorryPartners = 0x0002,
+            Drivers = 0x0004,
+            CorporatePartners = 0x0008,
+            MasterAdmins = 0xFFFF,
         }
 
         public enum EJobStatus

@@ -101,6 +101,7 @@
     <Compile Include="Helper\Admins.cs" />
     <Compile Include="Helper\Companies.cs" />
     <Compile Include="Helper\Countries.cs" />
+    <Compile Include="Helper\Fleets.cs" />
     <Compile Include="Helper\General.cs" />
     <Compile Include="Helper\Roles.cs" />
     <Compile Include="Helper\States.cs" />
@@ -115,7 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\JustGoNetwork FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\JustGoNetwork.com.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -13,8 +13,12 @@ namespace WcfService
         */
         [OperationContract]
         string Login(string username, string password);
+
+        [OperationContract]
         string ChangePassword(string oldPassword, string newPassword);
-        string ResetPassword(string username);
+
+        [OperationContract]
+        string ForgotPassword(string username);
 
         /*
         Fleet management functions
@@ -66,10 +70,19 @@ namespace WcfService
         /*
         Master admin functions
         */
+        [OperationContract]
         string GetCountries();
+
+        [OperationContract]
         string AddCountry(string name);
-        string EditCountry(int countryId);
+
+        [OperationContract]
+        string EditCountry(int countryId, string name);
+
+        [OperationContract]
         string DeleteCountry(int countryId);
+
+        [OperationContract]
         string DeleteCountries(int[] countryIds);
 
         string GetStates(int countryId);
