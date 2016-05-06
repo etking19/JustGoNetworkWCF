@@ -57,6 +57,15 @@ namespace WcfService
             return command.ExecuteReader();
         }
 
+
+        public static object PerformSqlExeuteScalar(MySqlCommand command)
+        {
+            MySqlConnection conn = new MySqlConnection(Constants.sConnectionString);
+            conn.Open();
+            command.Connection = conn;
+            return command.ExecuteScalar();
+        }
+
         public static void CleanUp(MySqlDataReader reader, MySqlCommand command)
         {
             reader.Close();

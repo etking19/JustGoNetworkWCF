@@ -23,43 +23,85 @@ namespace WcfService
         /*
         Fleet management functions
         */
+        [OperationContract]
         string GetFleets();
-        string AddFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate);
-        string EditFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate);
+
+        [OperationContract]
+        string GetFleetsByCompanyId(int companyId);
+
+        [OperationContract]
+        string AddFleet(string identifier, int companyId, string remarks, int fleetTypeId, string roadTaxExpiry, string serviceDueDate);
+
+        [OperationContract]
+        string EditFleet(string identifier, int companyId, string remarks, int fleetTypeId, string roadTaxExpiry, string serviceDueDate);
+
+        [OperationContract]
         string DeleteFleet(string identifier);
+
+        [OperationContract]
         string DeleteFleets(string[] identifier);
 
         /*
         User/Driver management functions
         */
+        [OperationContract]
         string GetDrivers();
-        string AddDriver(string username, string displayName, string mykad);
-        string EditDriver(string username, string displayName, string mykad);
-        string RemoveDriver(string username);
-        string RemoveDrivers(string[] usernames);
 
-        string ResetRating(string username);
+        [OperationContract]
+        string GetDriversByCompanyId(int companyId);
+
+        [OperationContract]
+        string RemoveDriver(int userId);
+
+        [OperationContract]
+        string RemoveDrivers(int[] userIds);
 
         /*
         Job management functions
         */
-        string GetJobsPartner(Constants.EJobStatus status);
-        string AddJobPartner(string customerName, string customerContact,
-            string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2, 
-            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
-            string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2, 
-            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
-            string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks);
-        string EditJob(int jobId, string customerName, string customerContact,
+        [OperationContract]
+        string AddJob(int companyId, string customerName, string customerContact,
             string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2,
             string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
             string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2,
             string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
             string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks);
-        string DeleteJob(int jobId);
-        string DeleteJobs(int[] jobIds);
 
-        string AssignJobPartner(int jobId, string driverUsername);
+        [OperationContract]
+        string EditJob(int id, int companyId, string customerName, string customerContact,
+            string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2,
+            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
+            string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2,
+            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
+            string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks);
+
+        [OperationContract]
+        string RemoveJob(int id);
+
+        [OperationContract]
+        string GetOpenJobs();
+
+        /*
+        Job dispatch management functions
+        */
+        [OperationContract]
+        string GetJobsDispatch(int status);
+
+        [OperationContract]
+        string AddJobDispatch(int jobId, int companyId);
+
+        [OperationContract]
+        string EditJobDispatch(int id, int jobId, int companyId);
+
+        [OperationContract]
+        string DeleteJobDispatch(int id);
+
+        [OperationContract]
+        string DeleteJobsDispatch(int[] ids);
+
+        [OperationContract]
+        string AssignJobDispatch(int id, string driverUsername);
+
 
         /*
         GPS tracking functions
@@ -70,7 +112,7 @@ namespace WcfService
         /*
         Master admin functions
         */
-        // --------- coutries ------
+        // --------- countries ------
         [OperationContract]
         string GetCountries();
 
@@ -126,10 +168,10 @@ namespace WcfService
         string EnableCompany(int companyId, bool enabled);
 
         [OperationContract]
-        string AddCompany(string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm);
+        string AddCompany(string name, string address1, string address2, string postcode, int stateId, int countryId, string ssm);
 
         [OperationContract]
-        string EditCompany(int companyId, string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm);
+        string EditCompany(int companyId, string name, string address1, string address2, string postcode, int stateId, int countryId, string ssm);
 
         [OperationContract]
         string RemoveCompany(int companyId);
@@ -137,21 +179,17 @@ namespace WcfService
         [OperationContract]
         string RemoveCompanies(int[] companyIds);
 
-        // --------- users ------
-        [OperationContract]
-        string GetRoles();
 
-        [OperationContract]
-        string GetUsers();
-
+        // --------- user management ------
         [OperationContract]
         string EnableUser(int userId, bool enabled);
 
         [OperationContract]
-        string AddUser(string username, string displayName, int[] permissions, int companyId);
+        string AddUser(string username, string displayName, int[] permissions, int companyId, string identityCard);
 
         [OperationContract]
-        string EditUser(int userId, string displayName, int[] permissions, int companyId);
+        string EditUser(string username, string displayName, int[] permissions, int companyId, string identityCard);
+
 
         /*
         Client app functions
@@ -159,7 +197,7 @@ namespace WcfService
         string GetPickUpErrorsEle();
         string GetDeliveryErrorsEle();
         
-        string UpdateJobStatus(int jobId, Constants.EJobStatus jobStatus);
+        string UpdateJobStatus(int jobId, Constants.EJobDispatchStatus jobStatus);
         string UpdateJobPickUpError(int jobId, Constants.PickUpError pickupError);
         string UpdateJobDeliveryError(int jobId, Constants.DeliveryError deliveryError);
         string UpdateJobStatusRemarks(int jobId, string remarks);
@@ -173,9 +211,9 @@ namespace WcfService
         */
         string AddJob(string customerName, string customerContact,
             string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2,
-            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
+            string pickupPostcode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
             string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2,
-            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
+            string deliverPostcode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
             string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks);
 
         string AssignJob(int jobId, int deliveryCompanyId);

@@ -9,15 +9,23 @@ namespace WcfService
 {
     public class AjaxService : IAjaxService
     {
-        public string AddCompany(string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm)
+        public string AddCompany(string name, string address1, string address2, string postcode, int stateId, int countryId, string ssm)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.CompanyManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Companies().AddCompany(name, address1, address2, postcode, stateId, countryId, ssm);
         }
 
         public string AddCountry(string name)
         {
+            Constants.User user;
             if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
-                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+                checkAuthentication(Constants.EPermission.CountryManagement, out user))
             {
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
@@ -25,27 +33,19 @@ namespace WcfService
             return new Countries().AddCountry(name);
         }
 
-        public string AddDriver(string username, string displayName, string mykad)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string AddFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate)
-        {
-            throw new NotImplementedException();
-        }
-
         public string AddFleetType(string name, int capacity, string design)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetTypeManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new FleetTypes().AddFleetType(name, capacity, design);
         }
 
-        public string AddJob(string customerName, string customerContact, string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2, string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude, string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2, string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude, string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string AddJobPartner(string customerName, string customerContact, string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2, string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude, string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2, string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude, string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
+        public string AssignJob(int jobId, int deliveryCompanyId)
         {
             throw new NotImplementedException();
         }
@@ -55,46 +55,28 @@ namespace WcfService
             throw new NotImplementedException();
         }
 
-        public string AddRole(string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public string AddState(int countryId, string name)
         {
-            throw new NotImplementedException();
-        }
-
-        public string AssignJob(int jobId, int deliveryCompanyId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string AssignJobPartner(int jobId, string driverUsername)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string ChangePassword(string oldPassword, string newPassword)
-        {
+            Constants.User user;
             if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
-                (checkAuthentication() < Constants.EPermission.Users))
+                checkAuthentication(Constants.EPermission.StateManagement, out user))
             {
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
 
-            return new General().ChangePassword(getUsernameFromAuth(), oldPassword, newPassword);
+            return new States().AddState(countryId, name);
         }
 
-        public string DeleteAdmin(string username)
+        public string ChangePassword(string oldPassword, string newPassword)
         {
-            throw new NotImplementedException();
+            return new General().ChangePassword(getUsernameFromAuth(), oldPassword, newPassword);
         }
 
         public string DeleteCountries(int[] countryIds)
         {
+            Constants.User user;
             if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
-                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+                checkAuthentication(Constants.EPermission.CountryManagement, out user))
             {
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
@@ -104,8 +86,9 @@ namespace WcfService
 
         public string DeleteCountry(int countryId)
         {
+            Constants.User user;
             if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
-                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+                checkAuthentication(Constants.EPermission.CountryManagement, out user))
             {
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
@@ -115,42 +98,74 @@ namespace WcfService
 
         public string DeleteFleet(string identifier)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Fleets().DeleteFleet(identifier);
         }
 
         public string DeleteFleets(string[] identifier)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Fleets().DeleteFleets(identifier);
         }
 
         public string DeleteFleetType(int fleetId)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetTypeManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new FleetTypes().DeleteFleetType(fleetId);
         }
 
         public string DeleteFleetTypes(int[] fleetIds)
         {
-            throw new NotImplementedException();
-        }
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetTypeManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
 
-        public string DeleteJob(int jobId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string DeleteJobs(int[] jobIds)
-        {
-            throw new NotImplementedException();
+            return new FleetTypes().DeleteFleetTypes(fleetIds);
         }
 
         public string DeleteState(int stateId)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.StateManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new States().DeleteState(stateId);
         }
 
         public string DeleteStates(int[] stateIds)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.StateManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new States().DeleteStates(stateIds);
         }
 
         public string EditAdmin(string username, string displayName, int companyId, int roleId)
@@ -158,25 +173,28 @@ namespace WcfService
             throw new NotImplementedException();
         }
 
-        public string EditCompany(int companyId, string name, string address1, string address2, string poscode, int stateId, int countryId, string ssm)
+        public string EditCompany(int companyId, string name, string address1, string address2, string postcode, int stateId, int countryId, string ssm)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.CompanyManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Companies().EditCompany(companyId, name, address1, address2, postcode, stateId, countryId, ssm);
         }
 
         public string EditCountry(int countryId, string name)
         {
+            Constants.User user;
             if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
-                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+                checkAuthentication(Constants.EPermission.CountryManagement, out user))
             {
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
 
             return new Countries().EditCountry(countryId, name);
-        }
-
-        public string EditDriver(string username, string displayName, string mykad)
-        {
-            throw new NotImplementedException();
         }
 
         public string EditFleet(string identifier, int fleetTypeId, string roadTaxExpiry, string serviceDueDate)
@@ -186,16 +204,14 @@ namespace WcfService
 
         public string EditFleetType(int fleetId, string name, int capacity, string design)
         {
-            throw new NotImplementedException();
-        }
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetTypeManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
 
-        public string EditJob(int jobId, string customerName, string customerContact, string pickupCustomerName, 
-            string pickupCustomerContact, string pickupAdd1, string pickupAdd2, string pickupPoscode, int pickupStateId, 
-            int pickupCountryId, float pickupLongitude, float pickupLatitude, string deliverCustomerName, string deliverCustomerContact, 
-            string deliverAdd1, string deliverAdd2, string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, 
-            float deliverLatitude, string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
-        {
-            throw new NotImplementedException();
+            return new FleetTypes().EditFleetType(fleetId, name, capacity, design);
         }
 
         public string EditRole(int roleId, string name)
@@ -205,22 +221,23 @@ namespace WcfService
 
         public string EditState(int stateId, int countryId, string name)
         {
-            throw new NotImplementedException();
-        }
-
-        public string GetCompanies()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetCountries()
-        {
+            Constants.User user;
             if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
-                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+                checkAuthentication(Constants.EPermission.StateManagement, out user))
             {
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
 
+            return new States().EditState(stateId, countryId, name);
+        }
+
+        public string GetCompanies()
+        {
+            return new Companies().GetCompanies();
+        }
+
+        public string GetCountries()
+        {
             return new Countries().GetCountries();
         }
 
@@ -231,22 +248,43 @@ namespace WcfService
 
         public string GetDrivers()
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.Driversmanagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, Payload = new Drivers().GetDriversList() });
+        }
+
+        public string GetDriversByCompanyId(int companyId)
+        {
+            var list = new Drivers().GetDriversList().FindAll(x => x.CompanyId == companyId);
+
+            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true, Payload = list });
         }
 
         public string GetFleets()
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetTypeManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Fleets().GetFleets();
+        }
+
+        public string GetFleetsByCompanyId(int companyId)
+        {
+            return new Fleets().GetFleetsByCompanyId(companyId);
         }
 
         public string GetFleetTypes()
         {
-            throw new NotImplementedException();
-        }
-
-        public string GetJobsPartner(Constants.EJobStatus status)
-        {
-            throw new NotImplementedException();
+            return new FleetTypes().GetFleetTypes();
         }
 
         public string GetLastTrackingPos(string driverUsername)
@@ -276,12 +314,12 @@ namespace WcfService
 
         public string GetRoles()
         {
-            throw new NotImplementedException();
+            return new Users().GetRoles();
         }
 
         public string GetStates(int countryId)
         {
-            throw new NotImplementedException();
+            return new States().GetStates(countryId);
         }
 
         public string Login(string username, string password)
@@ -291,22 +329,58 @@ namespace WcfService
 
         public string RemoveCompanies(int[] companyIds)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.CompanyManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Companies().RemoveCompanies(companyIds);
         }
 
         public string RemoveCompany(int companyId)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.CompanyManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Companies().RemoveCompany(companyId);
         }
 
-        public string RemoveDriver(string username)
+        public string RemoveDriver(int userId)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.Driversmanagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            new Drivers().RemoveDriver(userId);
+
+            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true });
         }
 
-        public string RemoveDrivers(string[] usernames)
+        public string RemoveDrivers(int[] userIds)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.Driversmanagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            Drivers drivers = new Drivers();
+            foreach (int userId in userIds)
+            {
+                drivers.RemoveDriver(userId);
+            }
+            
+            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true });
         }
 
         public string RemoveRole(int roleId)
@@ -331,8 +405,9 @@ namespace WcfService
 
         public string Test()
         {
+            Constants.User user = new Constants.User();
             if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
-                (checkAuthentication() < Constants.EPermission.MasterAdmins))
+                checkAuthentication(Constants.EPermission.TrackingManagement, out user))
             {
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
             }
@@ -349,7 +424,7 @@ namespace WcfService
                 return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { ErrorCode= ErrorCodes.EGeneralError, ErrorMessage=ex.Message, Success=false });
             }
 
-            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success=true, ErrorCode = ErrorCodes.ESuccess });
+            return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success=true, ErrorCode = ErrorCodes.ESuccess, Payload = user });
         }
 
         public string UpdateDeliveryOrder(int jobId, string base64DO)
@@ -367,7 +442,7 @@ namespace WcfService
             throw new NotImplementedException();
         }
 
-        public string UpdateJobStatus(int jobId, Constants.EJobStatus jobStatus)
+        public string UpdateJobStatus(int jobId, Constants.EJobDispatchStatus jobStatus)
         {
             throw new NotImplementedException();
         }
@@ -391,8 +466,10 @@ namespace WcfService
             return authentication[0];
         }
 
-        private Constants.EPermission checkAuthentication()
+        private bool checkAuthentication(Constants.EPermission expectedPermission, out Constants.User userObj)
         {
+            userObj = new Constants.User();
+
             IncomingWebRequestContext request = WebOperationContext.Current.IncomingRequest;
             WebHeaderCollection headers = request.Headers;
 
@@ -410,125 +487,333 @@ namespace WcfService
             queryParams.Add("username", username);
             queryParams.Add("token", token);
 
-            MySqlCommand command = Utils.GenerateQueryCmd("users", queryParams);
-            int userId = 0;
-            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            using (MySqlCommand command = Utils.GenerateQueryCmd("users", queryParams))
             {
-                if(!reader.Read())
+                using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
                 {
-                    return Constants.EPermission.NoRole;
-                }
+                    if (!reader.Read())
+                    {
+                        return false;
+                    }
 
-                if((int)reader["enabled"] == 0)
-                {
-                    throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Account disabled" }));
-                }
+                    if ((int)reader["enabled"] == 0)
+                    {
+                        return false;
+                    }
 
-                int result = DateTime.UtcNow.CompareTo(reader["validity"]);
-                if (result > 0)
-                {
-                    // token expired
-                    throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginExpired, ErrorMessage = "Login expired" }));
-                }
+                    int result = DateTime.UtcNow.CompareTo(reader["validity"]);
+                    if (result > 0)
+                    {
+                        return false;
+                    }
 
-                userId = (int)reader["id"];
+                    // refresh the token validity
+                    Utils.RefreshToken(username);
+
+                    userObj = new Constants.User()
+                    {
+                        Id = (int)reader["id"],
+                        Username = (string)reader["username"],
+                        DisplayName = (string)reader["display_name"],
+                        Enabled = (int)reader["enabled"] == 0 ? true : false,
+                        PushIdentifier = (string)reader["push_identifier"],
+                        LastLogin = reader["last_login_date"].ToString()
+                    };
+
+                    if (((int)expectedPermission & (int)Constants.ERolePermission.Users) == (int)expectedPermission)
+                    {
+                        return true;
+                    }
+                }
             }
-
-            // refresh the token validity
-            Utils.RefreshToken(username);
 
             // check if user from master admin
             queryParams = new Dictionary<string, string>();
-            queryParams.Add("user_id", userId.ToString());
-            command = Utils.GenerateQueryCmd("master_admins", queryParams);
-            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            queryParams.Add("user_id", userObj.Id.ToString());
+            using (MySqlCommand command = Utils.GenerateQueryCmd("master_admins", queryParams))
             {
-                if (reader.Read())
+                using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
                 {
-                    return Constants.EPermission.MasterAdmins;
+                    if (reader.Read())
+                    {
+                        if (((int)expectedPermission & (int)Constants.ERolePermission.MasterAdmins) == (int)expectedPermission)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
             // check if user from lorry partners
             queryParams = new Dictionary<string, string>();
-            queryParams.Add("user_id", userId.ToString());
-            command = Utils.GenerateQueryCmd("lorry_partners", queryParams);
-            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            queryParams.Add("user_id", userObj.Id.ToString());
+            using (MySqlCommand command = Utils.GenerateQueryCmd("lorry_partners", queryParams))
             {
-                if (reader.Read())
+                using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
                 {
-                    var companyObj = new Companies().GetCompany((int)reader["company_id"]);
-                    if(companyObj.Enabled == false)
+                    if (reader.Read())
                     {
-                        throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
-                    }
+                        var companyObj = new Companies().GetCompany((int)reader["company_id"]);
+                        if (companyObj.Enabled == false)
+                        {
+                            return false;
+                        }
 
-                    return Constants.EPermission.LorryPartners;
+                        if (((int)expectedPermission & (int)Constants.ERolePermission.LorryPartners) == (int)expectedPermission)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
-            // check if user from master admin
+
+            // check if user from drivers admin
             queryParams = new Dictionary<string, string>();
-            queryParams.Add("user_id", userId.ToString());
-            command = Utils.GenerateQueryCmd("drivers", queryParams);
-            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            queryParams.Add("user_id", userObj.Id.ToString());
+            using (MySqlCommand command = Utils.GenerateQueryCmd("drivers", queryParams))
             {
-                if (reader.Read())
+                using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
                 {
-                    var companyObj = new Companies().GetCompany((int)reader["company_id"]);
-                    if (companyObj.Enabled == false)
+                    if (reader.Read())
                     {
-                        throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
-                    }
+                        var companyObj = new Companies().GetCompany((int)reader["company_id"]);
+                        if (companyObj.Enabled == false)
+                        {
+                            throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
+                        }
 
-                    return Constants.EPermission.Drivers;
+                        if (((int)expectedPermission & (int)Constants.ERolePermission.Drivers) == (int)expectedPermission)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
-            // check if user from master admin
+
+            // check if user from corporate admin
             queryParams = new Dictionary<string, string>();
-            queryParams.Add("user_id", userId.ToString());
-            command = Utils.GenerateQueryCmd("corporate_partners", queryParams);
-            using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
+            queryParams.Add("user_id", userObj.Id.ToString());
+            using (MySqlCommand command = Utils.GenerateQueryCmd("corporate_partners", queryParams))
             {
-                if (reader.Read())
+                using (MySqlDataReader reader = Utils.PerformSqlQuery(command))
                 {
-                    var companyObj = new Companies().GetCompany((int)reader["company_id"]);
-                    if (companyObj.Enabled == false)
+                    if (reader.Read())
                     {
-                        throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
-                    }
+                        var companyObj = new Companies().GetCompany((int)reader["company_id"]);
+                        if (companyObj.Enabled == false)
+                        {
+                            throw new Exception(Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginAccSuspended, ErrorMessage = "Company disabled" }));
+                        }
 
-                    return Constants.EPermission.CorporatePartners;
+                        if (((int)expectedPermission & (int)Constants.ERolePermission.CorporatePartners) == (int)expectedPermission)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
-            return Constants.EPermission.Users;
+            return false;
         }
 
         public string EnableCompany(int companyId, bool enabled)
         {
-            throw new NotImplementedException();
-        }
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.CompanyManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
 
-        public string GetUsers()
-        {
-            throw new NotImplementedException();
+            return new Companies().EnableCompany(companyId, enabled);
         }
 
         public string EnableUser(int userId, bool enabled)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.UserManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Users().EnableUser(userId, enabled);
         }
 
-        public string AddUser(string username, string displayName, int[] permissions, int companyId)
+        public string AddUser(string username, string displayName, int[] permissions, int companyId, string identityCard)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.UserManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Users().AddUser(username, displayName, permissions, companyId, identityCard);
         }
 
-        public string EditUser(int userId, string displayName, int[] permissions, int companyId)
+        public string EditUser(string username, string displayName, int[] permissions, int companyId, string identityCard)
         {
-            throw new NotImplementedException();
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.UserManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Users().EditUser(username, displayName, permissions, companyId, identityCard);
         }
+
+        public string AddFleet(string identifier, int companyId, string remarks, int fleetTypeId, string roadTaxExpiry, string serviceDueDate)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Fleets().AddFleet(identifier, companyId, remarks, fleetTypeId, roadTaxExpiry, serviceDueDate);
+        }
+
+        public string EditFleet(string identifier, int companyId, string remarks, int fleetTypeId, string roadTaxExpiry, string serviceDueDate)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.FleetManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Fleets().EditFleet(identifier, companyId, remarks, fleetTypeId, roadTaxExpiry, serviceDueDate);
+        }
+
+        public string GetJobsDispatch(int status)
+        {
+        }
+
+        public string AddJobDispatch(int jobId, int companyId)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsDispatchManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new JobsDispatched().AddJobDispatch(jobId, companyId);
+        }
+
+        public string EditJobDispatch(int id, int jobId, int companyId)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsDispatchManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new JobsDispatched().EditJobDispatch(id, companyId);
+        }
+
+        public string DeleteJobDispatch(int id)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsDispatchManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new JobsDispatched().DeleteJobDispatch(id);
+        }
+
+        public string DeleteJobsDispatch(int[] ids)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsDispatchManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new JobsDispatched().DeleteJobsDispatch(ids);
+        }
+
+        public string AssignJobDispatch(int id, string driverUsername)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsDispatchManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new JobsDispatched().AssignDriver(id, driverUsername);
+        }
+
+
+        public string AddJob(int companyId, string customerName, string customerContact,
+            string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2,
+            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
+            string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2,
+            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
+            string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Jobs().AddJob(companyId, customerName, customerContact,
+                pickupCustomerName, pickupCustomerContact, pickupAdd1, pickupAdd2,
+                pickupPoscode, pickupStateId, pickupCountryId, pickupLongitude, pickupLatitude,
+                deliverCustomerName, deliverCustomerContact, deliverAdd1, deliverAdd2,
+                deliverPoscode, deliverStateId, deliverCountryId, deliverLongitude, deliverLatitude,
+                deliveryDateTime, amount, cashOnDelivery, workerAssistance, remarks);
+        }
+
+        public string EditJob(int id, int companyId, string customerName, string customerContact,
+            string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2,
+            string pickupPoscode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude,
+            string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2,
+            string deliverPoscode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude,
+            string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Jobs().EditJob(id, companyId, customerName, customerContact,
+                pickupCustomerName, pickupCustomerContact, pickupAdd1, pickupAdd2,
+                pickupPoscode, pickupStateId, pickupCountryId, pickupLongitude, pickupLatitude,
+                deliverCustomerName, deliverCustomerContact, deliverAdd1, deliverAdd2,
+                deliverPoscode, deliverStateId, deliverCountryId, deliverLongitude, deliverLatitude,
+                deliveryDateTime, amount, cashOnDelivery, workerAssistance, remarks);
+        }
+
+        public string RemoveJob(int id)
+        {
+            Constants.User user;
+            if ((System.Configuration.ConfigurationManager.AppSettings["bypassAuthentication"] == "0") &&
+                checkAuthentication(Constants.EPermission.JobsManagement, out user))
+            {
+                return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = false, ErrorCode = ErrorCodes.ELoginPermissionDenied });
+            }
+
+            return new Jobs().RemoveJob(id);
+        }
+
+        public string GetOpenJobs()
+        {
+        }
+
     }
 }

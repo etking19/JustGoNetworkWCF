@@ -99,9 +99,13 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="Helper\CorporatePartners.cs" />
+    <Compile Include="Helper\DeliveryErrors.cs" />
     <Compile Include="Helper\Drivers.cs" />
+    <Compile Include="Helper\Jobs.cs" />
+    <Compile Include="Helper\JobsDispatched.cs" />
     <Compile Include="Helper\LorryPartners.cs" />
     <Compile Include="Helper\MasterAdmins.cs" />
+    <Compile Include="Helper\PickUpErrors.cs" />
     <Compile Include="Helper\Users.cs" />
     <Compile Include="Helper\Companies.cs" />
     <Compile Include="Helper\Countries.cs" />

@@ -8,17 +8,35 @@ namespace WcfService
         public static string sConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["JustGoNetworkDB"].ConnectionString;
         public static JavaScriptSerializer sJavaScriptSerializer = new JavaScriptSerializer();
 
-        public enum EPermission
+        public enum ERolePermission
         {
-            NoRole = 0x0000,
-            Users = 0x0001,
-            LorryPartners = 0x0002,
-            Drivers = 0x0004,
-            CorporatePartners = 0x0008,
-            MasterAdmins = 0xFFFF,
+            MasterAdmins         = 0xFFFFFFF,
+            LorryPartners       = 0x0007840,
+            Drivers             = 0x0006000,
+            CorporatePartners   = 0x0001000,
+            Users               = 0x0004000
         }
 
-        public enum EJobStatus
+        public enum EPermission
+        {
+            CountryManagement           = 0x0000001,
+            StateManagement             = 0x0000002,
+            FleetTypeManagement         = 0x0000004,
+            PickUpErrorManagement       = 0x0000008,
+            DeliveryErrorManagement     = 0x0000010,
+            UserManagement              = 0x0000020,
+            CompanyManagement           = 0x0000040,
+            MasterAdminManagement       = 0x0000080,
+            LorryPartnerManagement      = 0x0000100,
+            Driversmanagement           = 0x0000200,
+            CorporatePartnerManagement  = 0x0000400,
+            FleetManagement             = 0x0000800,
+            JobsManagement              = 0x0001000,
+            JobsDispatchManagement      = 0x0002000,
+            TrackingManagement          = 0x0004000
+        }
+
+        public enum EJobDispatchStatus
         {
             Open = 0,
             OrderReceived = 1,
@@ -76,7 +94,7 @@ namespace WcfService
         public class Role
         {
             public string Name;
-            public EPermission Permission;
+            public ERolePermission Permission;
         }
 
         public class User
@@ -90,7 +108,6 @@ namespace WcfService
             public bool Enabled;
             public string LastLogin;
             public string PushIdentifier;
-            public EPermission[] Permissions;
         }
 
         public class MasterAdmin
@@ -148,10 +165,11 @@ namespace WcfService
         public class Fleet
         {
             public string Identifier;
+            public string Remarks;
             public Company Company;
             public FleetType FleetType;
-            public DateTime RoadTaxExpiry;
-            public DateTime ServiceDueDate;
+            public string RoadTaxExpiry;
+            public string ServiceDueDate;
         }
 
         public class AddressInfo
@@ -171,7 +189,9 @@ namespace WcfService
 
         public class Job
         {
-            public int Id;
+            public long Id;
+            public int CompanyId;
+            public Company Company;
             public bool Enabled;
             public string CustomerName;
             public string CustomerContact;
@@ -179,21 +199,32 @@ namespace WcfService
             public AddressInfo PickUpInfo;
             public AddressInfo DeliveryInfo;
 
-            public DateTime DeliveryDateTime;
+            public string DeliveryDateTime;
             public float Amount;
             public bool CashOnDelivery;
             public int WorkerAssistance;
             public string Remarks;
+        }
 
+        public class JobDispatch
+        {
+            public long Id;
+
+            public long JobId;
+            public Job Job;
+
+            public int CompanyId;
+            public int DriverId;
             public DriverAdmin Driver;
             public float Rating;
 
-            public EJobStatus JobStatus;
+            public EJobDispatchStatus JobStatus;
 
             public PickUpError PickUpError;
             public DeliveryError DeliveryError;
             public string StatusRemarks;
         }
+
 
 
 
