@@ -6,3 +6,11 @@ C:\Users\Denell\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debu
 C:\Users\Denell\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.pdb
 C:\Users\Denell\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonsoft.Json.dll
 C:\Users\Denell\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonsoft.Json.xml
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WcfService.dll.config
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WcfService.dll
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WcfService.pdb
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonsoft.Json.dll
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonsoft.Json.xml
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.csprojResolveAssemblyReference.cache
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.dll
+D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.pdb

@@ -190,6 +190,7 @@ namespace WcfService
         [OperationContract]
         string EditUser(string username, string displayName, int[] permissions, int companyId, string identityCard);
 
+        string GetPermissions();
 
         /*
         Client app functions

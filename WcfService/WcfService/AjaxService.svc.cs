@@ -214,11 +214,6 @@ namespace WcfService
             return new FleetTypes().EditFleetType(fleetId, name, capacity, design);
         }
 
-        public string EditRole(int roleId, string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public string EditState(int stateId, int countryId, string name)
         {
             Constants.User user;
@@ -307,11 +302,6 @@ namespace WcfService
             throw new NotImplementedException();
         }
 
-        public string GetRole(int roleId)
-        {
-            throw new NotImplementedException();
-        }
-
         public string GetRoles()
         {
             return new Users().GetRoles();
@@ -383,24 +373,9 @@ namespace WcfService
             return Constants.sJavaScriptSerializer.Serialize(new Constants.Result() { Success = true });
         }
 
-        public string RemoveRole(int roleId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string RemoveRoles(int[] roleIds)
-        {
-            throw new NotImplementedException();
-        }
-
         public string ForgotPassword(string username)
         {
             return new General().ForgotPassword(username);
-        }
-
-        public string ResetRating(string username)
-        {
-            throw new NotImplementedException();
         }
 
         public string Test()
@@ -692,6 +667,7 @@ namespace WcfService
 
         public string GetJobsDispatch(int status)
         {
+            throw new NotImplementedException();
         }
 
         public string AddJobDispatch(int jobId, int companyId)
@@ -813,7 +789,12 @@ namespace WcfService
 
         public string GetOpenJobs()
         {
+            throw new NotImplementedException();
         }
 
+        public string AddJob(string customerName, string customerContact, string pickupCustomerName, string pickupCustomerContact, string pickupAdd1, string pickupAdd2, string pickupPostcode, int pickupStateId, int pickupCountryId, float pickupLongitude, float pickupLatitude, string deliverCustomerName, string deliverCustomerContact, string deliverAdd1, string deliverAdd2, string deliverPostcode, int deliverStateId, int deliverCountryId, float deliverLongitude, float deliverLatitude, string deliveryDateTime, float amount, bool cashOnDelivery, int workerAssistance, string remarks)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
