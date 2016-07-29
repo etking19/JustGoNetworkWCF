@@ -14,3 +14,11 @@ D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonso
 D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.csprojResolveAssemblyReference.cache
 D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.dll
 D:\70061168\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.pdb
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WcfService.dll.config
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WcfService.dll
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WcfService.pdb
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonsoft.Json.dll
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonsoft.Json.xml
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.csprojResolveAssemblyReference.cache
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.dll
+C:\Users\etking\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.pdb
