@@ -38,6 +38,8 @@ namespace WcfService
 
         private static bool CheckPassword(string username, string password)
         {
+            // TODO: query from database for correct userId and token
+
             for (int count = 0; count < _users.Length; count++)
             {
                 if(_users[count] == username &&
