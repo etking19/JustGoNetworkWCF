@@ -11,6 +11,9 @@ namespace WcfService
         Model.Response Test();
 
 
+
+        // user
+
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/user/login", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserLogin(string username, string password);
@@ -53,7 +56,7 @@ namespace WcfService
 
 
 
-
+        // company
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/company/profile/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -76,6 +79,7 @@ namespace WcfService
         Model.Response CompanyDeleteProfile(string companyId);
 
 
+        // roles
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/role/details", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -98,6 +102,7 @@ namespace WcfService
         Model.Response RoleUpdate(string roleId, Model.Role role);
 
 
+        // fleet type
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/fleet/type", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -108,13 +113,14 @@ namespace WcfService
         Model.Response FleetTypeGetAll(string fleetTypeId);
 
 
+        // permission
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/permission", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response PermissionGet();
 
 
-
+        // fleet
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -141,6 +147,7 @@ namespace WcfService
         Model.Response FleetDelete(string fleetId);
 
 
+        // country and states
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/country/info", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -160,6 +167,7 @@ namespace WcfService
         Model.Response StateGet(string stateId);
 
 
+        // pick up error
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/pickupErr/info", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -211,14 +219,20 @@ namespace WcfService
         // job address
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/job/address", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressAdd(string userId, Model.Address jobAddress);
+        [WebInvoke(Method = "POST", UriTemplate = "/job/address/from", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAddressFromAdd(string userId, Model.Address jobAddress);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/address/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressGet(string userId);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/address/from/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAddressFromGet(string userId);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/job/address/to", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAddressToAdd(string userId, Model.Address jobAddress);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/job/address/to/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAddressToGet(string userId);
 
         // job delivery
 

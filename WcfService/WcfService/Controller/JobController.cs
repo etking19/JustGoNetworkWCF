@@ -44,17 +44,28 @@ namespace WcfService.Controller
             return response;
         }
 
-        public Response AddAddress(string userId, Model.Address payload)
+        public Response AddAddressFrom(string userId, Model.Address payload)
         {
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
-        public Response GetAddresses(string userId)
+        public Response GetAddressesFrom(string userId)
         {
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
+        }
 
+        public Response AddAddressTo(string userId, Model.Address payload)
+        {
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
+        }
+
+        public Response GetAddressesTo(string userId)
+        {
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
         }
 
         public Response GetJobDelivery()

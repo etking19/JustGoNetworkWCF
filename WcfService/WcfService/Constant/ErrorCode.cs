@@ -14,6 +14,18 @@
         public static int EMultipleLogin = 2003;
         public static int EAccountDisabled = 2004;
         public static int EAccountDeleted = 2005;
+        public static int EUserNotFound = 2006;
+        public static int EUserAlreadyExisted = 2007;
+        public static int EUserPasswordError = 2008;
+        public static int ERetryTime = 2009;
+        public static int EInvalidOtp = 2010;
+        public static int EInvalidRefNum = 2011;
+        public static int EOtpExpired = 2012;
 
+
+        // Company error
+        public static int ECompanyDeleted = 2100;
+        public static int ECompanyNotFound = 2101;
+        public static int ECompanyDisabled = 2012;
     }
 }

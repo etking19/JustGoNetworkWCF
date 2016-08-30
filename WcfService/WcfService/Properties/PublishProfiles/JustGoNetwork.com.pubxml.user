@@ -11,34 +11,46 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="AjaxService.svc">
-      <publishTime>03/14/2016 18:07:20</publishTime>
+      <publishTime>08/03/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
-      <publishTime>10/02/2015 23:05:26</publishTime>
+      <publishTime>08/03/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF5.dll">
-      <publishTime>10/02/2015 23:05:09</publishTime>
+      <publishTime>08/03/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF6.dll">
-      <publishTime>10/02/2015 23:05:30</publishTime>
+      <publishTime>08/03/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Fabric.Plugin.dll">
-      <publishTime>10/02/2015 23:05:13</publishTime>
+      <publishTime>08/03/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Web.dll">
-      <publishTime>10/02/2015 23:05:28</publishTime>
+      <publishTime>08/03/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>03/21/2016 19:42:47</publishTime>
+      <publishTime>08/03/2014 20:33:56</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>01/28/2015 04:02:42</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>01/28/2015 04:02:54</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>01/28/2015 04:03:46</publishTime>
     </File>
     <File Include="bin/WcfService.dll">
-      <publishTime>04/28/2016 12:33:18</publishTime>
+      <publishTime>08/08/2016 16:08:24</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>08/05/2016 12:44:29</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>03/21/2016 19:42:48</publishTime>
+      <publishTime>08/05/2016 12:44:35</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/28/2016 12:33:19</publishTime>
+      <publishTime>08/08/2016 16:09:25</publishTime>
     </File>
   </ItemGroup>
 </Project>

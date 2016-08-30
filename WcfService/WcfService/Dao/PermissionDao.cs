@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WcfService.Dao
 {
-    public class PermissionDao
+    public class PermissionDao : BaseDao
     {
         public string Add(Model.Permission payload)
         {

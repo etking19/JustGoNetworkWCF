@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WcfService.Dao
 {
-    public class PickUpErrorDao
+    public class PickUpErrorDao : BaseDao
     {
         public string Add(Model.PickupError payload)
         {

@@ -111,7 +111,6 @@
     </Compile>
     <Compile Include="BasicAuthHttpModule.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="Constant\ErrorCode.cs" />
     <Compile Include="Constant\ErrorMsg.cs" />
     <Compile Include="Controller\BaseController.cs" />
@@ -133,30 +132,15 @@
     <Compile Include="Dao\JobDeliveryDao.cs" />
     <Compile Include="Dao\JobDetailsDao.cs" />
     <Compile Include="Dao\JobStatusDao.cs" />
+    <Compile Include="Dao\OtpDao.cs" />
     <Compile Include="Dao\PermissionDao.cs" />
     <Compile Include="Dao\PickUpErrorDao.cs" />
     <Compile Include="Dao\RoleDao.cs" />
     <Compile Include="Dao\StateDao.cs" />
     <Compile Include="Dao\UsersDao.cs" />
-    <Compile Include="ErrorCodes.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\CorporatePartners.cs" />
-    <Compile Include="Helper\DeliveryErrors.cs" />
-    <Compile Include="Helper\Drivers.cs" />
-    <Compile Include="Helper\Jobs.cs" />
-    <Compile Include="Helper\JobsDispatched.cs" />
-    <Compile Include="Helper\LorryPartners.cs" />
-    <Compile Include="Helper\MasterAdmins.cs" />
-    <Compile Include="Helper\PickUpErrors.cs" />
-    <Compile Include="Helper\Users.cs" />
-    <Compile Include="Helper\Companies.cs" />
-    <Compile Include="Helper\Countries.cs" />
-    <Compile Include="Helper\Fleets.cs" />
-    <Compile Include="Helper\FleetTypes.cs" />
-    <Compile Include="Helper\General.cs" />
-    <Compile Include="Helper\States.cs" />
     <Compile Include="IAjaxService.cs" />
     <Compile Include="Model\Activity.cs" />
     <Compile Include="Model\Address.cs" />
@@ -167,6 +151,7 @@
     <Compile Include="Model\JobDelivery.cs" />
     <Compile Include="Model\JobDetails.cs" />
     <Compile Include="Model\JobStatus.cs" />
+    <Compile Include="Model\Otp.cs" />
     <Compile Include="Model\Permission.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Model\PickupError.cs" />
@@ -176,6 +161,7 @@
     <Compile Include="Model\Token.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\DBLogger.cs" />
     <Compile Include="Utility\UtilNotification.cs" />
     <Compile Include="Utility\Utils.cs" />
     <Compile Include="Utility\UtilSms.cs" />

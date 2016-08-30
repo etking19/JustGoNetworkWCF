@@ -27,6 +27,7 @@ namespace WcfService.Controller
         protected static RoleDao roleDao = new RoleDao();
 
         protected static UsersDao userDao = new UsersDao();
+        protected static OtpDao otpDao = new OtpDao();
         protected static CompanyDao companyDao = new CompanyDao();
         protected static FleetDao fleetDao = new FleetDao();
         protected static JobDetailsDao jobDetailsDao = new JobDetailsDao();

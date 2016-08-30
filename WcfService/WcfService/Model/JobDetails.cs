@@ -16,7 +16,13 @@ namespace WcfService.Model
         public string ownerUserId;
 
         [DataMember]
+        public string jobTypeId;
+
+        [DataMember]
         public float amount;
+
+        [DataMember]
+        public float amountPaid;
 
         [DataMember]
         public bool cashOnDelivery;

@@ -1,10 +1,6 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.ServiceModel.Web;
+﻿using System;
+using WcfService.Constant;
 using WcfService.Controller;
-using WcfService.Helper;
 using WcfService.Model;
 
 namespace WcfService
@@ -137,7 +133,7 @@ namespace WcfService
         {
             Model.Response response = new Response()
             {
-                errorCode = ErrorCodes.ESuccess,
+                errorCode = ErrorCode.ESuccess,
                 errorMessage = "test success",
                 success = true
             };
@@ -149,7 +145,7 @@ namespace WcfService
         {
             Model.Response response = new Response()
             {
-                errorCode = ErrorCodes.ESuccess,
+                errorCode = ErrorCode.ESuccess,
                 errorMessage = "Token valid",
                 success = true
             };
@@ -252,14 +248,24 @@ namespace WcfService
             return jobController.DeleteJobDetails(jobId);
         }
 
-        public Response JobAddressAdd(string userId, Address jobAddress)
+        public Response JobAddressFromAdd(string userId, Address jobAddress)
         {
-            return jobController.AddAddress(userId, jobAddress);
+            return jobController.AddAddressFrom(userId, jobAddress);
         }
 
-        public Response JobAddressGet(string userId)
+        public Response JobAddressFromGet(string userId)
         {
-            return jobController.GetAddresses(userId);
+            return jobController.GetAddressesFrom(userId);
+        }
+
+        public Response JobAddressToAdd(string userId, Address jobAddress)
+        {
+            return jobController.AddAddressTo(userId, jobAddress);
+        }
+
+        public Response JobAddressToGet(string userId)
+        {
+            return jobController.GetAddressesTo(userId);
         }
 
         public Response JobDeliveryGetAll()

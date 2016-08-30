@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using WcfService.Helper;
+using WcfService.Utility;
 
 namespace WcfService
 {
@@ -38,7 +38,7 @@ namespace WcfService
         public static int PerformSqlNonQuery(MySqlCommand command)
         {
             int result = 0;
-            using (MySqlConnection conn = new MySqlConnection(Constants.sConnectionString))
+            using (MySqlConnection conn = new MySqlConnection(Configuration.CONNECTION_STRING))
             {
                 conn.Open();
                 command.Connection = conn;
@@ -51,7 +51,7 @@ namespace WcfService
 
         public static MySqlDataReader PerformSqlQuery(MySqlCommand command)
         {
-            MySqlConnection conn = new MySqlConnection(Constants.sConnectionString);
+            MySqlConnection conn = new MySqlConnection(Configuration.CONNECTION_STRING);
             conn.Open();
             command.Connection = conn;
             return command.ExecuteReader();
@@ -60,7 +60,7 @@ namespace WcfService
 
         public static object PerformSqlExeuteScalar(MySqlCommand command)
         {
-            MySqlConnection conn = new MySqlConnection(Constants.sConnectionString);
+            MySqlConnection conn = new MySqlConnection(Configuration.CONNECTION_STRING);
             conn.Open();
             command.Connection = conn;
             return command.ExecuteScalar();
@@ -68,13 +68,34 @@ namespace WcfService
 
         public static void CleanUp(MySqlDataReader reader, MySqlCommand command)
         {
-            reader.Close();
-            command.Connection.Close();
+            try
+            {
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+                DBLogger.Log(DBLogger.ESeverity.Warning, e.Message);
+            }
+
+            try
+            {
+                command.Connection.Close();
+            }
+            catch (Exception e)
+            {
+                DBLogger.Log(DBLogger.ESeverity.Warning, e.Message);
+            }  
         }
 
         public static MySqlCommand GenerateQueryCmd(string tableName)
         {
             string query = string.Format("SELECT * FROM {0}", tableName);
+            return new MySqlCommand(query);
+        }
+
+        public static MySqlCommand GenerateQueryCmdWithLimit(string tableName, string offset, string limit)
+        {
+            string query = string.Format("SELECT * FROM {0} LIMIT {1} OFFSET {2} ", tableName, limit, offset);
             return new MySqlCommand(query);
         }
 

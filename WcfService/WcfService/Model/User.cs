@@ -42,9 +42,9 @@ namespace WcfService.Model
         public string lastModifiedDate;
 
         [DataMember]
-        public int companyId;
+        public string companyId;
 
         [DataMember]
-        public int roleId;
+        public string roleId;
     }
 }

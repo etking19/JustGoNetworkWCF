@@ -1,34 +1,101 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
     public class UsersDao : BaseDao
     {
+        private static string sDatabaseName = "users";
+
         public Model.User GetUserById(string userId)
         {
-            Model.User user = new Model.User()
+            Model.User user = new Model.User();
+
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
             {
-                userId = userId,
-                username = "username",
-                password = "password",
-                displayName = "displayName"
-            };
+                Dictionary<string, string> commandDic = new Dictionary<string, string>();
+                commandDic.Add("id", userId);
+                command = Utils.GenerateQueryCmd(sDatabaseName, commandDic);
+                reader = Utils.PerformSqlQuery(command);
+                if(false == reader.Read())
+                {
+                    return null;
+                }
+
+                user.userId = (string)reader["id"];
+                user.username = (string)reader["username"];
+                user.password = (string)reader["password"];
+                user.displayName = (string)reader["display_name"];
+                user.identityCard = (string)reader["identity_card"];
+                user.image = (string)reader["image"];
+                user.contactNumber = (string)reader["contact"];
+                user.email = (string)reader["email"];
+                user.enabled = (int)reader["enabled"] == 0 ? false: true;
+                user.deleted = (int)reader["deleted"] == 0 ? false: true;
+                user.creationDate = reader["creation_date"].ToString();
+                user.lastModifiedDate = reader["last_modified_date"].ToString();
+            }
+            catch (Exception e)
+            {
+                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+
+                return null;
+            }
+            finally
+            {
+                Utils.CleanUp(reader, command);
+            }
 
             return user;
         }
 
         public Model.User GetUserByUsername(string username)
         {
-            Model.User user = new Model.User()
+            Model.User user = new Model.User();
+
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
             {
-                userId = "1",
-                username = username,
-                password = "password",
-                displayName = "displayName"
-            };
+                Dictionary<string, string> commandDic = new Dictionary<string, string>();
+                commandDic.Add("username", username);
+                command = Utils.GenerateQueryCmd(sDatabaseName, commandDic);
+                reader = Utils.PerformSqlQuery(command);
+                if (false == reader.Read())
+                {
+                    return null;
+                }
+
+                user.userId = (string)reader["id"];
+                user.username = (string)reader["username"];
+                user.password = (string)reader["password"];
+                user.displayName = (string)reader["display_name"];
+                user.identityCard = (string)reader["identity_card"];
+                user.image = (string)reader["image"];
+                user.contactNumber = (string)reader["contact"];
+                user.email = (string)reader["email"];
+                user.enabled = (int)reader["enabled"] == 0 ? false : true;
+                user.deleted = (int)reader["deleted"] == 0 ? false : true;
+                user.creationDate = reader["creation_date"].ToString();
+                user.lastModifiedDate = reader["last_modified_date"].ToString();
+            }
+            catch (Exception e)
+            {
+                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+                return null;
+            }
+            finally
+            {
+                Utils.CleanUp(reader, command);
+            }
 
             return user;
         }
@@ -36,36 +103,54 @@ namespace WcfService.Dao
         public List<Model.User> GetAllUsers(string number, string skip)
         {
             List<Model.User> userList = new List<Model.User>();
-            for(int i = 0; i < int.Parse(number); i++ )
+
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
             {
-                userList.Add(new Model.User()
+                command = Utils.GenerateQueryCmdWithLimit(sDatabaseName, number, skip);
+                reader = Utils.PerformSqlQuery(command);
+                while (reader.Read())
                 {
-                    userId = (i+int.Parse(skip)).ToString(),
-                    username = "username" + i,
-                    password = "password",
-                    displayName = "displayName" + i
-                });
+                    Model.User user = new Model.User();
+
+                    user.userId = (string)reader["id"];
+                    user.username = (string)reader["username"];
+                    user.password = (string)reader["password"];
+                    user.displayName = (string)reader["display_name"];
+                    user.identityCard = (string)reader["identity_card"];
+                    user.image = (string)reader["image"];
+                    user.contactNumber = (string)reader["contact"];
+                    user.email = (string)reader["email"];
+                    user.enabled = (int)reader["enabled"] == 0 ? false : true;
+                    user.deleted = (int)reader["deleted"] == 0 ? false : true;
+                    user.creationDate = reader["creation_date"].ToString();
+                    user.lastModifiedDate = reader["last_modified_date"].ToString();
+
+                    userList.Add(user);
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+
+                return null;
+            }
+            finally
+            {
+                Utils.CleanUp(reader, command);
             }
 
             return userList;
         }
 
-        public List<Model.User> GetAllUsersByCompany(string companyId)
-        {
-            return null;
-        }
-
-        public List<Model.User> GetAllUsersByRole(string roleId)
-        {
-            return null;
-        }
-
-        public List<Model.User> GetAllUsers(string[] companyIds, string[] roleIds)
-        {
-            return null;
-        }
-
         public bool UpdateUser(Model.User user)
+        {
+            return true;
+        }
+
+        public bool UpdatePassword(string userId, string newPassword)
         {
             return true;
         }
@@ -75,12 +160,24 @@ namespace WcfService.Dao
             return true;
         }
 
-        public string AddUser(Model.User user)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="newUserId"></param>
+        /// <returns>0 indicate success, else error code</returns>
+        public int AddUser(Model.User user, out string newUserId)
         {
-            return "1";
+            newUserId = "1";
+            return 0;
         }
 
         public bool UpdateToken(string userId, string newToken, string newValidity)
+        {
+            return true;
+        }
+
+        public bool AddOrUpdateDevice(string userId, string identifier)
         {
             return true;
         }
