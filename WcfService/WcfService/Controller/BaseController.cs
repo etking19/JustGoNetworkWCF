@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web.Script.Serialization;
 using WcfService.Dao;
 using WcfService.Model;
 
@@ -11,6 +8,8 @@ namespace WcfService.Controller
     {
         // share common attributes
         protected Response response = new Response();
+
+        protected JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
 
         // Dao classes
         protected static CommonDao commonDao = new CommonDao();
@@ -32,5 +31,6 @@ namespace WcfService.Controller
         protected static FleetDao fleetDao = new FleetDao();
         protected static JobDetailsDao jobDetailsDao = new JobDetailsDao();
         protected static JobDeliveryDao jobDeliveryDao = new JobDeliveryDao();
+        protected static AddressDao addressDao = new AddressDao();
     }
 }

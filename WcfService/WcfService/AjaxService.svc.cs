@@ -81,12 +81,7 @@ namespace WcfService
 
         public Response FleetUpdate(string fleetId, Fleet fleet)
         {
-            throw new NotImplementedException();
-        }
-
-        public Response FleetUpdateDriver(string fleetId, string userId)
-        {
-            throw new NotImplementedException();
+            return fleetController.UpdateFleet(fleetId, fleet);
         }
 
         public Response PermissionGet()
@@ -218,9 +213,9 @@ namespace WcfService
             return commonController.GetDeliveryError(deliveryErrId);
         }
 
-        public Response JobDetailsGetAll()
+        public Response JobDetailsGetAll(string limit, string skip)
         {
-            return jobController.GetJobDetails();
+            return jobController.GetJobDetails(limit, skip);
         }
 
         public Response JobDetailsGet(string jobId)
@@ -230,7 +225,7 @@ namespace WcfService
 
         public Response JobDetailsGetByCompany(string companyId)
         {
-            return jobController.GetJobDetailsByCompanyId(companyId);
+            return jobController.GetJobDetailsByDeliveryCompany(companyId);
         }
 
         public Response JobDetailsAdd(JobDetails jobDetails)
@@ -253,9 +248,9 @@ namespace WcfService
             return jobController.AddAddressFrom(userId, jobAddress);
         }
 
-        public Response JobAddressFromGet(string userId)
+        public Response JobAddressFromGetLimit(string userId, string limit, string skip)
         {
-            return jobController.GetAddressesFrom(userId);
+            return jobController.GetAddressesFromLimit(userId, limit, skip);
         }
 
         public Response JobAddressToAdd(string userId, Address jobAddress)
@@ -263,14 +258,14 @@ namespace WcfService
             return jobController.AddAddressTo(userId, jobAddress);
         }
 
-        public Response JobAddressToGet(string userId)
+        public Response JobAddressToGetLimit(string userId, string limit, string skip)
         {
-            return jobController.GetAddressesTo(userId);
+            return jobController.GetAddressesToLimit(userId, limit, skip);
         }
 
-        public Response JobDeliveryGetAll()
+        public Response JobDeliveryGetAll(string limit, string skip)
         {
-            return jobController.GetJobDelivery();
+            return jobController.GetJobDelivery(limit, skip);
         }
 
         public Response JobDeliveryGetById(string jobId)
@@ -278,19 +273,19 @@ namespace WcfService
             return jobController.GetJobDelivery(jobId);
         }
 
-        public Response JobDeliveryGetByCompany(string companyId)
+        public Response JobDeliveryGetByCompany(string companyId, string limit, string skip, string status)
         {
-            return jobController.GetJobDeliveryByCompany(companyId);
+            return jobController.GetJobDeliveryByCompany(companyId, limit, skip, status);
         }
 
-        public Response JobDeliveryGetByDriver(string userId)
+        public Response JobDeliveryGetByDriver(string userId, string limit, string skip, string status)
         {
-            return jobController.GetJobDeliveryByDriver(userId);
+            return jobController.GetJobDeliveryByDriver(userId, limit, skip, status);
         }
 
-        public Response JobDeliveryGetByStatus(string statusId)
+        public Response JobDeliveryGetByStatus(string statusId, string limit, string skip)
         {
-            return jobController.GetJobDeliveryByStatus(statusId);
+            return jobController.GetJobDeliveryByStatus(statusId, limit, skip);
         }
 
         public Response JobDeliveryAdd(string jobId, string companyId, string driverId)
@@ -320,7 +315,7 @@ namespace WcfService
 
         public Response JobDeliveryStatusGetAll()
         {
-            return jobController.GetJobDelivery();
+            return commonController.GetJobStatus();
         }
 
         public Response JobDeliveryStatusGet(string uniqueId)
@@ -328,14 +323,14 @@ namespace WcfService
             return jobController.GetJobDeliveryByUniqueId(uniqueId);
         }
 
-        public Response JobDeliveryStatusGetByCompany(string companyId)
+        public Response JobDeliveryStatusGetByCompany(string companyId, string limit, string skip, string status)
         {
-            return jobController.GetJobDeliveryByCompany(companyId);
+            return jobController.GetJobDeliveryByCompany(companyId, limit, skip, status);
         }
 
-        public Response JobDeliveryStatusGetByDriver(string driverId)
+        public Response JobDeliveryStatusGetByDriver(string driverId, string limit, string skip, string status)
         {
-            return jobController.GetJobDeliveryByDriver(driverId);
+            return jobController.GetJobDeliveryByDriver(driverId, limit, skip, status);
         }
 
         public Response JobDeliveryStatusGetByJobId(string jobId)
@@ -351,6 +346,11 @@ namespace WcfService
         public Response JobDeliveryStatusUpdate(string jobId, string statusId)
         {
             return jobController.UpdateDeliveryStatus(jobId, statusId);
+        }
+
+        public Response JobAddressFrpmGetLimit(string userId, string limit, string skip)
+        {
+            return jobController.GetAddressesFromLimit(userId, limit, skip);
         }
     }
 }

@@ -8,6 +8,5 @@ namespace WcfService.Dao
 {
     public class BaseDao
     {
-        public static JavaScriptSerializer sJavaScriptSerializer = new JavaScriptSerializer();
     }
 }

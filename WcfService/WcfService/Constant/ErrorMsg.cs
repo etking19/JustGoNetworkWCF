@@ -7,9 +7,10 @@ namespace WcfService.Constant
 {
     public class ErrorMsg
     {
-        private static Dictionary<int, string> errorMsgDic; 
+        private static ErrorMsg sInstance = null;
+        private Dictionary<int, string> errorMsgDic; 
 
-        static ErrorMsg()
+        private ErrorMsg()
         {
             // initialize all error value here
             errorMsgDic = new Dictionary<int, string>();
@@ -18,6 +19,7 @@ namespace WcfService.Constant
 
             errorMsgDic.Add(ErrorCode.EGeneralError, "General error. Please see administrator to resolve issue.");
             errorMsgDic.Add(ErrorCode.EUnknownError, "Internal error. Please try again later.");
+            errorMsgDic.Add(ErrorCode.EParameterError, "API error. Please try again later.");
 
             errorMsgDic.Add(ErrorCode.ECredentialError, "Username or Password incorrect.");
             errorMsgDic.Add(ErrorCode.ETokenError, "Token was invalid");
@@ -44,7 +46,17 @@ namespace WcfService.Constant
 
         }
 
-        public static string GetErrorMsg(int errorCode)
+        public static ErrorMsg GetInstance()
+        {
+            if(sInstance == null)
+            {
+                sInstance = new ErrorMsg();
+            }
+
+            return sInstance;
+        }
+
+        public string GetErrorMsg(int errorCode)
         {
             string errorMsg = "";
             errorMsgDic.TryGetValue(errorCode, out errorMsg);

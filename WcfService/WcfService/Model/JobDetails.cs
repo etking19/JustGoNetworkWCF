@@ -9,55 +9,58 @@ namespace WcfService.Model
     [DataContract]
     public class JobDetails
     {
-        [DataMember]
-        public string jobId;
+        [DataMember(IsRequired = false)]
+        public string jobId { get; set; }
 
-        [DataMember]
-        public string ownerUserId;
+        [DataMember(IsRequired = true)]
+        public string ownerUserId { get; set; }
 
-        [DataMember]
-        public string jobTypeId;
+        [DataMember(IsRequired = true)]
+        public string jobTypeId { get; set; }
 
-        [DataMember]
-        public float amount;
+        [DataMember(IsRequired = true)]
+        public float amount { get; set; }
 
-        [DataMember]
-        public float amountPaid;
+        [DataMember(IsRequired = false)]
+        public float amountPaid { get; set; }
 
-        [DataMember]
-        public bool cashOnDelivery;
+        [DataMember(IsRequired = false)]
+        public bool cashOnDelivery { get; set; }
 
-        [DataMember]
-        public int workerAsistance;
+        [DataMember(IsRequired = true)]
+        public int workerAsistance { get; set; }
 
-        [DataMember]
-        public string remarks;
+        [DataMember(IsRequired = true)]
+        public string remarks { get; set; }
 
-        [DataMember]
-        public string uniqueId;
+        [DataMember(IsRequired = false)]
+        public string uniqueId { get; set; }
 
-        [DataMember]
-        public bool enabled;
+        [DataMember(IsRequired = false)]
+        public bool enabled { get; set; }
 
-        [DataMember]
-        public string createdBy;
+        [DataMember(IsRequired = false)]
+        public string createdBy { get; set; }
 
-        [DataMember]
-        public string addressFromId;
+        [DataMember(IsRequired = true)]
+        public string addressFromId { get; set; }
 
-        [DataMember]
-        public string addressToId;
+        [DataMember(IsRequired = true)]
+        public string addressToId { get; set; }
 
-        [DataMember]
-        public string creationDate;
+        [DataMember(IsRequired = false)]
+        public string creationDate { get; set; }
 
-        [DataMember]
-        public string jobStatusId;
+        [DataMember(IsRequired = false)]
+        public string jobStatusId { get; set; }
 
-        public string modifiedBy;
+        [DataMember(IsRequired = false)]
+        public string modifiedBy { get; set; }
+   
+        [DataMember(IsRequired = false)]
+        public string lastModifiedDate { get; set; }
 
-        public string lastModifiedDate;
-
-        public bool deleted;
+        [DataMember(IsRequired = false)]
+        public bool deleted { get; set; }
     }
 }

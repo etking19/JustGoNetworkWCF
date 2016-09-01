@@ -12,7 +12,7 @@ namespace WcfService.Utility
         {
             response.success = success;
             response.errorCode = errorCode;
-            response.errorMessage = Constant.ErrorMsg.GetErrorMsg(errorCode);
+            response.errorMessage = Constant.ErrorMsg.GetInstance().GetErrorMsg(errorCode);
 
             return response;
         }

@@ -6,6 +6,7 @@
 
         public static int EGeneralError = 1000;
         public static int EUnknownError = 1001;
+        public static int EParameterError = 1002;
 
         // User error
         public static int ECredentialError = 2000;
@@ -26,6 +27,6 @@
         // Company error
         public static int ECompanyDeleted = 2100;
         public static int ECompanyNotFound = 2101;
-        public static int ECompanyDisabled = 2012;
+        public static int ECompanyDisabled = 2102;
     }
 }

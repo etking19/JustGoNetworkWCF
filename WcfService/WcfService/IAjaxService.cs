@@ -43,7 +43,7 @@ namespace WcfService
         Model.Response UserDeleteProfile(string userId);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/user/profile", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/user/profile", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserAddProfile(Model.User user);
 
         [OperationContract]
@@ -67,11 +67,11 @@ namespace WcfService
         Model.Response CompanyGetAllProfile(string number, string skip);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/company/profile", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/company/profile", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response CompanyAddProfile(Model.Company company);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/company/profile/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "PUT", UriTemplate = "/company/profile/{companyId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response CompanyUpdateProfile(string companyId, Model.Company company);
 
         [OperationContract]
@@ -90,7 +90,7 @@ namespace WcfService
         Model.Response RoleGetAll(string roleId);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/role/details", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/role/details", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response RoleAdd(Model.Role role);
 
         [OperationContract]
@@ -98,7 +98,7 @@ namespace WcfService
         Model.Response RoleDelete(string roleId);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/role/details/{roleId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "PUT", UriTemplate = "/role/details/{roleId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response RoleUpdate(string roleId, Model.Role role);
 
 
@@ -131,16 +131,12 @@ namespace WcfService
         Model.Response FleetGetByCompany(string companyId);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/fleet/lorry", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/fleet/lorry", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response FleetAdd(Model.Fleet fleet);
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response FleetUpdate(string fleetId, Model.Fleet fleet);
-
-        [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/fleet/user/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetUpdateDriver(string fleetId, string userId);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -192,8 +188,8 @@ namespace WcfService
         // job details
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/details", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDetailsGetAll();
+        [WebInvoke(Method = "GET", UriTemplate = "/job/details?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDetailsGetAll(string limit, string skip);
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/job/details/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -204,7 +200,7 @@ namespace WcfService
         Model.Response JobDetailsGetByCompany(string companyId);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/job/details", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/job/details", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDetailsAdd(Model.JobDetails jobDetails);
 
         [OperationContract]
@@ -223,38 +219,38 @@ namespace WcfService
         Model.Response JobAddressFromAdd(string userId, Model.Address jobAddress);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/address/from/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressFromGet(string userId);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/address/from/{userId}?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAddressFromGetLimit(string userId, string limit, string skip);
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/job/address/to", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobAddressToAdd(string userId, Model.Address jobAddress);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/address/to/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressToGet(string userId);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/address/to/{userId}?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAddressToGetLimit(string userId, string limit, string skip);
 
         // job delivery
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetAll();
+        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryGetAll(string limit, string skip);
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDeliveryGetById(string jobId);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/company/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetByCompany(string companyId);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/company/{companyId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryGetByCompany(string companyId, string limit, string skip, string status);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/driver/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetByDriver(string userId);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/driver/{userId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryGetByDriver(string userId, string limit, string skip, string status);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/status/{statusId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetByStatus(string statusId);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/status/{statusId}?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryGetByStatus(string statusId, string limit, string skip);
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/job/delivery", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -292,12 +288,12 @@ namespace WcfService
         Model.Response JobDeliveryStatusGet(string uniqueId);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/status/company/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusGetByCompany(string companyId);
+        [WebInvoke(Method = "GET", UriTemplate = "/status/company/{companyId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryStatusGetByCompany(string companyId, string limit, string skip, string status);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/status/driver/{driverId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusGetByDriver(string driverId);
+        [WebInvoke(Method = "GET", UriTemplate = "/status/driver/{driverId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryStatusGetByDriver(string driverId, string limit, string skip, string status);
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/status/job/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
