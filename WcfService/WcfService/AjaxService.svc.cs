@@ -233,11 +233,6 @@ namespace WcfService
             return jobController.AddJobDetails(jobDetails);
         }
 
-        public Response JobDetailsUpdate(string jobId, JobDetails jobDetails)
-        {
-            return jobController.UpdateJobDetails(jobId, jobDetails);
-        }
-
         public Response JobDetailsDelete(string jobId)
         {
             return jobController.DeleteJobDetails(jobId);
@@ -351,6 +346,11 @@ namespace WcfService
         public Response JobAddressFrpmGetLimit(string userId, string limit, string skip)
         {
             return jobController.GetAddressesFromLimit(userId, limit, skip);
+        }
+
+        public Response JobDeliveryGetStatus(string uniqueId)
+        {
+            return jobController.GetJobStatus(uniqueId);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace WcfService.Controller
 
             // 2. update the token info
             string newToken = Guid.NewGuid().ToString();
-            string newValidity = Utils.GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
+            string newValidity = commonDao.GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
 
             if (false == userDao.UpdateToken(user.userId, newToken, newValidity))
             {
@@ -298,7 +298,7 @@ namespace WcfService.Controller
         public bool UpdateUserToken(string userId)
         {
             string newToken = Guid.NewGuid().ToString();
-            string newValidity = Utils.GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
+            string newValidity = commonDao.GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
 
             return userDao.UpdateToken(userId, newToken, newValidity);
         }

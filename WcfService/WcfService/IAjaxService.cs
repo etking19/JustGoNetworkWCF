@@ -204,10 +204,6 @@ namespace WcfService
         Model.Response JobDetailsAdd(Model.JobDetails jobDetails);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/job/details/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDetailsUpdate(string jobId, Model.JobDetails jobDetails);
-
-        [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/job/details/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDetailsDelete(string jobId);
 
@@ -268,7 +264,9 @@ namespace WcfService
         [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/openJobs", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDeliveryGetOpenJobs();
 
-
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/job/details?uniqueId={uniqueId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryGetStatus(string uniqueId);
 
         // Job Status
 

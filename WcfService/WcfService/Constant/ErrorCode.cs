@@ -28,5 +28,10 @@
         public static int ECompanyDeleted = 2100;
         public static int ECompanyNotFound = 2101;
         public static int ECompanyDisabled = 2102;
+
+        // Job error
+        public static int EJobDeleted = 2200;
+        public static int EJobNotFound = 2201;
+        public static int EJobDisabled = 2202;
     }
 }

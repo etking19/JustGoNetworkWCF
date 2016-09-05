@@ -21,8 +21,8 @@ namespace WcfService.Dao
             {
                 Dictionary<string, string> commandDic = new Dictionary<string, string>();
                 commandDic.Add("id", userId);
-                command = Utils.GenerateQueryCmd(sDatabaseName, commandDic);
-                reader = Utils.PerformSqlQuery(command);
+                command = GenerateQueryCmd(sDatabaseName, commandDic);
+                reader = PerformSqlQuery(command);
                 if(false == reader.Read())
                 {
                     return null;
@@ -50,7 +50,7 @@ namespace WcfService.Dao
             }
             finally
             {
-                Utils.CleanUp(reader, command);
+                CleanUp(reader, command);
             }
 
             return user;
@@ -66,8 +66,8 @@ namespace WcfService.Dao
             {
                 Dictionary<string, string> commandDic = new Dictionary<string, string>();
                 commandDic.Add("username", username);
-                command = Utils.GenerateQueryCmd(sDatabaseName, commandDic);
-                reader = Utils.PerformSqlQuery(command);
+                command = GenerateQueryCmd(sDatabaseName, commandDic);
+                reader = PerformSqlQuery(command);
                 if (false == reader.Read())
                 {
                     return null;
@@ -94,7 +94,7 @@ namespace WcfService.Dao
             }
             finally
             {
-                Utils.CleanUp(reader, command);
+                CleanUp(reader, command);
             }
 
             return user;
@@ -108,8 +108,8 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
-                command = Utils.GenerateQueryCmdWithLimit(sDatabaseName, number, skip);
-                reader = Utils.PerformSqlQuery(command);
+                command = GenerateQueryCmdWithLimit(sDatabaseName, number, skip);
+                reader = PerformSqlQuery(command);
                 while (reader.Read())
                 {
                     Model.User user = new Model.User();
@@ -139,7 +139,7 @@ namespace WcfService.Dao
             }
             finally
             {
-                Utils.CleanUp(reader, command);
+                CleanUp(reader, command);
             }
 
             return userList;

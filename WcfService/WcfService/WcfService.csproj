@@ -162,10 +162,10 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\DBLogger.cs" />
+    <Compile Include="Utility\IdGenerator.cs" />
     <Compile Include="Utility\UtilNotification.cs" />
     <Compile Include="Utility\Utils.cs" />
     <Compile Include="Utility\UtilSms.cs" />
-    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

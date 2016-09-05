@@ -40,8 +40,9 @@ namespace WcfService.Constant
             errorMsgDic.Add(ErrorCode.ECompanyNotFound, "Company not found. Please see administrator for more info.");
             errorMsgDic.Add(ErrorCode.ECompanyDisabled, "Company disabled. Please see administrator for more info.");
 
-
-
+            errorMsgDic.Add(ErrorCode.EJobDeleted, "Job deleted. Please see administrator for more info.");
+            errorMsgDic.Add(ErrorCode.EJobNotFound, "Job not found. Please try different ID.");
+            errorMsgDic.Add(ErrorCode.EJobDisabled, "Job disabled. Please see administrator for more info.");
 
 
         }

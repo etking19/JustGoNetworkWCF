@@ -8,6 +8,8 @@ namespace WcfService.Controller
 {
     public class JobController : BaseController
     {
+        private readonly ulong JOB_ID_PAD = 999999;
+
         public Response GetJobDetails(string limit, string skip)
         {
             response.payload = javaScriptSerializer.Serialize(jobDetailsDao.Get(limit, skip));
@@ -22,9 +24,30 @@ namespace WcfService.Controller
             return response;
         }
 
-        public Response GetJobDetailsByUniqueId(string uniqueId)
+        public Response GetJobStatus(string uniqueId)
         {
-            response.payload = javaScriptSerializer.Serialize(jobDetailsDao.GetByUniqueId(uniqueId));
+            var jobId = decodeUniqueId(uniqueId);
+            var result = jobDetailsDao.Get(jobId);
+
+            if (result == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EJobNotFound);
+                return response;
+            }
+
+            if (result.deleted)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EJobDeleted);
+                return response;
+            }
+
+            if(result.enabled == false)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EJobDisabled);
+                return response;
+            }
+
+            response.payload = javaScriptSerializer.Serialize(result);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
@@ -45,33 +68,18 @@ namespace WcfService.Controller
 
         public Response AddJobDetails(Model.JobDetails payload)
         {
-            // generate unique job id
-            var uniqueJobId = payload.ownerUserId.ToString() + "-" + Guid.NewGuid().ToString("N");
-
-            // fill other details
-            payload.uniqueId = uniqueJobId;
-            payload.createdBy = payload.ownerUserId;
-
             // add to database
-            payload.jobId = jobDetailsDao.Add(payload);
+            payload.createdBy = payload.ownerUserId;
+            var jobId = jobDetailsDao.Add(payload);
+
+            // unique id was base on job id
+            payload.jobId = jobId;
+            var ulongjobId = ulong.Parse(jobId);
+            payload.uniqueId = Utility.IdGenerator.Encode(ulongjobId + JOB_ID_PAD);
 
             response.payload = javaScriptSerializer.Serialize(payload);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
 
-            return response;
-        }
-
-        public Response UpdateJobDetails(string jobId, Model.JobDetails payload)
-        {
-            if(jobDetailsDao.Update(jobId, payload))
-            {
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            }
-            else
-            {
-                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
-            }
-            
             return response;
         }
 
@@ -126,7 +134,10 @@ namespace WcfService.Controller
 
         public Response GetJobDeliveryByUniqueId(string uniqueId)
         {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.GetByUniqueId(uniqueId));
+            // decode the unique id
+            var jobId = decodeUniqueId(uniqueId);
+
+            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.Get(jobId.ToString()));
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
@@ -223,14 +234,16 @@ namespace WcfService.Controller
                 return response;
             }
 
-            jobDeliveryDao.UpdateRating(uniqueId, rating);
+            var jobId = decodeUniqueId(uniqueId);
+            jobDeliveryDao.UpdateRating(jobId, rating);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
         public Response GetRating(string uniqueId)
         {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.GetRating(uniqueId));
+            var jobId = decodeUniqueId(uniqueId);
+            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.GetRating(jobId));
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
@@ -240,6 +253,11 @@ namespace WcfService.Controller
             response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.UpdateStatus(jobId, jobStatusId));
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
+        }
+
+        private string decodeUniqueId(string uniqueId)
+        {
+            return (Utility.IdGenerator.Decode(uniqueId) -JOB_ID_PAD).ToString();
         }
     }
 }
