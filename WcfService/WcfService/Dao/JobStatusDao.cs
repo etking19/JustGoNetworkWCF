@@ -32,7 +32,8 @@ namespace WcfService.Dao
             }
             catch(Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
             }
             finally
             {

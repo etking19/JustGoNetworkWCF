@@ -34,19 +34,16 @@ namespace WcfService.Model
         public string remarks { get; set; }
 
         [DataMember(IsRequired = false)]
-        public string uniqueId { get; set; }
-
-        [DataMember(IsRequired = false)]
         public bool enabled { get; set; }
 
         [DataMember(IsRequired = false)]
         public string createdBy { get; set; }
 
         [DataMember(IsRequired = true)]
-        public string addressFromId { get; set; }
+        public List<Address> addressFrom { get; set; }
 
         [DataMember(IsRequired = true)]
-        public string addressToId { get; set; }
+        public List<Address> addressTo { get; set; }
 
         [DataMember(IsRequired = false)]
         public string creationDate { get; set; }
@@ -60,7 +57,6 @@ namespace WcfService.Model
         [DataMember(IsRequired = false)]
         public string lastModifiedDate { get; set; }
 
-        [DataMember(IsRequired = false)]
         public bool deleted { get; set; }
     }
 }

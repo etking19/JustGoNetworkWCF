@@ -9,42 +9,45 @@ namespace WcfService.Model
     [DataContract]
     public class User
     {
-        [DataMember]
+        [DataMember(IsRequired = false)]
         public string userId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string username;
 
+        [DataMember(IsRequired = false)]
         public string password;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string displayName;
 
-        [DataMember]
+        [DataMember(IsRequired = false)]
         public string identityCard;
 
-        [DataMember]
+        [DataMember(IsRequired = false)]
         public string image;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string contactNumber;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string email;
 
-        [DataMember]
+        [DataMember(IsRequired = false)]
         public bool enabled;
 
         public bool deleted;
 
+        [DataMember(IsRequired = false)]
         public string creationDate;
 
+        [DataMember(IsRequired = false)]
         public string lastModifiedDate;
 
-        [DataMember]
+        [DataMember(IsRequired = false)]
         public string companyId;
 
-        [DataMember]
+        [DataMember(IsRequired = false)]
         public string roleId;
     }
 }

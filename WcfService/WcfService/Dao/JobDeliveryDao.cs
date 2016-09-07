@@ -31,8 +31,8 @@ namespace WcfService.Dao
             }
             catch (Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
             }
             finally
             {
@@ -55,8 +55,8 @@ namespace WcfService.Dao
             }
             catch (Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
             }
             finally
             {

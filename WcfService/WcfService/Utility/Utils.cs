@@ -14,6 +14,10 @@ namespace WcfService.Utility
             response.errorCode = errorCode;
             response.errorMessage = Constant.ErrorMsg.GetInstance().GetErrorMsg(errorCode);
 
+            if(success == false)
+            {
+                response.payload = null;
+            }
             return response;
         }
     }

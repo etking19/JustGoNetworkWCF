@@ -9,31 +9,38 @@ namespace WcfService.Model
     [DataContract]
     public class Address
     {
-        [DataMember]
+        [DataMember(IsRequired = false)]
         public string addressId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string address1;
 
+        [DataMember(IsRequired = true)]
         public string address2;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string address3;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string stateId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string countryId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string postcode;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public float gpsLongitude;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public float gpsLatitude;
+
+        [DataMember(IsRequired = false)]
+        public string contactPerson;
+
+        [DataMember(IsRequired = false)]
+        public string contact;
 
         public string createdBy;
 

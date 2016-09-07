@@ -132,6 +132,7 @@
     <Compile Include="Dao\JobDeliveryDao.cs" />
     <Compile Include="Dao\JobDetailsDao.cs" />
     <Compile Include="Dao\JobStatusDao.cs" />
+    <Compile Include="Dao\LoggerDao.cs" />
     <Compile Include="Dao\OtpDao.cs" />
     <Compile Include="Dao\PermissionDao.cs" />
     <Compile Include="Dao\PickUpErrorDao.cs" />
@@ -150,12 +151,14 @@
     <Compile Include="Model\FleetType.cs" />
     <Compile Include="Model\JobDelivery.cs" />
     <Compile Include="Model\JobDetails.cs" />
+    <Compile Include="Model\JobOrderStatus.cs" />
     <Compile Include="Model\JobStatus.cs" />
     <Compile Include="Model\Otp.cs" />
     <Compile Include="Model\Permission.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Model\PickupError.cs" />
     <Compile Include="Model\Response.cs" />
+    <Compile Include="Model\ResponseJobOrderStatus.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\State.cs" />
     <Compile Include="Model\Token.cs" />

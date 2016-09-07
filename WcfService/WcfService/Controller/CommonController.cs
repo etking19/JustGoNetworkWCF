@@ -8,6 +8,11 @@ namespace WcfService.Controller
 {
     public class CommonController : BaseController
     {
+        public string Test()
+        {
+            return commonDao.Test();
+        }
+
         public Response GetPickupError()
         {
             response.payload = pickupErrDao.Get();
@@ -81,13 +86,6 @@ namespace WcfService.Controller
         public Response GetCountry(string id)
         {
             response.payload = countryDao.GetCountry(id);
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
-
-        public Response GetJobStatus()
-        {
-            response.payload = jobStatusDao.Get();
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WcfService.Constant;
 using WcfService.Controller;
 using WcfService.Model;
@@ -126,12 +127,14 @@ namespace WcfService
 
         public Model.Response Test()
         {
+
             Model.Response response = new Response()
             {
                 errorCode = ErrorCode.ESuccess,
                 errorMessage = "test success",
-                success = true
-            };
+                success = true,
+                payload = commonController.Test()
+        };
 
             return response;
         }
@@ -213,50 +216,27 @@ namespace WcfService
             return commonController.GetDeliveryError(deliveryErrId);
         }
 
-        public Response JobDetailsGetAll(string limit, string skip)
+
+        public Response JobAdd(Model.JobDetails jobDetails)
         {
-            return jobController.GetJobDetails(limit, skip);
+            return jobController.AddJob(jobDetails, jobDetails.addressFrom.ToArray(), jobDetails.addressTo.ToArray());
         }
 
-        public Response JobDetailsGet(string jobId)
+        public Response JobGet()
         {
-            return jobController.GetJobDetails(jobId);
-        }
-
-        public Response JobDetailsGetByCompany(string companyId)
-        {
-            return jobController.GetJobDetailsByDeliveryCompany(companyId);
-        }
-
-        public Response JobDetailsAdd(JobDetails jobDetails)
-        {
-            return jobController.AddJobDetails(jobDetails);
+            return jobController.GetJob();
         }
 
         public Response JobDetailsDelete(string jobId)
         {
-            return jobController.DeleteJobDetails(jobId);
+            return jobController.DeleteJob(jobId);
         }
 
-        public Response JobAddressFromAdd(string userId, Address jobAddress)
+        public Response JobAddressGet()
         {
-            return jobController.AddAddressFrom(userId, jobAddress);
+            throw new NotImplementedException();
         }
 
-        public Response JobAddressFromGetLimit(string userId, string limit, string skip)
-        {
-            return jobController.GetAddressesFromLimit(userId, limit, skip);
-        }
-
-        public Response JobAddressToAdd(string userId, Address jobAddress)
-        {
-            return jobController.AddAddressTo(userId, jobAddress);
-        }
-
-        public Response JobAddressToGetLimit(string userId, string limit, string skip)
-        {
-            return jobController.GetAddressesToLimit(userId, limit, skip);
-        }
 
         public Response JobDeliveryGetAll(string limit, string skip)
         {
@@ -300,18 +280,14 @@ namespace WcfService
 
         public Response JobStatusGet()
         {
-            return commonController.GetJobStatus();
+            return jobController.GetJobStatus();
         }
 
-        public Response JobDeliveryGetOpenJobs()
+        public Response JobOpenGet()
         {
             return jobController.GetOpenJobs();
         }
 
-        public Response JobDeliveryStatusGetAll()
-        {
-            return commonController.GetJobStatus();
-        }
 
         public Response JobDeliveryStatusGet(string uniqueId)
         {
@@ -348,9 +324,9 @@ namespace WcfService
             return jobController.GetAddressesFromLimit(userId, limit, skip);
         }
 
-        public Response JobDeliveryGetStatus(string uniqueId)
+        public Response JobDeliveryGetStatus()
         {
-            return jobController.GetJobStatus(uniqueId);
+            return jobController.GetJobStatus();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 using System.ServiceModel.Web;
 
 namespace WcfService
@@ -186,45 +187,34 @@ namespace WcfService
 
 
         // job details
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/job", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAdd(Model.JobDetails jobDetails);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/details?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDetailsGetAll(string limit, string skip);
+        [WebInvoke(Method = "GET", UriTemplate = "/job?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobGet();
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/details/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDetailsGet(string jobId);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/open?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobOpenGet();
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/details/company/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDetailsGetByCompany(string companyId);
-
-        [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/job/details", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDetailsAdd(Model.JobDetails jobDetails);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/status?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobStatusGet();
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/job/details/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDetailsDelete(string jobId);
 
+
         
+
         // job address
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/job/address/from", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressFromAdd(string userId, Model.Address jobAddress);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/address/from/{userId}?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressFromGetLimit(string userId, string limit, string skip);
-
-        [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/job/address/to", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressToAdd(string userId, Model.Address jobAddress);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/address/to/{userId}?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobAddressToGetLimit(string userId, string limit, string skip);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/address?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobAddressGet();
 
         // job delivery
 
@@ -261,25 +251,11 @@ namespace WcfService
         Model.Response JobDeliveryDelete(string jobId);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/openJobs", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetOpenJobs();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/details?uniqueId={uniqueId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetStatus(string uniqueId);
-
-        // Job Status
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/status", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobStatusGet();
-
+        [WebInvoke(Method = "GET", UriTemplate = "/job/details?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryGetStatus();
 
 
         // Job Delivery Status
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/status", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusGetAll();
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/status/{uniqueId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]

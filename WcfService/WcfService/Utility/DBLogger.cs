@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Dao;
 
 namespace WcfService.Utility
 {
     public class DBLogger
     {
-        protected static readonly object lockObj = new object();
+        private static DBLogger sInstance = null;
+        private LoggerDao loggerDao = null;
+
         public enum ESeverity
         {
             Info = 0,
@@ -16,12 +19,24 @@ namespace WcfService.Utility
             Critical = 3
         };
 
-        public static void Log(ESeverity level, string message)
+        private DBLogger()
         {
-            lock(lockObj)
+            loggerDao = new LoggerDao();
+        }
+
+        public static DBLogger GetInstance()
+        {
+            if(sInstance == null)
             {
-                // TODO: write to DB
+                sInstance = new DBLogger();
             }
+
+            return sInstance;
+        }
+
+        public void Log(ESeverity level, string message)
+        {
+            loggerDao.AddLog(Convert.ToInt32(level), message.Replace(Environment.NewLine, " "));
         }
     }
 }

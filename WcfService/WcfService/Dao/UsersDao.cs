@@ -21,6 +21,8 @@ namespace WcfService.Dao
             {
                 Dictionary<string, string> commandDic = new Dictionary<string, string>();
                 commandDic.Add("id", userId);
+                commandDic.Add("deleted", "0");
+
                 command = GenerateQueryCmd(sDatabaseName, commandDic);
                 reader = PerformSqlQuery(command);
                 if(false == reader.Read())
@@ -28,7 +30,7 @@ namespace WcfService.Dao
                     return null;
                 }
 
-                user.userId = (string)reader["id"];
+                user.userId = reader["id"].ToString();
                 user.username = (string)reader["username"];
                 user.password = (string)reader["password"];
                 user.displayName = (string)reader["display_name"];
@@ -43,8 +45,8 @@ namespace WcfService.Dao
             }
             catch (Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
 
                 return null;
             }
@@ -73,7 +75,7 @@ namespace WcfService.Dao
                     return null;
                 }
 
-                user.userId = (string)reader["id"];
+                user.userId = reader["id"].ToString();
                 user.username = (string)reader["username"];
                 user.password = (string)reader["password"];
                 user.displayName = (string)reader["display_name"];
@@ -88,8 +90,8 @@ namespace WcfService.Dao
             }
             catch (Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
                 return null;
             }
             finally
@@ -114,7 +116,7 @@ namespace WcfService.Dao
                 {
                     Model.User user = new Model.User();
 
-                    user.userId = (string)reader["id"];
+                    user.userId = reader["id"].ToString();
                     user.username = (string)reader["username"];
                     user.password = (string)reader["password"];
                     user.displayName = (string)reader["display_name"];
@@ -132,8 +134,8 @@ namespace WcfService.Dao
             }
             catch (Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.Log(DBLogger.ESeverity.Info, e.StackTrace);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
 
                 return null;
             }

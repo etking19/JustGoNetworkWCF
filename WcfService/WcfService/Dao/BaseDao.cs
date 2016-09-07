@@ -10,6 +10,8 @@ namespace WcfService.Dao
 {
     public class BaseDao
     {
+        private Configuration configuration = new Configuration();
+
         public string GetCurrentUtcTime(int hourOffset)
         {
             return DateTime.UtcNow.AddHours(hourOffset).ToString("yyyy-MM-dd HH:mm:ss");
@@ -41,7 +43,7 @@ namespace WcfService.Dao
         public int PerformSqlNonQuery(MySqlCommand command)
         {
             int result = 0;
-            using (MySqlConnection conn = new MySqlConnection(Configuration.CONNECTION_STRING))
+            using (MySqlConnection conn = new MySqlConnection(configuration.CONNECTION_STRING))
             {
                 conn.Open();
                 command.Connection = conn;
@@ -54,7 +56,7 @@ namespace WcfService.Dao
 
         public MySqlDataReader PerformSqlQuery(MySqlCommand command)
         {
-            MySqlConnection conn = new MySqlConnection(Configuration.CONNECTION_STRING);
+            MySqlConnection conn = new MySqlConnection(configuration.CONNECTION_STRING);
             conn.Open();
             command.Connection = conn;
             return command.ExecuteReader();
@@ -63,7 +65,7 @@ namespace WcfService.Dao
 
         public object PerformSqlExeuteScalar(MySqlCommand command)
         {
-            MySqlConnection conn = new MySqlConnection(Configuration.CONNECTION_STRING);
+            MySqlConnection conn = new MySqlConnection(configuration.CONNECTION_STRING);
             conn.Open();
             command.Connection = conn;
             return command.ExecuteScalar();
@@ -77,7 +79,6 @@ namespace WcfService.Dao
             }
             catch (Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Info, e.Message);
             }
 
             try
@@ -86,7 +87,6 @@ namespace WcfService.Dao
             }
             catch (Exception e)
             {
-                DBLogger.Log(DBLogger.ESeverity.Info, e.Message);
             }
         }
 
@@ -175,7 +175,7 @@ namespace WcfService.Dao
             }
 
 
-            string query = string.Format("INSERT into {0} ({1}) values ({2}); SELECT LAST_INSERT_ID();", tableName, parameters, values);
+            string query = string.Format("INSERT into {0} ({1}) values ({2});", tableName, parameters, values);
             command.CommandText = query;
 
             return command;

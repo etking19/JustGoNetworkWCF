@@ -74,7 +74,7 @@ namespace WcfService.Controller
             };
 
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            response.payload = tokenPayload;
+            response.payload = javaScriptSerializer.Serialize(tokenPayload);
             return response;
         }
 
@@ -89,7 +89,7 @@ namespace WcfService.Controller
                 return response;
             }
 
-            response.payload = new Model.Token() { userId = userId };
+            response.payload = javaScriptSerializer.Serialize(new Model.Token() { userId = userId });
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
@@ -124,11 +124,12 @@ namespace WcfService.Controller
             var result = userDao.GetUserById(userId);
             if(result == null)
             {
+                response.payload = null;
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;
             }
 
-            response.payload = result;
+            response.payload = javaScriptSerializer.Serialize(result);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
@@ -142,7 +143,7 @@ namespace WcfService.Controller
                 return response;
             }
 
-            response.payload = result;
+            response.payload = javaScriptSerializer.Serialize(result);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
