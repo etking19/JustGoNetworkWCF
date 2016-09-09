@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.ServiceModel.Web;
 
 namespace WcfService
@@ -11,7 +10,9 @@ namespace WcfService
         [WebInvoke(Method = "POST", UriTemplate = "/test", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response Test();
 
-
+        [OperationContract]
+        [WebInvoke(Method = "OPTIONS", UriTemplate = "*", RequestFormat = WebMessageFormat.Xml)]
+        void GetOptions();
 
         // user
 
@@ -192,23 +193,26 @@ namespace WcfService
         Model.Response JobAdd(Model.JobDetails jobDetails);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/job?", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobGet();
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/open?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/job/open?", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobOpenGet();
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/status?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/job/status?", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobStatusGet();
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/job/details/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "DELETE", UriTemplate = "/job/details/{jobId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDetailsDelete(string jobId);
 
+        [OperationContract]
+        [WebInvoke(Method = "PUT", UriTemplate = "/job", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDetailsUpdate(Model.JobDetails jobDetails);
 
-        
+
 
         // job address
 

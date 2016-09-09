@@ -28,12 +28,14 @@ namespace WcfService.Dao
             }
             catch (Exception)
             {
-                throw;
+
             }
             finally
             {
                 CleanUp(reader, mySqlCmd);
             }
+
+            return null;
         }
     }
 }

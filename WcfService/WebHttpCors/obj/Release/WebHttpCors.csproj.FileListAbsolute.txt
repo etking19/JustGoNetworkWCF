@@ -1,0 +1,5 @@
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\bin\Release\WebHttpCors.dll
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\bin\Release\WebHttpCors.pdb
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\obj\Release\WebHttpCors.csprojResolveAssemblyReference.cache
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\obj\Release\WebHttpCors.dll
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\obj\Release\WebHttpCors.pdb

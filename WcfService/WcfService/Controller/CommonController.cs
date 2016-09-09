@@ -8,9 +8,11 @@ namespace WcfService.Controller
 {
     public class CommonController : BaseController
     {
-        public string Test()
+        public Response Test()
         {
-            return commonDao.Test();
+            response.payload = javaScriptSerializer.Serialize(commonDao.Test());
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
         }
 
         public Response GetPickupError()

@@ -225,16 +225,38 @@ namespace WcfService.Controller
         }
 
 
-        public Response GetAddressesFromLimit(string userId, string limit, string skip)
+        public Response GetAddresses()
         {
-            response.payload = javaScriptSerializer.Serialize(addressDao.Get(userId, limit, skip, Dao.AddressDao.EType.From));
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
 
-        public Response GetAddressesToLimit(string userId, string limit, string skip)
-        {
-            response.payload = javaScriptSerializer.Serialize(addressDao.Get(userId, limit, skip, Dao.AddressDao.EType.To));
+            var limit = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["limit"];
+            var skip = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["skip"];
+
+            var userId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["userId"];
+            var fromAdd = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["from"];
+            var toAdd = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["to"];
+
+            if (userId == null ||
+                (fromAdd == null && toAdd == null))
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
+                return response;
+            }
+
+            var type = fromAdd != null ? Dao.AddressDao.EType.From : Dao.AddressDao.EType.To;
+            var result = addressDao.Get(userId, limit, skip, type);
+
+            if(result == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            response.payload = javaScriptSerializer.Serialize(result);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }

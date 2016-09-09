@@ -1,19 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ServiceModel;
+using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
 using WcfService.Constant;
 using WcfService.Controller;
 using WcfService.Model;
+using WcfService.Utility;
 
 namespace WcfService
 {
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class AjaxService : IAjaxService
     {
+
         private static CommonController commonController = new CommonController();
         private static UserController userController = new UserController();
         private static CompanyController companyController = new CompanyController();
         private static RoleController roleController = new RoleController();
         private static FleetController fleetController = new FleetController();
         private static JobController jobController = new JobController();
+
+        public void GetOptions()
+        {
+            // empty function
+            DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, "GetOptions");
+        }
 
         public Response CompanyAddProfile(Company company)
         {
@@ -127,16 +138,7 @@ namespace WcfService
 
         public Model.Response Test()
         {
-
-            Model.Response response = new Response()
-            {
-                errorCode = ErrorCode.ESuccess,
-                errorMessage = "test success",
-                success = true,
-                payload = commonController.Test()
-        };
-
-            return response;
+            return commonController.Test();
         }
 
         public Response TokenCheck(string userId, string token)
@@ -227,6 +229,11 @@ namespace WcfService
             return jobController.GetJob();
         }
 
+        public Response JobDetailsUpdate(Model.JobDetails jobDetails)
+        {
+            throw new NotImplementedException();
+        }
+
         public Response JobDetailsDelete(string jobId)
         {
             return jobController.DeleteJob(jobId);
@@ -234,9 +241,8 @@ namespace WcfService
 
         public Response JobAddressGet()
         {
-            throw new NotImplementedException();
+            return jobController.GetAddresses();
         }
-
 
         public Response JobDeliveryGetAll(string limit, string skip)
         {
@@ -317,11 +323,6 @@ namespace WcfService
         public Response JobDeliveryStatusUpdate(string jobId, string statusId)
         {
             return jobController.UpdateDeliveryStatus(jobId, statusId);
-        }
-
-        public Response JobAddressFrpmGetLimit(string userId, string limit, string skip)
-        {
-            return jobController.GetAddressesFromLimit(userId, limit, skip);
         }
 
         public Response JobDeliveryGetStatus()

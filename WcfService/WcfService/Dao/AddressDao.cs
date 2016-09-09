@@ -18,30 +18,67 @@ namespace WcfService.Dao
         private readonly string TABLE_ADD = "addresses";
         private readonly string TABLE_JOB_FROM = "job_from";
         private readonly string TABLE_JOB_TO = "job_to";
-
-        public string Add(Model.Address payload)
-        {
-            return "1";
-        }
-
-        public bool Delete(string id)
-        {
-            return true;
-        }
+        private readonly string TABLE_JOB = "jobs";
 
         public List<Model.Address> Get(string userId, string limit, string skip, EType type)
         {
-            return null;
-        }
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                var destinationTable = (type == EType.From ? TABLE_JOB_FROM : TABLE_JOB_TO);
+                string query = string.Format("SELECT {2}.*, {0}.customer_name as name, {0}.customer_contact as contact FROM {0} " +
+                    "INNER JOIN {1} ON {0}.job_id={1}.id AND {1}.owner_id={3} " +
+                    "INNER JOIN {2} ON {2}.id={0}.address_id " +
+                    "ORDER BY id DESC ",
+                    destinationTable, TABLE_JOB, TABLE_ADD, userId);
 
-        public Model.Address Get(string id)
-        {
-            return null;
-        }
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
 
-        public bool Update(string id, Model.Address payload)
-        {
-            return true;
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                command = new MySqlCommand(query);
+                reader = PerformSqlQuery(command);
+
+                List<Model.Address> addressList = new List<Model.Address>();
+                while (reader.Read())
+                {
+                    addressList.Add(new Model.Address()
+                    {
+                        addressId = reader["id"].ToString(),
+                        address1 = reader["add_1"].ToString(),
+                        address2 = reader["add_2"].ToString(),
+                        address3 = reader["add_3"].ToString(),
+                        contactPerson = reader["name"].ToString(),
+                        contact = reader["contact"].ToString(),
+                        countryId = reader["country_id"].ToString(),
+                        stateId = reader["state_id"].ToString(),
+                        gpsLatitude = (float)reader["gps_latitude"],
+                        gpsLongitude = (float)reader["gps_longitude"],
+                        postcode = reader["postcode"].ToString(),
+                        creationDate = reader["creation_date"].ToString(),
+                    });
+                }
+
+                return addressList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, command);
+            }
+
+            return null;
         }
 
         public string Add(Model.Address payload, string jobId, string customerName, string contact, EType type)
