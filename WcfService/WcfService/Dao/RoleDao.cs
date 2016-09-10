@@ -1,48 +1,82 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WcfService.Model;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
     public class RoleDao : BaseDao
     {
-        public string AddRole(Role role)
-        {
-            return "1";
-        }
+        private readonly string TABLE_ROLES = "roles";
 
         public Role GetRoleById(string roleId)
         {
-            return new Model.Role()
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
             {
-                name = "MasterAdmin",
-                roleId = "123"
-            };
+                Dictionary<string, string> queryParam = new Dictionary<string, string>();
+                queryParam.Add("id", roleId);
+
+                mySqlCmd = GenerateQueryCmd(TABLE_ROLES, queryParam);
+                reader = PerformSqlQuery(mySqlCmd);
+                if(reader.Read())
+                {
+                    return new Role()
+                    {
+                        roleId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
         public List<Role> GetRoles()
         {
-            List<Role> roleList = new List<Role>()
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
             {
-                new Role()
-                { name="MasterAdmin", roleId="123"},
-                new Role() { name="Driver", roleId="333"}
+                mySqlCmd = GenerateQueryCmd(TABLE_ROLES);
+                reader = PerformSqlQuery(mySqlCmd);
 
-            };
+                List<Role> roleList = new List<Role>();
+                while (reader.Read())
+                {
+                    roleList.Add(new Role()
+                    {
+                        roleId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    });
+                }
 
-            return roleList;
-        }
+                return roleList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
 
-        public bool UpdateRole(string roleId, Role role)
-        {
-            return true;
-        }
-
-        public bool DeleteRole(string roleId)
-        {
-            return true;
+            return null;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Web;
 using System.Web;
 using WcfService.Model;
 
@@ -8,37 +9,38 @@ namespace WcfService.Controller
 {
     public class RoleController : BaseController
     {
-        public Response AddRole(Role role)
-        {
-            response.payload = roleDao.AddRole(role);
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
-
-        public Response EditRole(string roleId, Role role)
-        {
-            response.payload = roleDao.UpdateRole(roleId, role);
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
-
-        public Response GetRole(string roleId)
-        {
-            response.payload = roleDao.GetRoleById(roleId);
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
-
         public Response GetRoles()
         {
-            response.payload = roleDao.GetRoles();
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
 
-        public Response DeleteRole(string roleId)
-        {
-            response.payload = roleDao.DeleteRole(roleId);
+            var roleId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["roleId"];
+            if (roleId != null)
+            {
+                var result = roleDao.GetRoleById(roleId);
+                if(result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EResourceNotFoundError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = roleDao.GetRoles();
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }

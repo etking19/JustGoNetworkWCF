@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Web;
 using System.Web;
 using WcfService.Model;
 
@@ -45,14 +46,36 @@ namespace WcfService.Controller
 
         public Response GetFleetType()
         {
-            response.payload = fleetTypeDao.Get();
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
 
-        public Response GetFleetType(string id)
-        {
-            response.payload = fleetTypeDao.Get(id);
+            var fleetTypeId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["fleetTypeId"];
+            if(fleetTypeId != null)
+            {
+                var result = fleetTypeDao.Get(fleetTypeId);
+                if(result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EResourceNotFoundError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = fleetTypeDao.Get();
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }

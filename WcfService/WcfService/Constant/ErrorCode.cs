@@ -7,6 +7,7 @@
         public static int EGeneralError = 1000;
         public static int EUnknownError = 1001;
         public static int EParameterError = 1002;
+        public static int EResourceNotFoundError = 1003;
 
         // User error
         public static int ECredentialError = 2000;

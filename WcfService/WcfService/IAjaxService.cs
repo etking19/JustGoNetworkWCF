@@ -40,15 +40,6 @@ namespace WcfService
         [WebInvoke(Method = "GET", UriTemplate = "/user/profile?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserGetProfile();
 
-
-        //[OperationContract]
-        //[WebInvoke(Method = "GET", UriTemplate = "/user/profile/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        //Model.Response UserGetProfile(string userId);
-
-        //[OperationContract]
-        //[WebInvoke(Method = "GET", UriTemplate = "/user/profile/{number}/{skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        //Model.Response UserGetAllProfile(string number, string skip);
-
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/user/profile/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserDeleteProfile(string userId);
@@ -89,35 +80,15 @@ namespace WcfService
         // roles
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/role/details", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/role/details?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response RoleGet();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/role/details/{roleId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response RoleGetAll(string roleId);
-
-        [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/role/details", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response RoleAdd(Model.Role role);
-
-        [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/role/details/{roleId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response RoleDelete(string roleId);
-
-        [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/role/details/{roleId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response RoleUpdate(string roleId, Model.Role role);
 
 
         // fleet type
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/fleet/type", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/fleet/type?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response FleetTypeGet();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/fleet/type/{fleetTypeId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetTypeGetAll(string fleetTypeId);
 
 
         // permission

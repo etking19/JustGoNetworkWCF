@@ -20,6 +20,7 @@ namespace WcfService.Constant
             errorMsgDic.Add(ErrorCode.EGeneralError, "General error. Please see administrator to resolve issue.");
             errorMsgDic.Add(ErrorCode.EUnknownError, "Internal error. Please try again later.");
             errorMsgDic.Add(ErrorCode.EParameterError, "API error. Please try again later.");
+            errorMsgDic.Add(ErrorCode.EResourceNotFoundError, "Resource requested not found, please try again.");
 
             errorMsgDic.Add(ErrorCode.ECredentialError, "Username or Password incorrect.");
             errorMsgDic.Add(ErrorCode.ETokenError, "Token was invalid");

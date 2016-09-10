@@ -81,11 +81,6 @@ namespace WcfService
             return commonController.GetFleetType();
         }
 
-        public Response FleetTypeGetAll(string fleetTypeId)
-        {
-            return commonController.GetFleetType(fleetTypeId);
-        }
-
         public Response FleetUpdate(string fleetId, Fleet fleet)
         {
             return fleetController.UpdateFleet(fleetId, fleet);
@@ -96,29 +91,9 @@ namespace WcfService
             return commonController.GetPermission();
         }
 
-        public Response RoleAdd(Role role)
-        {
-            return roleController.AddRole(role);
-        }
-
-        public Response RoleDelete(string roleId)
-        {
-            return roleController.DeleteRole(roleId);
-        }
-
         public Response RoleGet()
         {
             return roleController.GetRoles();
-        }
-
-        public Response RoleGetAll(string roleId)
-        {
-            return roleController.GetRole(roleId);
-        }
-
-        public Response RoleUpdate(string roleId, Role role)
-        {
-            return roleController.EditRole(roleId, role);
         }
 
         public Response StateGet(string stateId)
