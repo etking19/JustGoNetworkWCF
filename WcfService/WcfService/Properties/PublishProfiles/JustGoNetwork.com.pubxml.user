@@ -7,29 +7,29 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAzF4Ojg2F90C06LS5cTh3rAAAAAACAAAAAAAQZgAAAAEAACAAAACA2QuCBTGstFNPB16rvytAvLYtCaZhn3lftfsR9PKOEgAAAAAOgAAAAAIAACAAAAAMEhgnCJUjPAZ83sMf1/OSOC0C7bKlEE6X/5JSyVbogSAAAACzmvgOCpzm27jc8SzEb24xyzyN8hLJE/o4KoQz7SdNFEAAAAB204n6VWZ9Wvn/+OH9dC2Utxb3k480Uyz4HrG15T+vPjGogMCxHUJgTJk8tqToZsHJdQ5qgOKrVsFxeUAXxpp4</EncryptedPassword>
-    <_PublishTargetUrl>ftp://ftp.justgonetwork.com/justgonetwork.com/wwwroot</_PublishTargetUrl>
+    <_PublishTargetUrl>ftp://174.142.239.180/justgonetwork.com/wwwroot</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="AjaxService.svc">
       <publishTime>09/09/2016 10:55:17</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
-      <publishTime>08/03/2016 09:19:59</publishTime>
+      <publishTime>03/08/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF5.dll">
-      <publishTime>08/03/2016 09:19:59</publishTime>
+      <publishTime>03/08/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF6.dll">
-      <publishTime>08/03/2016 09:19:59</publishTime>
+      <publishTime>03/08/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Fabric.Plugin.dll">
-      <publishTime>08/03/2016 09:19:59</publishTime>
+      <publishTime>03/08/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/MySql.Web.dll">
-      <publishTime>08/03/2016 09:19:59</publishTime>
+      <publishTime>03/08/2016 09:19:59</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>08/03/2014 20:33:56</publishTime>
+      <publishTime>03/08/2014 20:33:56</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>01/28/2015 04:02:42</publishTime>
@@ -38,7 +38,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:01:46</publishTime>
     </File>
     <File Include="bin/System.Web.Http.Cors.dll">
-      <publishTime>01/28/2015 04:03:04</publishTime>
+      <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/System.Web.Http.dll">
       <publishTime>01/28/2015 04:02:54</publishTime>
@@ -47,22 +47,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:03:46</publishTime>
     </File>
     <File Include="bin/WcfService.dll">
-      <publishTime>09/09/2016 15:13:11</publishTime>
+      <publishTime>09/10/2016 14:04:19</publishTime>
     </File>
     <File Include="bin/WebHttpBehaviorExtensions.dll">
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/WebHttpCors.dll">
-      <publishTime>09/09/2016 09:29:14</publishTime>
+      <publishTime>09/10/2016 00:04:38</publishTime>
     </File>
     <File Include="Global.asax">
-      <publishTime>08/05/2016 12:44:29</publishTime>
+      <publishTime>05/08/2016 12:44:29</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>09/08/2016 15:34:07</publishTime>
+      <publishTime>08/09/2016 15:34:07</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/09/2016 15:11:16</publishTime>
+      <publishTime>09/10/2016 00:07:11</publishTime>
     </File>
   </ItemGroup>
 </Project>

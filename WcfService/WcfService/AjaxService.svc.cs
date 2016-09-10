@@ -36,14 +36,9 @@ namespace WcfService
             return companyController.DeleteCompany(companyId);
         }
 
-        public Response CompanyGetAllProfile(string number, string skip)
+        public Response CompanyGetAllProfile()
         {
-            return companyController.GetCompanies(number, skip);
-        }
-
-        public Response CompanyGetProfile(string companyId)
-        {
-            return companyController.GetCompany(companyId);
+            return companyController.GetCompanies();
         }
 
         public Response CompanyUpdateProfile(string companyId, Company company)
@@ -141,6 +136,11 @@ namespace WcfService
             return commonController.Test();
         }
 
+        public Model.Response TestPut()
+        {
+            return commonController.Test();
+        }
+
         public Response TokenCheck(string userId, string token)
         {
             Model.Response response = new Response()
@@ -168,15 +168,20 @@ namespace WcfService
             return userController.ForgotPassword(userId);
         }
 
-        public Response UserGetAllProfile(string number, string skip)
+        public Model.Response UserGetProfile()
         {
-            return userController.GetUserList(number, skip);
+            return userController.GetUser();
         }
 
-        public Response UserGetProfile(string userId)
-        {
-            return userController.GetUser(userId);
-        }
+        //public Response UserGetAllProfile(string number, string skip)
+        //{
+        //    return userController.GetUserList(number, skip);
+        //}
+
+        //public Response UserGetProfile(string userId)
+        //{
+        //    return userController.GetUser(userId);
+        //}
 
         public Response UserLogin(string username, string password)
         {
@@ -229,9 +234,9 @@ namespace WcfService
             return jobController.GetJob();
         }
 
-        public Response JobDetailsUpdate(Model.JobDetails jobDetails)
+        public Response JobDetailsUpdate(string jobId, Model.JobDetails jobDetails)
         {
-            throw new NotImplementedException();
+            return jobController.UpdateJob(jobId, jobDetails);
         }
 
         public Response JobDetailsDelete(string jobId)

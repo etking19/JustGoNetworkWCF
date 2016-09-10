@@ -77,7 +77,7 @@ namespace WcfService.Dao
             {
                 reader.Close();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 
@@ -85,7 +85,7 @@ namespace WcfService.Dao
             {
                 command.Connection.Close();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

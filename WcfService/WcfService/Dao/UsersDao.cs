@@ -9,179 +9,419 @@ namespace WcfService.Dao
 {
     public class UsersDao : BaseDao
     {
-        private static string sDatabaseName = "users";
+        private readonly string TABLE_USERS = "users";
+        private readonly string TABLE_USER_COMPANY = "user_company";
+        private readonly string TABLE_USER_DEVICE = "user_device";
+        private readonly string TABLE_USER_ROLE = "user_role";
+        private readonly string TABLE_SESSION = "user_session";
 
         public Model.User GetUserById(string userId)
         {
-            Model.User user = new Model.User();
-
             MySqlCommand command = null;
             MySqlDataReader reader = null;
             try
             {
                 Dictionary<string, string> commandDic = new Dictionary<string, string>();
                 commandDic.Add("id", userId);
-                commandDic.Add("deleted", "0");
 
-                command = GenerateQueryCmd(sDatabaseName, commandDic);
+                command = GenerateQueryCmd(TABLE_USERS, commandDic);
                 reader = PerformSqlQuery(command);
                 if(false == reader.Read())
                 {
                     return null;
                 }
 
-                user.userId = reader["id"].ToString();
-                user.username = (string)reader["username"];
-                user.password = (string)reader["password"];
-                user.displayName = (string)reader["display_name"];
-                user.identityCard = (string)reader["identity_card"];
-                user.image = (string)reader["image"];
-                user.contactNumber = (string)reader["contact"];
-                user.email = (string)reader["email"];
-                user.enabled = (int)reader["enabled"] == 0 ? false: true;
-                user.deleted = (int)reader["deleted"] == 0 ? false: true;
-                user.creationDate = reader["creation_date"].ToString();
-                user.lastModifiedDate = reader["last_modified_date"].ToString();
+                return generateUserObj(reader);
             }
             catch (Exception e)
             {
                 DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
                 DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-
-                return null;
             }
             finally
             {
                 CleanUp(reader, command);
             }
 
-            return user;
+            return null;
         }
 
         public Model.User GetUserByUsername(string username)
         {
-            Model.User user = new Model.User();
-
             MySqlCommand command = null;
             MySqlDataReader reader = null;
             try
             {
                 Dictionary<string, string> commandDic = new Dictionary<string, string>();
                 commandDic.Add("username", username);
-                command = GenerateQueryCmd(sDatabaseName, commandDic);
+
+                command = GenerateQueryCmd(TABLE_USERS, commandDic);
                 reader = PerformSqlQuery(command);
                 if (false == reader.Read())
                 {
                     return null;
                 }
 
-                user.userId = reader["id"].ToString();
-                user.username = (string)reader["username"];
-                user.password = (string)reader["password"];
-                user.displayName = (string)reader["display_name"];
-                user.identityCard = (string)reader["identity_card"];
-                user.image = (string)reader["image"];
-                user.contactNumber = (string)reader["contact"];
-                user.email = (string)reader["email"];
-                user.enabled = (int)reader["enabled"] == 0 ? false : true;
-                user.deleted = (int)reader["deleted"] == 0 ? false : true;
-                user.creationDate = reader["creation_date"].ToString();
-                user.lastModifiedDate = reader["last_modified_date"].ToString();
+                return generateUserObj(reader);
             }
             catch (Exception e)
             {
                 DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
                 DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-                return null;
             }
             finally
             {
                 CleanUp(reader, command);
             }
 
-            return user;
+            return null;
         }
 
-        public List<Model.User> GetAllUsers(string number, string skip)
+        public List<Model.User> GetCompanyUserByRole(string companyId, string roleId)
         {
-            List<Model.User> userList = new List<Model.User>();
-
             MySqlCommand command = null;
             MySqlDataReader reader = null;
             try
             {
-                command = GenerateQueryCmdWithLimit(sDatabaseName, number, skip);
+                string query = string.Format("SELECT {0}.* FROM {0} " +
+                    "INNER JOIN {1} ON {1}.user_id={0}.id " +
+                    "INNER JOIN {3} ON {3}.user_id={0}.id " +
+                    "WHERE company_id={2} and deleted=0 and enabled=1 and role_id={4} ORDER BY creation_date DESC;",
+                    TABLE_USERS, TABLE_USER_COMPANY, companyId, TABLE_USER_ROLE, roleId);
+                command = new MySqlCommand(query);
                 reader = PerformSqlQuery(command);
+
+                List<Model.User> userList = new List<Model.User>();
                 while (reader.Read())
                 {
-                    Model.User user = new Model.User();
-
-                    user.userId = reader["id"].ToString();
-                    user.username = (string)reader["username"];
-                    user.password = (string)reader["password"];
-                    user.displayName = (string)reader["display_name"];
-                    user.identityCard = (string)reader["identity_card"];
-                    user.image = (string)reader["image"];
-                    user.contactNumber = (string)reader["contact"];
-                    user.email = (string)reader["email"];
-                    user.enabled = (int)reader["enabled"] == 0 ? false : true;
-                    user.deleted = (int)reader["deleted"] == 0 ? false : true;
-                    user.creationDate = reader["creation_date"].ToString();
-                    user.lastModifiedDate = reader["last_modified_date"].ToString();
-
-                    userList.Add(user);
+                    userList.Add(generateUserObj(reader));
                 }
+
+                return userList;
             }
             catch (Exception e)
             {
                 DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
                 DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-
-                return null;
             }
             finally
             {
                 CleanUp(reader, command);
             }
 
-            return userList;
+            return null;
         }
 
-        public bool UpdateUser(Model.User user)
+        public List<Model.User> GetUserByCompanyId(string companyId, string limit, string skip)
         {
-            return true;
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT {0}.* FROM {0} " +
+                    "INNER JOIN {1} ON {1}.company_id={2} AND {1}.user_id={0}.id " +
+                    "WHERE deleted=0 ORDER BY creation_date DESC ",
+                    TABLE_USERS, TABLE_USER_COMPANY, companyId);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                command = new MySqlCommand(query);
+                reader = PerformSqlQuery(command);
+
+                List<Model.User> userList = new List<Model.User>();
+                while (reader.Read())
+                {
+                    userList.Add(generateUserObj(reader));
+                }
+
+                return userList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, command);
+            }
+
+            return null;
+        }
+
+        public List<Model.User> GetAllUsers(string limit, string skip)
+        {
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT * FROM {0} WHERE deleted=0 ORDER BY creation_date DESC ", TABLE_USERS);
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                command = new MySqlCommand(query);
+                reader = PerformSqlQuery(command);
+
+                List<Model.User> userList = new List<Model.User>();
+                while (reader.Read())
+                {
+                    userList.Add(generateUserObj(reader));
+                }
+
+                return userList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, command);
+            }
+
+            return null;
+        }
+
+        private Model.User generateUserObj(MySqlDataReader reader)
+        {
+            Model.User user = new Model.User();
+
+            user.userId = reader["id"].ToString();
+            user.username = (string)reader["username"];
+            //user.password = (string)reader["password"];
+            user.displayName = (string)reader["display_name"];
+            user.identityCard = (string)reader["identity_card"];
+            user.image = (string)reader["image"];
+            user.contactNumber = (string)reader["contact"];
+            user.email = (string)reader["email"];
+            user.enabled = (int)reader["enabled"] == 0 ? false : true;
+            user.deleted = (int)reader["deleted"] == 0 ? false : true;
+            user.creationDate = reader["creation_date"].ToString();
+            user.lastModifiedDate = reader["last_modified_date"].ToString();
+
+            return user;
+        }
+
+        /// <summary>
+        /// Does not support change company, and change contact number
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool UpdateUser(string userId, Model.User user)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> updateParam = new Dictionary<string, string>();
+                updateParam.Add("display_name", user.displayName);
+                updateParam.Add("identity_card", user.identityCard);
+                updateParam.Add("image", user.image);
+                updateParam.Add("email", user.email);
+
+                Dictionary<string, string> destinationParam = new Dictionary<string, string>();
+                destinationParam.Add("id", userId);
+
+                mySqlCmd = GenerateEditCmd(TABLE_USERS, updateParam, destinationParam);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
         }
 
         public bool UpdatePassword(string userId, string newPassword)
         {
-            return true;
-        }
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> updateParam = new Dictionary<string, string>();
+                updateParam.Add("password", newPassword);
 
-        public bool DeleteUser(string userId)
-        {
-            return true;
+                Dictionary<string, string> destinationParam = new Dictionary<string, string>();
+                destinationParam.Add("id", userId);
+
+                mySqlCmd = GenerateEditCmd(TABLE_USERS, updateParam, destinationParam);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
         }
 
         /// <summary>
-        /// 
+        /// Soft delete
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="newUserId"></param>
-        /// <returns>0 indicate success, else error code</returns>
-        public int AddUser(Model.User user, out string newUserId)
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool DeleteUser(string userId)
         {
-            newUserId = "1";
-            return 0;
+            MySqlCommand mySqlCmd = null;
+            try
+            {
+                Dictionary<string, string> removeParams = new Dictionary<string, string>();
+                removeParams.Add("id", userId);
+
+                mySqlCmd = GenerateSoftDelete(TABLE_USERS, removeParams);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(null, mySqlCmd);
+            }
+
+            return false;
         }
 
-        public bool UpdateToken(string userId, string newToken, string newValidity)
+        public string AddUser(Model.User user)
         {
-            return true;
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                // add to user table
+                Dictionary<string, string> addParam = new Dictionary<string, string>();
+                addParam.Add("username", user.username);
+                addParam.Add("password", user.password);
+                addParam.Add("contact", user.contactNumber);
+                addParam.Add("display_name", user.displayName);
+                addParam.Add("identity_card", user.identityCard);
+                addParam.Add("image", user.image);
+                addParam.Add("email", user.email);
+
+                mySqlCmd = GenerateAddCmd(TABLE_USERS, addParam);
+                PerformSqlNonQuery(mySqlCmd);
+                var userId = mySqlCmd.LastInsertedId.ToString();
+                CleanUp(reader, mySqlCmd);
+
+
+                // add to user company table
+                addParam.Clear();
+                addParam.Add("user_id", userId);
+                addParam.Add("company_id", user.companyId);
+                mySqlCmd = GenerateAddCmd(TABLE_USER_COMPANY, addParam);
+                PerformSqlNonQuery(mySqlCmd);
+                CleanUp(reader, mySqlCmd);
+
+
+                // add to user role table
+                addParam.Clear();
+                addParam.Add("user_id", userId);
+                addParam.Add("role_id", user.roleId);
+                mySqlCmd = GenerateAddCmd(TABLE_USER_ROLE, addParam);
+                PerformSqlNonQuery(mySqlCmd);
+
+                return userId;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
-        public bool AddOrUpdateDevice(string userId, string identifier)
+        public bool InsertOrUpdateToken(string userId, string newToken, string newValidity)
         {
-            return true;
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("INSERT INTO {0} (user_id, token, newValidity) VALUES (@userId, @newToken, @newValidity) " +
+                    "ON DUPLICATE KEY UPDATE token=@newToken, newValidity=@newValidity;",
+                    TABLE_SESSION);
+
+                mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@userId", userId);
+                mySqlCmd.Parameters.AddWithValue("@newToken", newToken);
+                mySqlCmd.Parameters.AddWithValue("@newValidity", newValidity);
+
+                return (0 != PerformSqlNonQuery(mySqlCmd));
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
+        }
+
+        public bool InsertOrUpdateDevice(string userId, string identifier)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("INSERT INTO {0} (user_id, identifier) VALUES (@userId, @identifier) " +
+                    "ON DUPLICATE KEY UPDATE user_id=@userId;",
+                    TABLE_USER_DEVICE);
+
+                mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@userId", userId);
+                mySqlCmd.Parameters.AddWithValue("@identifier", identifier);
+
+                return (0 != PerformSqlNonQuery(mySqlCmd));
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
         }
     }
 }

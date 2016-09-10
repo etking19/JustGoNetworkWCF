@@ -11,6 +11,10 @@ namespace WcfService
         Model.Response Test();
 
         [OperationContract]
+        [WebInvoke(Method = "PUT", UriTemplate = "/test", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response TestPut();
+
+        [OperationContract]
         [WebInvoke(Method = "OPTIONS", UriTemplate = "*", RequestFormat = WebMessageFormat.Xml)]
         void GetOptions();
 
@@ -33,12 +37,17 @@ namespace WcfService
         Model.Response UserForgotPassword(string userId);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/user/profile/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response UserGetProfile(string userId);
+        [WebInvoke(Method = "GET", UriTemplate = "/user/profile?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response UserGetProfile();
 
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/user/profile/{number}/{skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response UserGetAllProfile(string number, string skip);
+
+        //[OperationContract]
+        //[WebInvoke(Method = "GET", UriTemplate = "/user/profile/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        //Model.Response UserGetProfile(string userId);
+
+        //[OperationContract]
+        //[WebInvoke(Method = "GET", UriTemplate = "/user/profile/{number}/{skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        //Model.Response UserGetAllProfile(string number, string skip);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/user/profile/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -61,12 +70,8 @@ namespace WcfService
         // company
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/company/profile/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CompanyGetProfile(string companyId);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/company/profile/{number}/{skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CompanyGetAllProfile(string number, string skip);
+        [WebInvoke(Method = "GET", UriTemplate = "/company/profile?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response CompanyGetAllProfile();
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/company/profile", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -208,9 +213,14 @@ namespace WcfService
         [WebInvoke(Method = "DELETE", UriTemplate = "/job/details/{jobId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDetailsDelete(string jobId);
 
+        /// <summary>
+        /// Currently only support update general details, update address was not implemented yet
+        /// </summary>
+        /// <param name="jobDetails"></param>
+        /// <returns></returns>
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/job", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDetailsUpdate(Model.JobDetails jobDetails);
+        [WebInvoke(Method = "PUT", UriTemplate = "/job/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDetailsUpdate(string jobId, Model.JobDetails jobDetails);
 
 
 
@@ -219,6 +229,13 @@ namespace WcfService
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/job/address?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobAddressGet();
+
+
+
+
+
+
+
 
         // job delivery
 

@@ -22,8 +22,15 @@ namespace WebHttpCors
 
             foreach (var endpoint in endpoints)
             {
-                // Add support for cross-origin resource sharing
-                endpoint.Behaviors.Add(new CorsSupportBehavior());
+                try
+                {
+                    // Add support for cross-origin resource sharing
+                    endpoint.Behaviors.Add(new CorsSupportBehavior());
+                }
+                catch (Exception)
+                {
+                }
+
             }
         }
     }

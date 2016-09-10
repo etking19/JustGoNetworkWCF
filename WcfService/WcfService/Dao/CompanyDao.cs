@@ -1,69 +1,211 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
     public class CompanyDao : BaseDao
     {
-        public Model.Company GetCompany(string companyId)
+        private readonly string TABLE_COMPANIES = "companies";
+
+        public string AddCompany(Model.Company company)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                // add to job order status
+                Dictionary<string, string> insertParam = new Dictionary<string, string>();
+                insertParam.Add("name", company.name);
+                insertParam.Add("address_1", company.address1);
+                insertParam.Add("address_2", company.address2);
+                insertParam.Add("postcode", company.postcode);
+                insertParam.Add("state_id", company.stateId);
+                insertParam.Add("country_id", company.countryId);
+                insertParam.Add("registration_number", company.registrationNumber);
+
+                mySqlCmd = GenerateAddCmd(TABLE_COMPANIES, insertParam);
+                PerformSqlNonQuery(mySqlCmd);
+
+                return mySqlCmd.LastInsertedId.ToString();
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
+        }
+
+        public Model.Company GetCompanyById(string companyId)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> queryParam = new Dictionary<string, string>();
+                queryParam.Add("id", companyId);
+
+                mySqlCmd = GenerateQueryCmd(TABLE_COMPANIES, queryParam);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                if (false == reader.Read())
+                {
+                    return null;
+                }
+
+                var result = constructObj(reader);
+
+                // query the admin
+                var admins = new UsersDao().GetCompanyUserByRole(companyId, "2");  // fixed Company-admin to 2
+                if(admins != null)
+                {
+                    result.admin = admins.ToArray();
+                }
+
+                // query the rating
+                result.rating = new JobDeliveryDao().GetRatingByCompany(companyId);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
+        }
+
+        public List<Model.Company> GetCompanies(string limit, string skip)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT * FROM {0} WHERE deleted=0 ORDER BY creation_date DESC ", 
+                    TABLE_COMPANIES);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+                List<Model.Company> companyList = new List<Model.Company>();
+                while(reader.Read())
+                {
+                    companyList.Add(constructObj(reader));
+                }
+
+                return companyList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
+        }
+
+        private Model.Company constructObj(MySqlDataReader reader)
         {
             return new Model.Company()
             {
-                companyId = "1",
-                address1 = "address 1",
-                address2 = "address 2",
-                name = "company",
-                enabled = true,
-                deleted = false,
-                countryId = "1",
-                postcode = "123456",
-                registrationNumber = "1234567890",
-                stateId = "1",
-                creationDate = "",
-                lastModifiedDate = ""
+                companyId = reader["id"].ToString(),
+                name = reader["name"].ToString(),
+                address1 = reader["address_1"].ToString(),
+                address2 = reader["address_2"].ToString(),
+                postcode = reader["postcode"].ToString(),
+                stateId = reader["state_id"].ToString(),
+                countryId = reader["country_id"].ToString(),
+                registrationNumber = reader["registration_number"].ToString(),
+                enabled = (int)reader["enabled"] == 0 ? false : true,
+                deleted = (int)reader["deleted"] == 0 ? false : true,
+                creationDate = reader["creation_date"].ToString(),
+                lastModifiedDate = reader["last_modified_date"].ToString()
             };
-        }
-
-        public List<Model.Company> GetAllCompanies(string number, string skip)
-        {
-            List<Model.Company> companyList = new List<Model.Company>();
-            for (int i = 0; i < int.Parse(number); i++)
-            {
-                companyList.Add(new Model.Company()
-                {
-                    companyId = "" + i,
-                    address1 = "address 1",
-                    address2 = "address 2",
-                    name = "company " + i,
-                    enabled = true,
-                    deleted = false,
-                    countryId = "1",
-                    postcode = "123456",
-                    registrationNumber = "1234567890",
-                    stateId = "1",
-                    creationDate = "",
-                    lastModifiedDate = ""
-                });
-            }
-
-            return companyList;
         }
 
         public bool UpdateCompany(string companyId, Model.Company company)
         {
-            return true;
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> updateParam = new Dictionary<string, string>();
+                updateParam.Add("name", company.name);
+                updateParam.Add("address_1", company.address1);
+                updateParam.Add("address_2", company.address2);
+                updateParam.Add("postcode", company.postcode);
+                updateParam.Add("state_id", company.stateId);
+                updateParam.Add("country_id", company.countryId);
+                updateParam.Add("registration_number", company.registrationNumber);
+
+                Dictionary<string, string> destinationParam = new Dictionary<string, string>();
+                destinationParam.Add("id", companyId);
+
+                mySqlCmd = GenerateEditCmd(TABLE_COMPANIES, updateParam, destinationParam);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
         }
 
         public bool DeleteCompany(string companyId)
         {
-            return true;
-        }
+            MySqlCommand mySqlCmd = null;
+            try
+            {
+                Dictionary<string, string> removeParams = new Dictionary<string, string>();
+                removeParams.Add("id", companyId);
 
-        public string AddCompany(Model.Company company)
-        {
-            return "1";
+                mySqlCmd = GenerateSoftDelete(TABLE_COMPANIES, removeParams);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(null, mySqlCmd);
+            }
+
+            return false;
         }
     }
 }

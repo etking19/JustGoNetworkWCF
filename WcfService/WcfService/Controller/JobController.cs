@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Web;
@@ -110,11 +111,16 @@ namespace WcfService.Controller
                 }
             }
 
+            // TODO: send notification to all partners
+
+
+
             // generate the unique job id
             var uniqueId = Utility.IdGenerator.Encode(ulong.Parse(jobId) + JOB_ID_PAD);
 
             response.payload = javaScriptSerializer.Serialize(uniqueId);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+
             return response;
         }
 
@@ -260,6 +266,39 @@ namespace WcfService.Controller
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
+
+
+        public Response UpdateJob(string jobId, JobDetails jobDetails)
+        {
+            if (jobId == null ||
+                jobDetails == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
+                return response;
+            }
+
+            // update the job base on input
+            jobDetails.jobId = jobId;
+            if (false == jobDetailsDao.Update(jobDetails))
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            // TODO: update the address
+
+
+
+            // TODO: inform job delivery company and driver if any changes
+
+
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
+        }
+
+
+
+
 
         public Response GetJobDelivery(string limit, string skip)
         {

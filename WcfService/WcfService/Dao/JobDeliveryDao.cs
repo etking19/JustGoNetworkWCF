@@ -114,5 +114,63 @@ namespace WcfService.Dao
         {
             throw new NotImplementedException();
         }
+
+        public float GetRatingByCompany(string companyId)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT AVG(rating) as rating FROM {0} WHERE company_id={1};", 
+                    TABLE_NAME, companyId);
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+                if(reader.Read())
+                {
+                    return reader.GetFloat("rating");
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return 0;
+        }
+
+        public float GetRatingByUser(string userId)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT AVG(rating) as rating FROM {0} WHERE driver_user_id={1};",
+                    TABLE_NAME, userId);
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+                if (reader.Read())
+                {
+                    return reader.GetFloat("rating");
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return 0;
+        }
     }
 }

@@ -77,6 +77,39 @@ namespace WcfService.Dao
             return null;
         }
 
+        public bool Update(Model.JobDetails payload)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> updateParam = new Dictionary<string, string>();
+                updateParam.Add("owner_id", payload.ownerUserId);
+                updateParam.Add("job_type_id", payload.jobTypeId);
+                updateParam.Add("amount", payload.amount.ToString());
+                updateParam.Add("worker_assistance", payload.workerAsistance.ToString());
+                updateParam.Add("remarks", payload.remarks);
+                updateParam.Add("modify_by", payload.modifiedBy);
+
+                Dictionary<string, string> destinationParam = new Dictionary<string, string>();
+                destinationParam.Add("id", payload.jobId);
+
+                mySqlCmd = GenerateEditCmd(TABLE_NAME_JOB, updateParam, destinationParam);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
+        }
+
         public bool Delete(string id)
         {
             MySqlCommand mySqlCmd = null;

@@ -9,37 +9,39 @@ namespace WcfService.Model
     [DataContract]
     public class Company
     {
-        [DataMember]
-        public string companyId;
-
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string name;
 
-        [DataMember]
-        public bool enabled;
-
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string address1;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string address2;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string postcode;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string stateId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string countryId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string registrationNumber;
+
+        public string companyId;
+
+        public bool enabled;
 
         public bool deleted;
 
         public string creationDate;
 
         public string lastModifiedDate;
+
+        public float rating;
+
+        public User[] admin;
     }
 }

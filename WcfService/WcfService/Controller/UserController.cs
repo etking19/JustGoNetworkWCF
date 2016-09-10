@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Web;
 using System.Web;
 using WcfService.Dao;
 using WcfService.Model;
@@ -44,7 +45,7 @@ namespace WcfService.Controller
             }
 
             // get the company details
-            var companyDetails = companyDao.GetCompany(user.companyId);
+            var companyDetails = companyDao.GetCompanyById(user.companyId);
             if(companyDetails == null ||
                 companyDetails.enabled == false ||
                 companyDetails.deleted)
@@ -58,7 +59,7 @@ namespace WcfService.Controller
             string newToken = Guid.NewGuid().ToString();
             string newValidity = commonDao.GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
 
-            if (false == userDao.UpdateToken(user.userId, newToken, newValidity))
+            if (false == userDao.InsertOrUpdateToken(user.userId, newToken, newValidity))
             {
                 // invalid error
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EUnknownError);
@@ -80,24 +81,22 @@ namespace WcfService.Controller
 
         public Response AddUser(Model.User user)
         {
-            var userId = "";
-            var result = userDao.AddUser(user, out userId);
-            if(result != 0)
+            // create the user
+            var result = userDao.AddUser(user);
+            if (result == null)
             {
-                // invalid operation
-                response = Utility.Utils.SetResponse(response, false, result);
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;
             }
 
-            response.payload = javaScriptSerializer.Serialize(new Model.Token() { userId = userId });
+            response.payload = javaScriptSerializer.Serialize(result);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
         public Response EditUser(string userId, Model.User user)
         {
-            user.userId = userId;
-            if (false == userDao.UpdateUser(user))
+            if (false == userDao.UpdateUser(userId, user))
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;
@@ -119,34 +118,100 @@ namespace WcfService.Controller
             return response;
         }
 
-        public Response GetUser(string userId)
+        public Response GetUser()
         {
-            var result = userDao.GetUserById(userId);
-            if(result == null)
+            if (WebOperationContext.Current == null)
             {
-                response.payload = null;
-                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
                 return response;
             }
 
-            response.payload = javaScriptSerializer.Serialize(result);
+            var limit = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["limit"];
+            var skip = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["skip"];
+
+            var userId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["userId"];
+            var username = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["username"];
+            var companyId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["companyId"];
+
+            if (userId != null)
+            {
+                // return single user id
+                var result = userDao.GetUserById(userId);
+                if(result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EUserNotFound);
+                    return response;
+                }
+
+                if(result.deleted)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EAccountDeleted);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if(username != null)
+            {
+                // get user by username
+                var result = userDao.GetUserByUsername(username);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EUserNotFound);
+                    return response;
+                }
+
+                if (result.deleted)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EAccountDeleted);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if(companyId != null)
+            {
+                // get user by company id
+                response.payload = javaScriptSerializer.Serialize(userDao.GetUserByCompanyId(companyId, limit, skip));
+            } 
+            else
+            {
+                // get all users
+                response.payload = javaScriptSerializer.Serialize(userDao.GetAllUsers(limit, skip));
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
-        public Response GetUserList(string number, string skip)
-        {
-            var result = userDao.GetAllUsers(number, skip);
-            if(result == null)
-            {
-                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
-                return response;
-            }
+        //public Response GetUser(string userId)
+        //{
+        //    var result = userDao.GetUserById(userId);
+        //    if(result == null)
+        //    {
+        //        response.payload = null;
+        //        response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+        //        return response;
+        //    }
 
-            response.payload = javaScriptSerializer.Serialize(result);
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+        //    response.payload = javaScriptSerializer.Serialize(result);
+        //    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+        //    return response;
+        //}
+
+        //public Response GetUserList(string number, string skip)
+        //{
+        //    var result = userDao.GetAllUsers(number, skip);
+        //    if(result == null)
+        //    {
+        //        response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+        //        return response;
+        //    }
+
+        //    response.payload = javaScriptSerializer.Serialize(result);
+        //    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+        //    return response;
+        //}
 
         public Response UpdatePassword(string userId, string oldPw, string newPw)
         {
@@ -286,7 +351,7 @@ namespace WcfService.Controller
 
         public Response UpdateDeviceIdentifier(string userId, string newIdentifier)
         {
-            if(false == userDao.AddOrUpdateDevice(userId, newIdentifier))
+            if(false == userDao.InsertOrUpdateDevice(userId, newIdentifier))
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;
@@ -301,7 +366,7 @@ namespace WcfService.Controller
             string newToken = Guid.NewGuid().ToString();
             string newValidity = commonDao.GetCurrentUtcTime(Configuration.TOKEN_VALID_HOURS);
 
-            return userDao.UpdateToken(userId, newToken, newValidity);
+            return userDao.InsertOrUpdateToken(userId, newToken, newValidity);
         }
     }
 }
