@@ -199,25 +199,29 @@ namespace WcfService
 
         // job delivery
 
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetAll(string limit, string skip);
+        //[OperationContract]
+        //[WebInvoke(Method = "GET", UriTemplate = "/job/delivery?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        //Model.Response JobDeliveryGetAll(string limit, string skip);
+
+        //[OperationContract]
+        //[WebInvoke(Method = "GET", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        //Model.Response JobDeliveryGetById(string jobId);
+
+        //[OperationContract]
+        //[WebInvoke(Method = "GET", UriTemplate = "/job/delivery/company/{companyId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        //Model.Response JobDeliveryGetByCompany(string companyId, string limit, string skip, string status);
+
+        //[OperationContract]
+        //[WebInvoke(Method = "GET", UriTemplate = "/job/delivery/driver/{userId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        //Model.Response JobDeliveryGetByDriver(string userId, string limit, string skip, string status);
+
+        //[OperationContract]
+        //[WebInvoke(Method = "GET", UriTemplate = "/job/delivery/status/{statusId}?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        //Model.Response JobDeliveryGetByStatus(string statusId, string limit, string skip);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetById(string jobId);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/company/{companyId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetByCompany(string companyId, string limit, string skip, string status);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/driver/{userId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetByDriver(string userId, string limit, string skip, string status);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/status/{statusId}?limit={limit}&skip={skip}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetByStatus(string statusId, string limit, string skip);
+        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryGet();
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/job/delivery", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -231,36 +235,20 @@ namespace WcfService
         [WebInvoke(Method = "DELETE", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDeliveryDelete(string jobId);
 
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/job/details?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryGetStatus();
 
 
-        // Job Delivery Status
+
+        // End User
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/status/{uniqueId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusGet(string uniqueId);
+        [WebInvoke(Method = "POST", UriTemplate = "/job/rating", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobSetRating(string uniqueId, float rating);
+
+        // Driver
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/status/company/{companyId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusGetByCompany(string companyId, string limit, string skip, string status);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/status/driver/{driverId}?limit={limit}&skip={skip}&status={status}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusGetByDriver(string driverId, string limit, string skip, string status);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/status/job/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusGetByJobId(string jobId);
-
-        [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/status/{uniqueId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusSetRating(string uniqueId, float rating);
-
-        [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/status/job/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryStatusUpdate(string jobId, string statusId);
+        [WebInvoke(Method = "POST", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryStatusUpdate(string jobId, string statusId, string pickupErrId, string deliverErrId);
 
 
 

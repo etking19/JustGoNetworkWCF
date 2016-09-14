@@ -21,8 +21,14 @@ namespace WcfService.Model
         [DataMember]
         public string driverUserId;
 
-        public string lastModifiedBy;
+        public List<JobOrderStatus> orderStatusList { get; set; }
+        
+        public float rating { get; set; }
 
-        public string lastModifiedDate;
+        public string pickupErr { get; set; }
+
+        public string deliverErr { get; set; }
+
+        public string lastModifiedDate { get; set; }
     }
 }

@@ -297,105 +297,137 @@ namespace WcfService.Controller
         }
 
 
-
-
-
-        public Response GetJobDelivery(string limit, string skip)
+        public Response GetJobDelivery()
         {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.Get(limit, skip));
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
 
-        public Response GetJobDelivery(string jobId)
-        {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.Get(jobId));
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            var limit = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["limit"];
+            var skip = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["skip"];
 
-        public Response GetJobDeliveryByUniqueId(string uniqueId)
-        {
-            // decode the unique id
-            var jobId = decodeUniqueId(uniqueId);
+            var jobid = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["jobId"];
+            var companyId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["companyId"];
+            var driverId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["driverId"];
+            var statusId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["statusId"];
+            var uniqueId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["uniqueId"];
 
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.Get(jobId.ToString()));
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if (jobid != null)
+            {
+                var result = jobDeliveryDao.Get(jobid);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    return response;
+                }
 
-        public Response GetJobDeliveryByCompany(string companyId, string limit, string skip, string status)
-        {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.GetByDeliverCompany(companyId, limit, skip, status));
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if(uniqueId != null)
+            {
+                try
+                {
+                    var jobId = decodeUniqueId(uniqueId).ToString();
+                    var result = jobDeliveryDao.Get(jobid);
+                    if (result == null)
+                    {
+                        response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                        return response;
+                    }
 
-        public Response GetJobDeliveryByDriver(string driverId, string limit, string skip, string status)
-        {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.GetByDriver(driverId, limit, skip, status));
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+                    response.payload = javaScriptSerializer.Serialize(result);
+                }
+                catch (Exception)
+                {
+                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                    return response;
+                }
+            }
+            else if(companyId != null)
+            {
+                var result = jobDeliveryDao.GetByDeliverCompany(companyId, limit, skip);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    return response;
+                }
 
-        public Response GetJobDeliveryByStatus(string statusId, string limit, string skip)
-        {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.GetByStatus(statusId, limit, skip));
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if(driverId != null)
+            {
+                var result = jobDeliveryDao.GetByDriver(driverId, limit, skip);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if(statusId != null)
+            {
+                var result = jobDeliveryDao.GetByStatus(statusId, limit, skip);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = jobDeliveryDao.Get(limit, skip);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
         public Response AddJobDelivery(string jobId, string companyId, string driverId)
         {
-            try
+            var result = jobDeliveryDao.Add(jobId, companyId, driverId);
+            if (result == null)
             {
-                response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.Add(jobId, companyId, driverId));
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            }
-            catch (Exception e)
-            {
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
             }
 
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
         public Response UpdateJobDelivery(string jobId, string companyId, string driverId)
         {
-            try
+            if (false == jobDeliveryDao.Update(jobId, companyId, driverId))
             {
-                jobDeliveryDao.Update(jobId, companyId, driverId);
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            }
-            catch (Exception e)
-            {
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
             }
 
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
         public Response DeleteJobDelivery(string jobId)
         {
-            try
+            if (false == jobDeliveryDao.Delete(jobId))
             {
-                jobDeliveryDao.Delete(jobId);
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            }
-            catch (Exception e)
-            {
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
             }
 
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
@@ -409,22 +441,12 @@ namespace WcfService.Controller
             }
 
             var jobId = decodeUniqueId(uniqueId);
-            jobDeliveryDao.UpdateRating(jobId, rating);
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if(false == jobDeliveryDao.UpdateRating(jobId, rating))
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
 
-        public Response GetRating(string uniqueId)
-        {
-            var jobId = decodeUniqueId(uniqueId);
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.GetRating(jobId));
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
-
-        public Response UpdateDeliveryStatus(string jobId, string jobStatusId)
-        {
-            response.payload = javaScriptSerializer.Serialize(jobDeliveryDao.UpdateStatus(jobId, jobStatusId));
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }

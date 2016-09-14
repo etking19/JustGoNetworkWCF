@@ -10,6 +10,8 @@ namespace WcfService.Dao
     public class JobDeliveryDao : BaseDao
     {
         private readonly string TABLE_NAME = "job_delivery";
+        private readonly string TABLE_ORDER_STATUS = "job_order_status";
+        private readonly string TABLE_JOBS = "jobs";
 
         public string Add(string jobId, string companyId, string driverId)
         {
@@ -66,53 +68,401 @@ namespace WcfService.Dao
             return false;
         }
 
-        public List<Model.JobDelivery> Get(string limit, string skip)
-        {
-            List<Model.JobDelivery> jobDetailsList = new List<Model.JobDelivery>();
-            jobDetailsList.Add(new Model.JobDelivery() { jobDeliveryId = "1", companyId = "1", driverUserId = "1", jobId = "1", lastModifiedBy = "1", lastModifiedDate = "20160808 000000" });
-            jobDetailsList.Add(new Model.JobDelivery() { jobDeliveryId = "2", companyId = "1", driverUserId = "1", jobId = "1", lastModifiedBy = "1", lastModifiedDate = "20160808 000000" });
-
-            return jobDetailsList;
-        }
-
         public Model.JobDelivery Get(string id)
         {
-            return new Model.JobDelivery() { jobDeliveryId = id, companyId = "1", driverUserId = "1", jobId = "1", lastModifiedBy = "1", lastModifiedDate = "20160808 000000" };
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT * FROM {0} " +
+                    "LEFT JOIN {1} ON {0}.job_id={1}.job_id " +
+                    "INNER JOIN {3} ON {0}.job_id={3}.id " +
+                    "WHERE {0}.id={2} AND {3}.deleted=0 AND {3}.enabled=1",
+                    TABLE_NAME, TABLE_ORDER_STATUS, id, TABLE_JOBS);
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                if (reader.Read())
+                {
+                    return constructObj(reader);
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
-        public List<Model.JobDelivery> GetByDeliverCompany(string companyId, string limit, string skip, string status)
+        public List<Model.JobDelivery> Get(string limit, string skip)
         {
-            throw new NotImplementedException();
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT {0}.*, {1}.id as Jid, {1}.job_status_id as JSid FROM {0} " +
+                    "LEFT JOIN {1} ON {0}.job_id={1}.job_id " +
+                    "INNER JOIN {2} ON {0}.job_id={2}.id " +
+                    "WHERE {2}.deleted=0 AND {2}.enabled=1 ORDER BY {0}.last_modified_date DESC ",
+                    TABLE_NAME, TABLE_ORDER_STATUS, TABLE_JOBS);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                List<Model.JobDelivery> deliveryList = new List<Model.JobDelivery>();
+                while (reader.Read())
+                {
+                    var jobId = reader["job_id"].ToString();
+                    var previousResult = deliveryList.Find(t => t.jobId.CompareTo(jobId) == 0);
+                    if (previousResult == null)
+                    {
+                        deliveryList.Add(constructObj(reader));
+                    }
+                    else
+                    {
+                        previousResult.orderStatusList.Add(constructJobOrder(reader));
+                    }
+                }
+
+                return deliveryList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
-        public List<Model.JobDelivery> GetByDriver(string driverId, string limit, string skip, string status)
+        public List<Model.JobDelivery> GetByDeliverCompany(string companyId, string limit, string skip)
         {
-            throw new NotImplementedException();
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT {0}.*, {1}.id as Jid, {1}.job_status_id as JSid FROM {0} " +
+                    "LEFT JOIN {1} ON {0}.job_id={1}.job_id " +
+                    "INNER JOIN {3} ON {0}.job_id={3}.id " +
+                    "WHERE {0}.company_id={2} AND {3}.deleted=0 AND {3}.enabled=1 ORDER BY {0}.last_modified_date DESC ",
+                    TABLE_NAME, TABLE_ORDER_STATUS, companyId, TABLE_JOBS);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                List<Model.JobDelivery> deliveryList = new List<Model.JobDelivery>();
+                while (reader.Read())
+                {
+                    var jobId = reader["job_id"].ToString();
+                    var previousResult = deliveryList.Find(t => t.jobId.CompareTo(jobId) == 0);
+                    if(previousResult == null)
+                    {
+                        deliveryList.Add(constructObj(reader));
+                    }
+                    else
+                    {
+                        previousResult.orderStatusList.Add(constructJobOrder(reader));
+                    }
+                }
+
+                return deliveryList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
+        }
+
+        public List<Model.JobDelivery> GetByDriver(string driverId, string limit, string skip)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT {0}.*, {1}.id as Jid, {1}.job_status_id as JSid FROM {0} " +
+                    "LEFT JOIN {1} ON {0}.job_id={1}.job_id " +
+                    "INNER JOIN {3} ON {0}.job_id={3}.id " +
+                    "WHERE {0}.driver_user_id={2} AND {3}.deleted=0 AND {3}.enabled=1 ORDER BY {0}.last_modified_date DESC ",
+                    TABLE_NAME, TABLE_ORDER_STATUS, driverId, TABLE_JOBS);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                List<Model.JobDelivery> deliveryList = new List<Model.JobDelivery>();
+                while (reader.Read())
+                {
+                    var jobId = reader["job_id"].ToString();
+                    var previousResult = deliveryList.Find(t => t.jobId.CompareTo(jobId) == 0);
+                    if (previousResult == null)
+                    {
+                        deliveryList.Add(constructObj(reader));
+                    }
+                    else
+                    {
+                        previousResult.orderStatusList.Add(constructJobOrder(reader));
+                    }
+                }
+
+                return deliveryList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
         public List<Model.JobDelivery> GetByStatus(string statusId, string limit, string skip)
         {
-            throw new NotImplementedException();
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT {0}.*, {1}.id as Jid, {1}.job_status_id as JSid FROM {0} " +
+                    "LEFT JOIN {1} ON {0}.job_id={1}.job_id " +
+                    "INNER JOIN {3} ON {0}.job_id={3}.id " +
+                    "WHERE {1}.job_status_id={2} AND {3}.deleted=0 AND {3}.enabled=1 ORDER BY {0}.last_modified_date DESC ",
+                    TABLE_NAME, TABLE_ORDER_STATUS, statusId, TABLE_JOBS);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                mySqlCmd = new MySqlCommand(query);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                List<Model.JobDelivery> deliveryList = new List<Model.JobDelivery>();
+                while (reader.Read())
+                {
+                    var jobId = reader["job_id"].ToString();
+                    var previousResult = deliveryList.Find(t => t.jobId.CompareTo(jobId) == 0);
+                    if (previousResult == null)
+                    {
+                        deliveryList.Add(constructObj(reader));
+                    }
+                    else
+                    {
+                        previousResult.orderStatusList.Add(constructJobOrder(reader));
+                    }
+                }
+
+                return deliveryList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
         public bool Update(string jobId, string companyId, string driverId)
         {
-            return true;
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> updateParam = new Dictionary<string, string>();
+                updateParam.Add("company_id", companyId);
+                updateParam.Add("driver_user_id", driverId);
+
+                Dictionary<string, string> destinationParam = new Dictionary<string, string>();
+                destinationParam.Add("job_id", jobId);
+
+                mySqlCmd = GenerateEditCmd(TABLE_NAME, updateParam, destinationParam);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
         }
 
-        public void UpdateRating(string jobId, float rating)
+        public bool UpdateRating(string jobId, float rating)
         {
-            throw new NotImplementedException();
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> updateParam = new Dictionary<string, string>();
+                updateParam.Add("rating", rating.ToString());
+
+                Dictionary<string, string> destinationParam = new Dictionary<string, string>();
+                destinationParam.Add("job_id", jobId);
+
+                mySqlCmd = GenerateEditCmd(TABLE_NAME, updateParam, destinationParam);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
         }
 
-        public float GetRating(string jobId)
+        public bool UpdateJobDeliverStatus(string jobId, string statusId, string pickupErrId, string deliverErrId)
         {
-            throw new NotImplementedException();
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> insertParam = new Dictionary<string, string>();
+                insertParam.Add("job_status_id", statusId);
+                insertParam.Add("job_id", jobId);
+
+                mySqlCmd = GenerateAddCmd(TABLE_ORDER_STATUS, insertParam);
+                if (PerformSqlNonQuery(mySqlCmd) == 0)
+                {
+                    return false;
+                }
+
+                if(pickupErrId != null ||
+                    deliverErrId != null)
+                {
+                    CleanUp(reader, mySqlCmd);
+
+                    Dictionary<string, string> updateParam = new Dictionary<string, string>();
+                    if(pickupErrId != null)
+                    {
+                        updateParam.Add("pickup_error_id", pickupErrId);
+                    }
+
+                    if(deliverErrId != null)
+                    {
+                        updateParam.Add("delivery_error_id", deliverErrId);
+                    }
+
+                    Dictionary<string, string> destParam = new Dictionary<string, string>();
+                    destParam.Add("job_id", jobId);
+
+                    mySqlCmd = GenerateEditCmd(TABLE_NAME, updateParam, destParam);
+                    return (PerformSqlNonQuery(mySqlCmd) != 0);
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
         }
 
-        public bool UpdateStatus(string jobId, string statusId)
+        private Model.JobDelivery constructObj(MySqlDataReader reader)
         {
-            throw new NotImplementedException();
+            return new Model.JobDelivery()
+            {
+                jobDeliveryId = reader["id"].ToString(),
+                jobId = reader["job_id"].ToString(),
+                companyId = reader["company_id"].ToString(),
+                driverUserId = reader["driver_user_id"].ToString(),
+                rating = reader.GetFloat("rating"),
+                pickupErr = reader["pickup_error_id"].ToString(),
+                deliverErr = reader["delivery_error_id"].ToString(),
+                lastModifiedDate = reader["last_modified_date"].ToString(),
+                orderStatusList = new List<Model.JobOrderStatus>()
+                {
+                    new Model.JobOrderStatus()
+                    {
+                        id = reader["Jid"].ToString(),
+                        job_id = reader["job_id"].ToString(),
+                        job_status_id = reader["JSid"].ToString()
+                    }
+
+                }
+            };
+        }
+
+        private Model.JobOrderStatus constructJobOrder(MySqlDataReader reader)
+        {
+            return new Model.JobOrderStatus()
+            {
+                id = reader["Jid"].ToString(),
+                job_id = reader["job_id"].ToString(),
+                job_status_id = reader["JSid"].ToString()
+            };
         }
 
         public float GetRatingByCompany(string companyId)

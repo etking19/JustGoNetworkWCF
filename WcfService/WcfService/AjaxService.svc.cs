@@ -196,29 +196,9 @@ namespace WcfService
             return jobController.GetAddresses();
         }
 
-        public Response JobDeliveryGetAll(string limit, string skip)
+        public Response JobDeliveryGet()
         {
-            return jobController.GetJobDelivery(limit, skip);
-        }
-
-        public Response JobDeliveryGetById(string jobId)
-        {
-            return jobController.GetJobDelivery(jobId);
-        }
-
-        public Response JobDeliveryGetByCompany(string companyId, string limit, string skip, string status)
-        {
-            return jobController.GetJobDeliveryByCompany(companyId, limit, skip, status);
-        }
-
-        public Response JobDeliveryGetByDriver(string userId, string limit, string skip, string status)
-        {
-            return jobController.GetJobDeliveryByDriver(userId, limit, skip, status);
-        }
-
-        public Response JobDeliveryGetByStatus(string statusId, string limit, string skip)
-        {
-            return jobController.GetJobDeliveryByStatus(statusId, limit, skip);
+            return jobController.GetJobDelivery();
         }
 
         public Response JobDeliveryAdd(string jobId, string companyId, string driverId)
@@ -246,40 +226,14 @@ namespace WcfService
             return jobController.GetOpenJobs();
         }
 
-
-        public Response JobDeliveryStatusGet(string uniqueId)
-        {
-            return jobController.GetJobDeliveryByUniqueId(uniqueId);
-        }
-
-        public Response JobDeliveryStatusGetByCompany(string companyId, string limit, string skip, string status)
-        {
-            return jobController.GetJobDeliveryByCompany(companyId, limit, skip, status);
-        }
-
-        public Response JobDeliveryStatusGetByDriver(string driverId, string limit, string skip, string status)
-        {
-            return jobController.GetJobDeliveryByDriver(driverId, limit, skip, status);
-        }
-
-        public Response JobDeliveryStatusGetByJobId(string jobId)
-        {
-            return jobController.GetJobDelivery(jobId);
-        }
-
-        public Response JobDeliveryStatusSetRating(string uniqueId, float rating)
+        public Response JobSetRating(string uniqueId, float rating)
         {
             return jobController.SetRating(uniqueId, rating);
         }
 
-        public Response JobDeliveryStatusUpdate(string jobId, string statusId)
+        public Response JobDeliveryStatusUpdate(string jobId, string statusId, string pickupErrId, string deliverErrId)
         {
-            return jobController.UpdateDeliveryStatus(jobId, statusId);
-        }
-
-        public Response JobDeliveryGetStatus()
-        {
-            return jobController.GetJobStatus();
+            throw new NotImplementedException();
         }
 
         public Response ActivityGet()
