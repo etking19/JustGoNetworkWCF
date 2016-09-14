@@ -18,28 +18,71 @@ namespace WcfService.Controller
 
         public Response GetPickupError()
         {
-            response.payload = pickupErrDao.Get();
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
+
+            var pickupErrId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["id"];
+            if(pickupErrId != null)
+            {
+                var result = pickupErrDao.Get(pickupErrId);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = pickupErrDao.Get();
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
-        public Response GetPickupError(string id)
-        {
-            response.payload = pickupErrDao.Get(id);
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
 
         public Response GetDeliveryError()
         {
-            response.payload = deliveryErrDao.Get();
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
 
-        public Response GetDeliveryError(string id)
-        {
-            response.payload = deliveryErrDao.Get(id);
+            var deliverErrId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["id"];
+
+            if(deliverErrId != null)
+            {
+                var result = deliveryErrDao.Get(deliverErrId);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = deliveryErrDao.Get();
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
@@ -82,35 +125,100 @@ namespace WcfService.Controller
 
         public Response GetPermission()
         {
-            response.payload = permissionDao.Get();
+            var result = permissionDao.Get();
+            if(result == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            response.payload = javaScriptSerializer.Serialize(result);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
         public Response GetState()
         {
-            response.payload = stateDao.Get();
-            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-            return response;
-        }
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
 
-        public Response GetState(string id)
-        {
-            response.payload = stateDao.Get();
+            var countryId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["countryId"];
+            if(countryId != null)
+            {
+                var result = stateDao.GetByCountryId(countryId);
+                if(result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = stateDao.Get();
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
         public Response GetCountry()
         {
-            response.payload = countryDao.GetCountris();
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                return response;
+            }
+
+            var countryId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["countryId"];
+            if (countryId != null)
+            {
+                var result = countryDao.GetCountry(countryId);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = countryDao.GetCountries();
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
 
-        public Response GetCountry(string id)
+        public Response GetActivity()
         {
-            response.payload = countryDao.GetCountry(id);
+            var result = activityDao.Get();
+            if (result == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            response.payload = javaScriptSerializer.Serialize(result);
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }

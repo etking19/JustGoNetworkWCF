@@ -1,39 +1,80 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
     public class PickUpErrorDao : BaseDao
     {
-        public string Add(Model.PickupError payload)
-        {
-            return "1";
-        }
-
-        public bool Delete(string id)
-        {
-            return true;
-        }
-
+        private readonly string TABLE_PICKUP_ERR= "pick_up_error";
         public List<Model.PickupError> Get()
         {
-            List<Model.PickupError> pickupErrList = new List<Model.PickupError>();
-            pickupErrList.Add(new Model.PickupError() { pickupErrorId = "1", name = "error 1" });
-            pickupErrList.Add(new Model.PickupError() { pickupErrorId = "2", name = "error 2" });
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                mySqlCmd = GenerateQueryCmd(TABLE_PICKUP_ERR);
+                reader = PerformSqlQuery(mySqlCmd);
 
-            return pickupErrList;
+                List<Model.PickupError> errList = new List<Model.PickupError>();
+                while (reader.Read())
+                {
+                    errList.Add(new Model.PickupError()
+                    {
+                        pickupErrorId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    });
+                }
+
+                return errList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
         public Model.PickupError Get(string id)
         {
-            return new Model.PickupError() { pickupErrorId = "1", name = "error 1" };
-        }
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> queryParam = new Dictionary<string, string>();
+                queryParam.Add("id", id);
 
-        public bool Update(string id, Model.PickupError payload)
-        {
-            return true;
+                mySqlCmd = GenerateQueryCmd(TABLE_PICKUP_ERR, queryParam);
+                reader = PerformSqlQuery(mySqlCmd);
+                if (reader.Read())
+                {
+                    return new Model.PickupError()
+                    {
+                        pickupErrorId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
     }
 }

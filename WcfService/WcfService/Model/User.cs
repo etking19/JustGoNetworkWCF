@@ -44,9 +44,11 @@ namespace WcfService.Model
         [DataMember(IsRequired = false)]
         public string lastModifiedDate;
 
+        // only use when add, possibloe have multiple company
         [DataMember(IsRequired = false)]
         public string companyId;
 
+        // only use when add, possible have multiple role
         [DataMember(IsRequired = false)]
         public string roleId;
     }

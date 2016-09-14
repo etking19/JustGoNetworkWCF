@@ -18,6 +18,48 @@ namespace WcfService
         [WebInvoke(Method = "OPTIONS", UriTemplate = "*", RequestFormat = WebMessageFormat.Xml)]
         void GetOptions();
 
+        // states
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/state?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response StateGet();
+
+        // countries
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/country?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response CountryGet();
+
+        // permission
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/permission", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response PermissionGet();
+
+        // activities
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/activity", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response ActivityGet();
+
+        // roles
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/role/details?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response RoleGet();
+
+        // fleet type
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/fleet/type?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response FleetTypeGet();
+
+
+        // pick up error
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/pickupErr?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response PickupErrGet();
+
+        // deliver error
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/deliverErr?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response DeliveryErrGet();
+
+
         // user
 
         [OperationContract]
@@ -58,6 +100,7 @@ namespace WcfService
 
 
 
+
         // company
 
         [OperationContract]
@@ -77,25 +120,13 @@ namespace WcfService
         Model.Response CompanyDeleteProfile(string companyId);
 
 
-        // roles
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/role/details?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response RoleGet();
 
 
-        // fleet type
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/fleet/type?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetTypeGet();
 
 
-        // permission
 
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/permission", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response PermissionGet();
+
+
 
 
         // fleet
@@ -119,47 +150,6 @@ namespace WcfService
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response FleetDelete(string fleetId);
-
-
-        // country and states
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/country/info", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CountryGetAll();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/country/info/{countryId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CountryGet(string countryId);
-
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/state/info", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response StateGetAll();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/state/info/{stateId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response StateGet(string stateId);
-
-
-        // pick up error
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/pickupErr/info", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response PickupErrGetAll();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/pickupErr/info/{pickupErrId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response PickupErrGet(string pickupErrId);
-
-
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/deliverErr/info", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response DeliveryErrGetAll();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/deliverErr/info/{deliveryErrId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response DeliveryErrGet(string deliveryErrId);
 
 
 

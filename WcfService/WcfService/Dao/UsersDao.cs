@@ -46,7 +46,7 @@ namespace WcfService.Dao
             return null;
         }
 
-        public Model.User GetUserByUsername(string username)
+        public Model.User GetUserByUsername(string username, bool password=false)
         {
             MySqlCommand command = null;
             MySqlDataReader reader = null;
@@ -62,7 +62,7 @@ namespace WcfService.Dao
                     return null;
                 }
 
-                return generateUserObj(reader);
+                return generateUserObj(reader, password);
             }
             catch (Exception e)
             {
@@ -198,13 +198,17 @@ namespace WcfService.Dao
             return null;
         }
 
-        private Model.User generateUserObj(MySqlDataReader reader)
+        private Model.User generateUserObj(MySqlDataReader reader, bool password=false)
         {
             Model.User user = new Model.User();
 
             user.userId = reader["id"].ToString();
             user.username = (string)reader["username"];
-            //user.password = (string)reader["password"];
+            if (password)
+            {
+                user.password = (string)reader["password"];
+            }
+
             user.displayName = (string)reader["display_name"];
             user.identityCard = (string)reader["identity_card"];
             user.image = (string)reader["image"];
@@ -371,8 +375,8 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
-                string query = string.Format("INSERT INTO {0} (user_id, token, newValidity) VALUES (@userId, @newToken, @newValidity) " +
-                    "ON DUPLICATE KEY UPDATE token=@newToken, newValidity=@newValidity;",
+                string query = string.Format("INSERT INTO {0} (user_id, token, valid_till) VALUES (@userId, @newToken, @newValidity) " +
+                    "ON DUPLICATE KEY UPDATE token=@newToken, valid_till=@newValidity;",
                     TABLE_SESSION);
 
                 mySqlCmd = new MySqlCommand(query);

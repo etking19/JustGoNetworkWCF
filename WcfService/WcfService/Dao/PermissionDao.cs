@@ -1,39 +1,48 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
     public class PermissionDao : BaseDao
     {
-        public string Add(Model.Permission payload)
-        {
-            return "1";
-        }
-
-        public bool Delete(string id)
-        {
-            return true;
-        }
+        private readonly string TABLE_PERMISSION = "permissions";
 
         public List<Model.Permission> Get()
         {
-            List<Model.Permission> permissionList = new List<Model.Permission>();
-            permissionList.Add(new Model.Permission() { permissionId = "1", name = "Add" });
-            permissionList.Add(new Model.Permission() { permissionId = "2", name = "Edit" });
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                mySqlCmd = GenerateQueryCmd(TABLE_PERMISSION);
+                reader = PerformSqlQuery(mySqlCmd);
 
-            return permissionList;
-        }
+                List<Model.Permission> permissionList = new List<Model.Permission>();
+                while (reader.Read())
+                {
+                    permissionList.Add(new Model.Permission()
+                    {
+                        permissionId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    });
+                }
 
-        public Model.Permission Get(string id)
-        {
-            return new Model.Permission() { permissionId = "1", name = "Add" };
-        }
+                return permissionList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
 
-        public bool Update(string id, Model.Permission payload)
-        {
-            return true;
+            return null;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Web;
@@ -14,7 +15,7 @@ namespace WcfService.Controller
         public Response Login(string username, string password)
         {
             // verify username and password
-            User user = userDao.GetUserByUsername(username);
+            User user = userDao.GetUserByUsername(username, true);
 
             if(user == null)
             {
@@ -30,7 +31,7 @@ namespace WcfService.Controller
                 return response;
             }
 
-            if(user.enabled)
+            if(user.enabled == false)
             {
                 // account disabled
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EAccountDisabled);
@@ -44,16 +45,20 @@ namespace WcfService.Controller
                 return response;
             }
 
-            // get the company details
-            var companyDetails = companyDao.GetCompanyById(user.companyId);
-            if(companyDetails == null ||
-                companyDetails.enabled == false ||
-                companyDetails.deleted)
+            // get the company role 
+            var permissionList = companyDao.GetCompanyPermission(user.userId);
+            if (permissionList == null)
             {
-                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EAccountDeleted);
+                // account deleted
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;
             }
 
+            if(permissionList.Count == 0)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.ECompanyNotFound);
+                return response;
+            }
 
             // 2. update the token info
             string newToken = Guid.NewGuid().ToString();
@@ -67,11 +72,13 @@ namespace WcfService.Controller
             }
 
             // return user details
+            user.password = null;
             Model.Token tokenPayload = new Token()
             {
-                userId = user.userId,
+                user = user,
                 token = newToken,
-                validTill = newValidity
+                validTill = newValidity,
+                companyList = permissionList
             };
 
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);

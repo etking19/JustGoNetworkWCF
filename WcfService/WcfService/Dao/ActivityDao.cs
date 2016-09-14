@@ -1,39 +1,48 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
-    public class ActivityDao
+    public class ActivityDao : BaseDao
     {
-        public string Add(Model.Activity payload)
-        {
-            return "1";
-        }
-
-        public bool Delete(string id)
-        {
-            return true;
-        }
+        private readonly string TABLE_ACTIVITIES = "activities";
 
         public List<Model.Activity> Get()
         {
-            List<Model.Activity> activitiesList = new List<Model.Activity>();
-            activitiesList.Add(new Model.Activity() { activityId = "1", name = "Job" });
-            activitiesList.Add(new Model.Activity() { activityId = "2", name = "Tracking" });
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                mySqlCmd = GenerateQueryCmd(TABLE_ACTIVITIES);
+                reader = PerformSqlQuery(mySqlCmd);
 
-            return activitiesList;
-        }
+                List<Model.Activity> activityList = new List<Model.Activity>();
+                while (reader.Read())
+                {
+                    activityList.Add(new Model.Activity()
+                    {
+                        activityId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    });
+                }
 
-        public Model.Activity Get(string id)
-        {
-            return new Model.Activity() { activityId = "1", name = "Add" };
-        }
+                return activityList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
 
-        public bool Update(string id, Model.Activity payload)
-        {
-            return true;
+            return null;
         }
     }
 }

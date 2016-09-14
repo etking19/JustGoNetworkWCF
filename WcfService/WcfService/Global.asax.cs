@@ -10,7 +10,7 @@ namespace WcfService
     {
         protected void Application_Start()
         {
-           // RouteTable.Routes.Add(new ServiceRoute("api", new CorsWebServiceHostFactory(), typeof(AjaxService)));
+            RouteTable.Routes.Add(new ServiceRoute("api", new CorsWebServiceHostFactory(), typeof(AjaxService)));
             DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, "Application_Start");
         }
 

@@ -7,3 +7,4 @@ C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\bi
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\bin\Debug\WebHttpCors.pdb
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\obj\Debug\WebHttpCors.dll
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\obj\Debug\WebHttpCors.pdb
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WebHttpCors\obj\Debug\WebHttpCors.csprojResolveAssemblyReference.cache

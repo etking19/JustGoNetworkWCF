@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="WcfService.AjaxService" CodeBehind="AjaxService.svc.cs" Factory="WebHttpCors.CorsWebServiceHostFactory, WebHttpCors"%>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WcfService.AjaxService" CodeBehind="AjaxService.svc.cs" %>

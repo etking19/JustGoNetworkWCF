@@ -134,17 +134,18 @@ namespace WebHttpCors
 			{
 				// Add allow HTTP headers to respond to the preflight request
 				if (preflightRequest.RequestedHeaders == string.Empty)
-					property.Headers.Add("Access-Control-Allow-Headers", "Accept");
+					property.Headers.Add("Access-Control-Allow-Headers", "Accept, Content-Type");
 				else
-					property.Headers.Add("Access-Control-Allow-Headers", preflightRequest.RequestedHeaders + ", Accept");
+					property.Headers.Add("Access-Control-Allow-Headers", preflightRequest.RequestedHeaders + ", Accept, Content-Type");
 
-				property.Headers.Add("Access-Control-Allow-Methods", "*");
+				property.Headers.Add("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
 
 			}
 
 			// Add allow-origin header to each response message, because client expects it
 			property.Headers.Add("Access-Control-Allow-Origin", "*");
-		}
+
+        }
     }
 
     public class CorsSupportBehavior : IEndpointBehavior

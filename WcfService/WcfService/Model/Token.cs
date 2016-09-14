@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
+using WcfService.Utility;
 
 namespace WcfService.Model
 {
-    [DataContract]
     public class Token
     {
-        [DataMember]
-        public string userId;
+        public Model.User user { get; set; }
+        public string token { get; set; }
+        public string validTill { get; set; }
 
-        [DataMember]
-        public string token;
-
-        [DataMember]
-        public string validTill;
+        public List<Model.Company> companyList { get; set; }
     }
 }

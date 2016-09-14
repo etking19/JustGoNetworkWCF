@@ -1,39 +1,88 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WcfService.Model;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
-    public class StateDao
+    public class StateDao : BaseDao
     {
-        public string Add(Model.State payload)
-        {
-            return "1";
-        }
-
-        public bool Delete(string id)
-        {
-            return true;
-        }
+        private readonly string TABLE_STATE = "states";
 
         public List<Model.State> Get()
         {
-            List<Model.State> stateList = new List<Model.State>();
-            stateList.Add(new Model.State() { stateId = "1", name = "Selangor", countryId = "1" });
-            stateList.Add(new Model.State() { stateId = "2", name = "Wilayah", countryId = "1" });
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                mySqlCmd = GenerateQueryCmd(TABLE_STATE);
+                reader = PerformSqlQuery(mySqlCmd);
 
-            return stateList;
+                List<State> stateList = new List<State>();
+                while (reader.Read())
+                {
+                    stateList.Add(new State()
+                    {
+                        stateId = reader["id"].ToString(),
+                        name = reader["name"].ToString(),
+                        countryId = reader["country_id"].ToString()
+                    });
+                }
+
+                return stateList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
-        public Model.State Get(string id)
+        public List<State> GetByCountryId(string countryId)
         {
-            return new Model.State() { stateId = "1", name = "Selangor", countryId = "1" };
-        }
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> queryParam = new Dictionary<string, string>();
+                queryParam.Add("country_id", countryId);
 
-        public bool Update(string id, Model.State payload)
-        {
-            return true;
+                mySqlCmd = GenerateQueryCmd(TABLE_STATE, queryParam);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                List<State> stateList = new List<State>();
+                while (reader.Read())
+                {
+                    stateList.Add(new State()
+                    {
+                        stateId = reader["id"].ToString(),
+                        name = reader["name"].ToString(),
+                        countryId = reader["country_id"].ToString()
+                    });
+                }
+
+                return stateList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
     }
 }

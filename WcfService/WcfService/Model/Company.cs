@@ -43,5 +43,7 @@ namespace WcfService.Model
         public float rating;
 
         public User[] admin;
+
+        public List<Model.Role> rolePermissionList { get; set; }
     }
 }

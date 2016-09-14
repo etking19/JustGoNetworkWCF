@@ -1,44 +1,82 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WcfService.Model;
+using WcfService.Utility;
 
 namespace WcfService.Dao
 {
     public class CountryDao : BaseDao
     {
-        public string AddCountry(Country country)
-        {
-            return "1";
-        }
-
-        public bool UpdateCountry(string countryId, Country country)
-        {
-            return true;
-        }
+        private readonly string TABLE_COUNTRY = "countries";
 
         public Country GetCountry(string countryId)
         {
-            return new Country()
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
             {
-                countryId = "1",
-                name = "Malaysia"
-            };
+                Dictionary<string, string> queryParam = new Dictionary<string, string>();
+                queryParam.Add("id", countryId);
+
+                mySqlCmd = GenerateQueryCmd(TABLE_COUNTRY, queryParam);
+                reader = PerformSqlQuery(mySqlCmd);
+                if (reader.Read())
+                {
+                    return new Country()
+                    {
+                        countryId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
 
-        public List<Country> GetCountris()
+        public List<Country> GetCountries()
         {
-            List<Country> countryList = new List<Country>();
-            countryList.Add(new Country() { countryId ="1", name="Malaysia" });
-            countryList.Add(new Country() { countryId = "2", name = "Thailand" });
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                mySqlCmd = GenerateQueryCmd(TABLE_COUNTRY);
+                reader = PerformSqlQuery(mySqlCmd);
 
-            return countryList;
-        }
+                List<Country> countryList = new List<Country>();
+                while (reader.Read())
+                {
+                    countryList.Add(new Country()
+                    {
+                        countryId = reader["id"].ToString(),
+                        name = reader["name"].ToString()
+                    });
+                }
 
-        public bool DeleteCountry(string countryId)
-        {
-            return true;
+                return countryList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
     }
 }

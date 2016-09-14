@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ServiceModel;
 using System.ServiceModel.Activation;
-using System.ServiceModel.Web;
 using WcfService.Constant;
 using WcfService.Controller;
 using WcfService.Model;
@@ -46,12 +44,7 @@ namespace WcfService
             return companyController.UpdateCompany(companyId, company);
         }
 
-        public Response CountryGet(string countryId)
-        {
-            return commonController.GetCountry(countryId);
-        }
-
-        public Response CountryGetAll()
+        public Response CountryGet()
         {
             return commonController.GetCountry();
         }
@@ -96,12 +89,7 @@ namespace WcfService
             return roleController.GetRoles();
         }
 
-        public Response StateGet(string stateId)
-        {
-            return commonController.GetState(stateId);
-        }
-
-        public Response StateGetAll()
+        public Response StateGet()
         {
             return commonController.GetState();
         }
@@ -178,26 +166,15 @@ namespace WcfService
             return userController.EditUser(userId, user);
         }
 
-        public Response PickupErrGetAll()
+        public Response PickupErrGet()
         {
             return commonController.GetPickupError();
         }
 
-        public Response PickupErrGet(string pickupErrId)
-        {
-            return commonController.GetPickupError(pickupErrId);
-        }
-
-        public Response DeliveryErrGetAll()
+        public Response DeliveryErrGet()
         {
             return commonController.GetDeliveryError();
         }
-
-        public Response DeliveryErrGet(string deliveryErrId)
-        {
-            return commonController.GetDeliveryError(deliveryErrId);
-        }
-
 
         public Response JobAdd(Model.JobDetails jobDetails)
         {
@@ -308,6 +285,11 @@ namespace WcfService
         public Response JobDeliveryGetStatus()
         {
             return jobController.GetJobStatus();
+        }
+
+        public Response ActivityGet()
+        {
+            return commonController.GetActivity();
         }
     }
 }

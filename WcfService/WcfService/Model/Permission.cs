@@ -14,5 +14,7 @@ namespace WcfService.Model
 
         [DataMember]
         public string name;
+
+        public List<Activity> activityList { get; set; }
     }
 }
