@@ -24,22 +24,22 @@ namespace WcfService
             DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, "GetOptions");
         }
 
-        public Response CompanyAddProfile(Company company)
+        public Response CompanyProfileAdd(Company company)
         {
             return companyController.AddCompany(company);
         }
 
-        public Response CompanyDeleteProfile(string companyId)
+        public Response CompanyProfileDelete(string companyId)
         {
             return companyController.DeleteCompany(companyId);
         }
 
-        public Response CompanyGetAllProfile()
+        public Response CompanyProfileGet()
         {
             return companyController.GetCompanies();
         }
 
-        public Response CompanyUpdateProfile(string companyId, Company company)
+        public Response CompanyProfileUpdate(string companyId, Company company)
         {
             return companyController.UpdateCompany(companyId, company);
         }
@@ -49,24 +49,19 @@ namespace WcfService
             return commonController.GetCountry();
         }
 
-        public Response FleetAdd(Fleet fleet)
+        public Response FleetLorryAdd(Fleet fleet)
         {
             return fleetController.AddFleet(fleet);
         }
 
-        public Response FleetDelete(string fleetId)
+        public Response FleetLorryDelete(string fleetId)
         {
             return fleetController.DeleteFleet(fleetId);
         }
 
-        public Response FleetGet(string fleetId)
+        public Response FleetLorryGet()
         {
-            return fleetController.GetFleet(fleetId);
-        }
-
-        public Response FleetGetByCompany(string companyId)
-        {
-            return fleetController.GetFleets();
+            return fleetController.GetFleet();
         }
 
         public Response FleetTypeGet()
@@ -74,7 +69,7 @@ namespace WcfService
             return commonController.GetFleetType();
         }
 
-        public Response FleetUpdate(string fleetId, Fleet fleet)
+        public Response FleetLorryUpdate(string fleetId, Fleet fleet)
         {
             return fleetController.UpdateFleet(fleetId, fleet);
         }

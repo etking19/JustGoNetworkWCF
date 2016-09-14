@@ -115,26 +115,19 @@ namespace WcfService
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/company/profile?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CompanyGetAllProfile();
+        Model.Response CompanyProfileGet();
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/company/profile", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CompanyAddProfile(Model.Company company);
+        Model.Response CompanyProfileAdd(Model.Company company);
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/company/profile/{companyId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CompanyUpdateProfile(string companyId, Model.Company company);
+        Model.Response CompanyProfileUpdate(string companyId, Model.Company company);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/company/profile/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response CompanyDeleteProfile(string companyId);
-
-
-
-
-
-
-
+        Model.Response CompanyProfileDelete(string companyId);
 
 
 
@@ -142,24 +135,20 @@ namespace WcfService
         // fleet
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetGet(string fleetId);
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/fleet/lorry/company/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetGetByCompany(string companyId);
+        [WebInvoke(Method = "GET", UriTemplate = "/fleet/lorry?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response FleetLorryGet();
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/fleet/lorry", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetAdd(Model.Fleet fleet);
+        Model.Response FleetLorryAdd(Model.Fleet fleet);
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetUpdate(string fleetId, Model.Fleet fleet);
+        Model.Response FleetLorryUpdate(string fleetId, Model.Fleet fleet);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response FleetDelete(string fleetId);
+        Model.Response FleetLorryDelete(string fleetId);
 
 
 

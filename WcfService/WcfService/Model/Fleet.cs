@@ -12,32 +12,28 @@ namespace WcfService.Model
         [DataMember]
         public string fleetId;
 
-        [DataMember]
+        [DataMember(IsRequired =true)]
         public string registrationNumber;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string fleetTypeId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string roadTaxExpiry;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string serviceDueDate;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public int serviceDueMileage;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string companyId;
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string remarks;
 
-        [DataMember]
         public bool enabled;
-
-        [DataMember]
-        public string fleetDriverId;
 
         public bool deleted;
 
