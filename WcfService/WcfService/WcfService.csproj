@@ -137,6 +137,7 @@
     <Compile Include="Dao\JobDeliveryDao.cs" />
     <Compile Include="Dao\JobDetailsDao.cs" />
     <Compile Include="Dao\JobStatusDao.cs" />
+    <Compile Include="Dao\JobTypeDao.cs" />
     <Compile Include="Dao\LoggerDao.cs" />
     <Compile Include="Dao\OtpDao.cs" />
     <Compile Include="Dao\PermissionDao.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Model\JobDetails.cs" />
     <Compile Include="Model\JobOrderStatus.cs" />
     <Compile Include="Model\JobStatus.cs" />
+    <Compile Include="Model\JobType.cs" />
     <Compile Include="Model\Otp.cs" />
     <Compile Include="Model\Permission.cs" />
     <Compile Include="Model\Company.cs" />

@@ -222,5 +222,33 @@ namespace WcfService.Controller
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
+
+        public Response GetJobStatusType()
+        {
+            var result = jobStatusDao.Get();
+            if (result == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            response.payload = javaScriptSerializer.Serialize(result);
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
+        }
+
+        public Response GetJobTypes()
+        {
+            var result = jobTypeDao.Get();
+            if (result == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            response.payload = javaScriptSerializer.Serialize(result);
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
+        }
     }
 }

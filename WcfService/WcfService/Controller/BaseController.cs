@@ -20,6 +20,7 @@ namespace WcfService.Controller
         protected static PickUpErrorDao pickupErrDao = new PickUpErrorDao();
         protected static DeliveryErrorDao deliveryErrDao = new DeliveryErrorDao();
         protected static JobStatusDao jobStatusDao = new JobStatusDao();
+        protected static JobTypeDao jobTypeDao = new JobTypeDao();
 
         protected static PermissionDao permissionDao = new PermissionDao();
         protected static ActivityDao activityDao = new ActivityDao();

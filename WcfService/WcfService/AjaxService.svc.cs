@@ -291,5 +291,15 @@ namespace WcfService
         {
             return commonController.GetActivity();
         }
+
+        public Response JobStatusTypeGet()
+        {
+            return commonController.GetJobStatusType();
+        }
+
+        public Response JobTypeGet()
+        {
+            return commonController.GetJobTypes();
+        }
     }
 }

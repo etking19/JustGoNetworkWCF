@@ -59,6 +59,16 @@ namespace WcfService
         [WebInvoke(Method = "GET", UriTemplate = "/deliverErr?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response DeliveryErrGet();
 
+        // job status
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/jobStatus/type", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobStatusTypeGet();
+
+        // job type
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/jobTyoe", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobTypeGet();
+
 
         // user
 
