@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel.Activation;
+using System.Web;
 using WcfService.Constant;
 using WcfService.Controller;
 using WcfService.Model;
@@ -17,6 +18,7 @@ namespace WcfService
         private static RoleController roleController = new RoleController();
         private static FleetController fleetController = new FleetController();
         private static JobController jobController = new JobController();
+        private static UserAuthHttpModule userAuthModule = new UserAuthHttpModule();
 
         public void GetOptions()
         {
@@ -131,16 +133,6 @@ namespace WcfService
             return userController.GetUser();
         }
 
-        //public Response UserGetAllProfile(string number, string skip)
-        //{
-        //    return userController.GetUserList(number, skip);
-        //}
-
-        //public Response UserGetProfile(string userId)
-        //{
-        //    return userController.GetUser(userId);
-        //}
-
         public Response UserLogin(string username, string password)
         {
             return userController.Login(username, password);
@@ -249,6 +241,26 @@ namespace WcfService
         public Response JobTypeGet()
         {
             return commonController.GetJobTypes();
+        }
+
+        public Response DeliveryPostcodeValidation(string deliverFrom, string deliverTo)
+        {
+            return commonController.CheckPostcodeValidation(deliverFrom, deliverTo);
+        }
+
+        public Response PriceGenerate()
+        {
+            return commonController.GeneratePrice();
+        }
+
+        public Response PriceGenerateDisposal()
+        {
+            return commonController.GeneratePriceDisposal();
+        }
+
+        public Response ValidateVoucher(string promoCode)
+        {
+            return commonController.ValidateVoucher(promoCode);
         }
     }
 }

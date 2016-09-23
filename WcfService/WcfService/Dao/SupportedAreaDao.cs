@@ -7,30 +7,27 @@ using WcfService.Utility;
 
 namespace WcfService.Dao
 {
-    public class JobTypeDao : BaseDao
+    public class SupportedAreaDao : BaseDao
     {
-        private readonly string TABLE_JOBTYPE = "job_type";
+        private readonly string TABLE_SUPPORTED_AREA_FROM = "supported_area_from";
+        private readonly string TABLE_SUPPORTED_AREA_TO = "supported_area_to";
 
-        public List<Model.JobType> Get()
+        public string[] GetFrom()
         {
             MySqlCommand mySqlCmd = null;
             MySqlDataReader reader = null;
             try
             {
-                mySqlCmd = GenerateQueryCmd(TABLE_JOBTYPE);
+                mySqlCmd = GenerateQueryCmd(TABLE_SUPPORTED_AREA_FROM);
                 reader = PerformSqlQuery(mySqlCmd);
 
-                List<Model.JobType> jobTypeList = new List<Model.JobType>();
+                List<string> fromAdds = new List<string>();
                 while (reader.Read())
                 {
-                    jobTypeList.Add(new Model.JobType()
-                    {
-                        jobTypeId = reader["id"].ToString(),
-                        name = reader["name"].ToString()
-                    });
+                    fromAdds.Add(reader["name"].ToString());
                 }
 
-                return jobTypeList;
+                return fromAdds.ToArray();
             }
             catch (Exception e)
             {
@@ -45,26 +42,22 @@ namespace WcfService.Dao
             return null;
         }
 
-        public Model.JobType GetById(string jobTypeId)
+        public string[] GetTo()
         {
             MySqlCommand mySqlCmd = null;
             MySqlDataReader reader = null;
             try
             {
-                Dictionary<string, string> queryParam = new Dictionary<string, string>();
-                queryParam.Add("id", jobTypeId);
-
-                mySqlCmd = GenerateQueryCmd(TABLE_JOBTYPE, queryParam);
+                mySqlCmd = GenerateQueryCmd(TABLE_SUPPORTED_AREA_TO);
                 reader = PerformSqlQuery(mySqlCmd);
-                
-                if (reader.Read())
+
+                List<string> fromAdds = new List<string>();
+                while (reader.Read())
                 {
-                    return new Model.JobType()
-                    {
-                        jobTypeId = reader["id"].ToString(),
-                        name = reader["name"].ToString()
-                    };
+                    fromAdds.Add(reader["name"].ToString());
                 }
+
+                return fromAdds.ToArray();
             }
             catch (Exception e)
             {

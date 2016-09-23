@@ -31,6 +31,9 @@ namespace WcfService.Model
         public int workerAsistance { get; set; }
 
         [DataMember(IsRequired = true)]
+        public string deliveryDate { get; set; }
+
+        [DataMember(IsRequired = true)]
         public string remarks { get; set; }
 
         [DataMember(IsRequired = false)]

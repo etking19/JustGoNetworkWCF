@@ -12,8 +12,7 @@ namespace WcfService
 {
     public class BasicAuthHttpModule : IHttpModule
     {
-        private const string Realm = "My Realm";
-        private static string[] _users;
+        private const string Realm = "Require application token";
         private static string[] _tokens;
 
         public void Init(HttpApplication context)
@@ -21,10 +20,15 @@ namespace WcfService
             // Register event handlers
             context.AuthenticateRequest += OnApplicationAuthenticateRequest;
             context.EndRequest += OnApplicationEndRequest;
+            context.AuthorizeRequest += Context_AuthorizeRequest;
 
             // get all the username and tokens from web.config
-            _users = ConfigurationManager.AppSettings["AuthorizationUser"].Split(';');
             _tokens = ConfigurationManager.AppSettings["AuthorizationToken"].Split(';');
+        }
+
+        private void Context_AuthorizeRequest(object sender, EventArgs e)
+        {
+            Console.WriteLine(e);
         }
 
         private static void SetPrincipal(IPrincipal principal)
@@ -36,43 +40,22 @@ namespace WcfService
             }
         }
 
-        private static bool CheckPassword(string username, string password)
-        {
-            // TODO: query from database for correct userId and token
-
-            for (int count = 0; count < _users.Length; count++)
-            {
-                if(_users[count] == username &&
-                    _tokens[count] == password)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private static void AuthenticateUser(string credentials)
         {
             try
             {
                 var encoding = Encoding.GetEncoding("iso-8859-1");
                 credentials = encoding.GetString(Convert.FromBase64String(credentials));
-
-                int separator = credentials.IndexOf(':');
-                string name = credentials.Substring(0, separator);
-                string password = credentials.Substring(separator + 1);
-
-                if (CheckPassword(name, password))
+                foreach(string token in _tokens)
                 {
-                    var identity = new GenericIdentity(name);
-                    SetPrincipal(new GenericPrincipal(identity, null));
+                    if (token.CompareTo(credentials) == 0)
+                    {
+                        // found correct credential
+                        return;
+                    }
                 }
-                else
-                {
-                    // Invalid username or password.
-                    HttpContext.Current.Response.StatusCode = 401;
-                }
+
+                HttpContext.Current.Response.StatusCode = 401;
             }
             catch (Exception e)
             {
@@ -97,7 +80,17 @@ namespace WcfService
                 {
                     AuthenticateUser(authHeaderVal.Parameter);
                 }
+                else
+                {
+                    HttpContext.Current.Response.StatusCode = 401;
+                }
             }
+            else
+            {
+                HttpContext.Current.Response.StatusCode = 401;
+            }
+
+
         }
 
         // If the request was unauthorized, add the WWW-Authenticate header 

@@ -55,6 +55,7 @@ namespace WcfService.Dao
                 insertParam.Add("job_type_id", payload.jobTypeId);
                 insertParam.Add("amount", payload.amount.ToString());
                 insertParam.Add("worker_assistance", payload.workerAsistance.ToString());
+                insertParam.Add("delivery_date", payload.deliveryDate);
                 insertParam.Add("remarks", payload.remarks.ToString());
                 insertParam.Add("created_by", payload.createdBy);
                 insertParam.Add("modify_by", payload.createdBy);
@@ -88,6 +89,7 @@ namespace WcfService.Dao
                 updateParam.Add("job_type_id", payload.jobTypeId);
                 updateParam.Add("amount", payload.amount.ToString());
                 updateParam.Add("worker_assistance", payload.workerAsistance.ToString());
+                updateParam.Add("delivery_date", payload.deliveryDate);
                 updateParam.Add("remarks", payload.remarks);
                 updateParam.Add("modify_by", payload.modifiedBy);
 
@@ -165,6 +167,7 @@ namespace WcfService.Dao
                             amountPaid = (float)reader["amount_paid"],
                             cashOnDelivery = (int)reader["cash_on_delivery"] == 0 ? false : true,
                             workerAsistance = (int)reader["worker_assistance"],
+                            deliveryDate = reader["delivery_date"].ToString(),
                             remarks = (string)reader["remarks"],
                             enabled = (int)reader["enabled"] == 0 ? false : true,
                             deleted = (int)reader["deleted"] == 0 ? false : true,
@@ -381,6 +384,7 @@ namespace WcfService.Dao
                     amountPaid = (float)reader["amount_paid"],
                     cashOnDelivery = (int)reader["cash_on_delivery"] == 0 ? false : true,
                     workerAsistance = (int)reader["worker_assistance"],
+                    deliveryDate = reader["delivery_date"].ToString(),
                     remarks = (string)reader["remarks"],
                     enabled = (int)reader["enabled"] == 0 ? false : true,
                     deleted = (int)reader["deleted"] == 0 ? false : true,

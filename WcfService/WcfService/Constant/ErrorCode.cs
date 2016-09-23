@@ -34,5 +34,14 @@
         public static int EJobDeleted = 2200;
         public static int EJobNotFound = 2201;
         public static int EJobDisabled = 2202;
+
+        // Client error
+        public static int EPostcodeNotValid = 2300;
+        public static int EPostcodeFromNotSupport = 2301;
+        public static int EPostcodeToNotSupport = 2302;
+        public static int EVoucherNotValid = 2303;
+        public static int EVoucherExpired = 2304;
+        public static int EVoucherMinimumRequired = 2305;
+        public static int EVoucherRedemptionLimit = 2306;
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using WcfService.Model;
+﻿using WcfService.Model;
 
 namespace WcfService.Utility
 {
@@ -19,6 +15,17 @@ namespace WcfService.Utility
                 response.payload = null;
             }
             return response;
+        }
+
+        public static bool ContainsAny(string haystack, string[] needles)
+        {
+            foreach (string needle in needles)
+            {
+                if (haystack.Contains(needle))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

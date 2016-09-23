@@ -16,7 +16,8 @@ namespace WcfService.Utility
             Info = 0,
             Warning = 1,
             Error = 2,
-            Critical = 3
+            Critical = 3,
+            Analytic = 99
         };
 
         private DBLogger()

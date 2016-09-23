@@ -45,7 +45,13 @@ namespace WcfService.Constant
             errorMsgDic.Add(ErrorCode.EJobNotFound, "Job not found. Please try different ID.");
             errorMsgDic.Add(ErrorCode.EJobDisabled, "Job disabled. Please see administrator for more info.");
 
-
+            errorMsgDic.Add(ErrorCode.EPostcodeNotValid, "Postcode entered not valid.");
+            errorMsgDic.Add(ErrorCode.EPostcodeFromNotSupport, "Deliver from postcode not supported.");
+            errorMsgDic.Add(ErrorCode.EPostcodeToNotSupport, "Deliver to postcode not supported.");
+            errorMsgDic.Add(ErrorCode.EVoucherNotValid, "Promo code not valid.");
+            errorMsgDic.Add(ErrorCode.EVoucherExpired, "Promo code expired.");
+            errorMsgDic.Add(ErrorCode.EVoucherMinimumRequired, "Minimum spending required.");
+            errorMsgDic.Add(ErrorCode.EVoucherRedemptionLimit, "All vouchers has been redeem.");
         }
 
         public static ErrorMsg GetInstance()
