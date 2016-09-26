@@ -84,8 +84,12 @@ namespace WcfService
         Model.Response DeliveryErrGet();
 
         // job status
+        /// <summary>
+        /// jobStatusId
+        /// </summary>
+        /// <returns></returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/jobStatus/type", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/jobStatus/type?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobStatusTypeGet();
 
         // job type
@@ -220,6 +224,10 @@ namespace WcfService
         [WebInvoke(Method = "GET", UriTemplate = "/job/open?", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobOpenGet();
 
+        /// <summary>
+        /// uniqueId OR jobId
+        /// </summary>
+        /// <returns></returns>
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/job/status?", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobStatusGet();

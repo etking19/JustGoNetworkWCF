@@ -161,6 +161,12 @@ namespace WcfService.Dao
             int count = 0;
             foreach (KeyValuePair<string, string> entry in insertParam)
             {
+                if(entry.Value == null)
+                {
+                    // skip
+                    continue;
+                }
+
                 if (count != 0)
                 {
                     parameters += ",";
@@ -190,6 +196,12 @@ namespace WcfService.Dao
             int count = 0;
             foreach (KeyValuePair<string, string> entry in updateParam)
             {
+                if (entry.Value == null)
+                {
+                    // skip
+                    continue;
+                }
+
                 if (count != 0)
                 {
                     query += ",";

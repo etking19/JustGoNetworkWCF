@@ -96,7 +96,7 @@ namespace WcfService.Controller
                 return response;
             }
 
-            response.payload = javaScriptSerializer.Serialize(result);
+            response.payload = result;
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }

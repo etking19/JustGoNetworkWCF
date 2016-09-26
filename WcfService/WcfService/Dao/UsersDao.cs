@@ -323,36 +323,46 @@ namespace WcfService.Dao
             try
             {
                 // add to user table
-                Dictionary<string, string> addParam = new Dictionary<string, string>();
-                addParam.Add("username", user.username);
-                addParam.Add("password", user.password);
-                addParam.Add("contact", user.contactNumber);
-                addParam.Add("display_name", user.displayName);
-                addParam.Add("identity_card", user.identityCard);
-                addParam.Add("image", user.image);
-                addParam.Add("email", user.email);
+                string query = string.Format("INSERT INTO {0} (username, password, contact, display_name, identity_card, image, email) VALUES (@username, @password, @contact, @display_name, @identity_card, @image, @email) " +
+                    "ON DUPLICATE KEY UPDATE id= LAST_INSERT_ID(id), contact=@contact, display_name=@display_name, email=@email;",
+                    TABLE_USERS);
 
-                mySqlCmd = GenerateAddCmd(TABLE_USERS, addParam);
+                mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@username", user.username);
+                mySqlCmd.Parameters.AddWithValue("@password", user.password == null? "": user.password);
+                mySqlCmd.Parameters.AddWithValue("@contact", user.contactNumber);
+                mySqlCmd.Parameters.AddWithValue("@display_name", user.displayName);
+                mySqlCmd.Parameters.AddWithValue("@identity_card", user.identityCard == null ? "": user.identityCard);
+                mySqlCmd.Parameters.AddWithValue("@image", user.image == null?"": user.image);
+                mySqlCmd.Parameters.AddWithValue("@email", user.email);
+
                 PerformSqlNonQuery(mySqlCmd);
                 var userId = mySqlCmd.LastInsertedId.ToString();
-                CleanUp(reader, mySqlCmd);
-
 
                 // add to user company table
-                addParam.Clear();
-                addParam.Add("user_id", userId);
-                addParam.Add("company_id", user.companyId);
-                mySqlCmd = GenerateAddCmd(TABLE_USER_COMPANY, addParam);
-                PerformSqlNonQuery(mySqlCmd);
-                CleanUp(reader, mySqlCmd);
+                Dictionary<string, string> addParam = new Dictionary<string, string>();
+                if (user.companyId != null)
+                {
+                    CleanUp(reader, mySqlCmd);
 
+                    addParam.Clear();
+                    addParam.Add("user_id", userId);
+                    addParam.Add("company_id", user.companyId);
+                    mySqlCmd = GenerateAddCmd(TABLE_USER_COMPANY, addParam);
+                    PerformSqlNonQuery(mySqlCmd);
+                }
 
-                // add to user role table
-                addParam.Clear();
-                addParam.Add("user_id", userId);
-                addParam.Add("role_id", user.roleId);
-                mySqlCmd = GenerateAddCmd(TABLE_USER_ROLE, addParam);
-                PerformSqlNonQuery(mySqlCmd);
+                if (user.roleId != null)
+                {
+                    CleanUp(reader, mySqlCmd);
+
+                    // add to user role table
+                    addParam.Clear();
+                    addParam.Add("user_id", userId);
+                    addParam.Add("role_id", user.roleId);
+                    mySqlCmd = GenerateAddCmd(TABLE_USER_ROLE, addParam);
+                    PerformSqlNonQuery(mySqlCmd);
+                }
 
                 return userId;
             }

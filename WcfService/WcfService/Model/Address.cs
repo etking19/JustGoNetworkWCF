@@ -21,19 +21,19 @@ namespace WcfService.Model
         [DataMember(IsRequired = true)]
         public string address3;
 
-        [DataMember(IsRequired = true)]
+        [DataMember(IsRequired = false)]
         public string stateId;
 
-        [DataMember(IsRequired = true)]
+        [DataMember(IsRequired = false)]
         public string countryId;
 
         [DataMember(IsRequired = true)]
         public string postcode;
 
-        [DataMember(IsRequired = true)]
+        [DataMember(IsRequired = false)]
         public float gpsLongitude;
 
-        [DataMember(IsRequired = true)]
+        [DataMember(IsRequired = false)]
         public float gpsLatitude;
 
         [DataMember(IsRequired = false)]

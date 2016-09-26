@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceModel.Web;
 using System.Web;
 using WcfService.Model;
+using WcfService.Model.Google;
 using WcfService.Utility;
 
 namespace WcfService.Controller
@@ -65,11 +66,132 @@ namespace WcfService.Controller
             // first add the user if not existed
             var userId = jobDetails.ownerUserId;
             var userObj = userDao.GetUserById(userId);
-            if(userObj == null)
+            if (userObj == null)
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                 return response;
             }
+
+            // get the gps coordinate if not passed in
+            // get the state id and country id if not passed in
+            foreach (Model.Address address in jobDetails.addressFrom)
+            {
+                if (address.gpsLongitude == 0 ||
+                    address.gpsLatitude == 0 ||
+                    address.stateId == null ||
+                    address.countryId == null)
+                {
+                    // request gps cordinate
+                    AddressComponents mapsObj = Utils.GetGpsCoordinate(address.address1, address.address2, address.address3, address.postcode);
+                    if (mapsObj == null)
+                    {
+                        // find from local database
+                        Postcode postcodeClass = new Postcode();
+                        string nameLocal;
+                        var result = postcodeClass.PostcodeNameList.TryGetValue(address.postcode, out nameLocal);
+                        if (result == false)
+                        {
+                            response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                            return response;
+                        }
+                        mapsObj = Utils.GetGpsCoordinate(nameLocal);
+                    }
+
+                    if (address.gpsLongitude == 0)
+                    {
+                        address.gpsLongitude = mapsObj.geometry.location.lng;
+                    }
+
+                    if (address.gpsLatitude == 0)
+                    {
+                        address.gpsLatitude = mapsObj.geometry.location.lat;
+                    }
+
+                    if (address.countryId == null)
+                    {
+                        var countryObj = countryDao.GetCountries().Find(t => t.name.Contains(mapsObj.address_components.Find(c => c.types.Contains("country")).long_name));
+                        address.countryId = countryObj.countryId;
+                    }
+
+                    if (address.stateId == null)
+                    {
+                        var stateList = stateDao.GetByCountryId(address.countryId);
+                        var stateObj = stateList.Find(t => t.name.Contains(mapsObj.address_components.Find(a => a.types.Contains("administrative_area_level_1")).long_name));
+                        if (stateObj == null)
+                        {
+                            // cannot find from google api, use local database
+                            Postcode postcodeClass = new Postcode();
+                            string stateLocal;
+                            var localDic = postcodeClass.PostcodeList.TryGetValue(address.postcode, out stateLocal);
+                            address.stateId = stateList.Find(t => t.name.Contains(stateLocal)).stateId;
+                        }
+                        else
+                        {
+                            address.stateId = stateObj.stateId;
+                        }
+                    }
+                }
+            }
+
+            foreach (Model.Address address in jobDetails.addressTo)
+            {
+                if (address.gpsLongitude == 0 ||
+                    address.gpsLatitude == 0 ||
+                    address.stateId == null ||
+                    address.countryId == null)
+                {
+                    // request gps cordinate
+                    AddressComponents mapsObj = Utils.GetGpsCoordinate(address.address1, address.address2, address.address3, address.postcode);
+                    if (mapsObj == null)
+                    {
+                        // find from local database
+                        Postcode postcodeClass = new Postcode();
+                        string nameLocal;
+                        var result = postcodeClass.PostcodeNameList.TryGetValue(address.postcode, out nameLocal);
+                        if (result == false)
+                        {
+                            response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                            return response;
+                        }
+                        mapsObj = Utils.GetGpsCoordinate(nameLocal);
+                    }
+
+                    if (address.gpsLongitude == 0)
+                    {
+                        address.gpsLongitude = mapsObj.geometry.location.lng;
+                    }
+
+                    if (address.gpsLatitude == 0)
+                    {
+                        address.gpsLatitude = mapsObj.geometry.location.lat;
+                    }
+
+                    if (address.countryId == null)
+                    {
+                        var countryObj = countryDao.GetCountries().Find(t => t.name.Contains(mapsObj.address_components.Find(c => c.types.Contains("country")).long_name));
+                        address.countryId = countryObj.countryId;
+                    }
+
+                    if (address.stateId == null)
+                    {
+                        var stateList = stateDao.GetByCountryId(address.countryId);
+                        var stateObj = stateList.Find(t => t.name.Contains(mapsObj.address_components.Find(a => a.types.Contains("administrative_area_level_1")).long_name));
+                        if (stateObj == null)
+                        {
+                            // cannot find from google api, use local database
+                            Postcode postcodeClass = new Postcode();
+                            string stateLocal;
+                            postcodeClass.PostcodeList.TryGetValue(address.postcode, out stateLocal);
+                            address.stateId = stateList.Find(t => t.name.Contains(stateLocal)).stateId;
+                        }
+                        else
+                        {
+                            address.stateId = stateObj.stateId;
+                        }
+                    }
+                }
+            }
+
 
             // add the job details
             jobDetails.createdBy = userId;

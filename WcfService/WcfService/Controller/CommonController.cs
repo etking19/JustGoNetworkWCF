@@ -231,14 +231,37 @@ namespace WcfService.Controller
 
         public Response GetJobStatusType()
         {
-            var result = jobStatusDao.Get();
-            if (result == null)
+            if (WebOperationContext.Current == null)
             {
-                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
                 return response;
             }
 
-            response.payload = javaScriptSerializer.Serialize(result);
+            var jobStatusId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["jobStatusId"];
+
+            if(jobStatusId != null)
+            {
+                var result = jobStatusDao.GetById(jobStatusId);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else
+            {
+                var result = jobStatusDao.Get();
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
         }
@@ -299,41 +322,47 @@ namespace WcfService.Controller
                     }
                 }
 
-                MapsGeocode jsonObj = JsonConvert.DeserializeObject<MapsGeocode>(result);
-                if(jsonObj.status.CompareTo("OK") != 0)
+                string fromFormattedAdd = null;
+                do
                 {
-                    response.payload = javaScriptSerializer.Serialize(jsonObj.status);
-                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EPostcodeNotValid);
-                    return response;
+                    MapsGeocode jsonObj = JsonConvert.DeserializeObject<MapsGeocode>(result);
+                    if (jsonObj.status.CompareTo("OK") != 0)
+                    {
+                        break;
+                    }
+                    var representAddFrom = jsonObj.results.Find(t => t.formatted_address.Contains("Malaysia"));
+                    if (representAddFrom == null)
+                    {
+                        break;
+                    }
+
+                    fromFormattedAdd = representAddFrom.formatted_address;
+                    break;
+
+                } while (true);
+
+                if (fromFormattedAdd == null)
+                {
+                    // fail to get from Google, use local
+                    fromFormattedAdd = getAddFromLocal(deliverFrom);
                 }
-                var representAddFrom = jsonObj.results.Find(t => t.formatted_address.Contains("Malaysia"));
-                if(representAddFrom == null)
+
+                if (fromFormattedAdd == null)
                 {
-                    response.payload = result;
                     response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EPostcodeNotValid);
                     return response;
                 }
 
                 // validate the available postcode
                 string[] supportedFrom = supportedAreaDao.GetFrom();
-                var validFrom = false;
-                foreach (Model.Google.Address locationFrom in representAddFrom.address_components)
+                if (Utils.ContainsAny(fromFormattedAdd, supportedFrom) == false)
                 {
-                    if (Utils.ContainsAny(locationFrom.long_name, supportedFrom))
-                    {
-                        validFrom = true;
-                        break;
-                    }
-                }
-
-                if(false == validFrom)
-                {
-                    DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("From Not Supported: {0}", representAddFrom.formatted_address));
+                    DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("From Not Supported: {0}", fromFormattedAdd));
                     response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EPostcodeFromNotSupport);
                     return response;
                 }
 
-                AddressComponents representAddTo = null;
+                string toFormattedAdd = null;
                 if (deliverTo != null)
                 {
                     url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?region=my&address={0}", deliverTo);
@@ -351,54 +380,63 @@ namespace WcfService.Controller
                         }
                     }
 
-                    jsonObj = JsonConvert.DeserializeObject<MapsGeocode>(result);
-                    if (jsonObj.status.CompareTo("OK") != 0)
+                    do
                     {
-                        response.payload = javaScriptSerializer.Serialize(jsonObj.status);
-                        response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EPostcodeNotValid);
-                        return response;
+                        var jsonObj = JsonConvert.DeserializeObject<MapsGeocode>(result);
+                        if (jsonObj.status.CompareTo("OK") != 0)
+                        {
+                            break;
+                        }
+
+                        var representAddTo = jsonObj.results.Find(t => t.formatted_address.Contains("Malaysia"));
+                        if (representAddTo == null)
+                        {
+                            break;
+                        }
+
+                        toFormattedAdd = representAddTo.formatted_address;
+                        break;
+
+                    } while (true);
+
+
+                    if (toFormattedAdd == null)
+                    {
+                        // fail to get from Google, use local
+                        toFormattedAdd = getAddFromLocal(deliverTo);
                     }
 
-                    representAddTo = jsonObj.results.Find(t => t.formatted_address.Contains("Malaysia"));
-                    if (representAddTo == null)
+                    if (toFormattedAdd == null)
                     {
-                        response.payload = result;
                         response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EPostcodeNotValid);
                         return response;
                     }
 
                     // validate the available postcode
                     string[] supportedTo = supportedAreaDao.GetTo();
-                    var validTo = false;
-                    foreach (Model.Google.Address locationFrom in representAddFrom.address_components)
+                    if (Utils.ContainsAny(toFormattedAdd, supportedTo) == false)
                     {
-                        if (Utils.ContainsAny(locationFrom.long_name, supportedFrom))
-                        {
-                            validTo = true;
-                            break;
-                        }
-                    }
-
-                    if (false == validTo)
-                    {
-                        DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("To Not Supported: {0}", representAddTo.formatted_address));
+                        DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("To Not Supported: {0}", toFormattedAdd));
                         response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EPostcodeToNotSupport);
                         return response;
                     }
                 }
 
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("From Interested: {0}", fromFormattedAdd));
                 PostcodeList postCodeList = new PostcodeList()
                 {
-                    postCodeAddFrom = representAddFrom.formatted_address,
-                    postCodeAddTo = representAddTo.formatted_address
+                    postCodeAddFrom = fromFormattedAdd
                 };
 
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("From Interested: {0}", representAddFrom.formatted_address));
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("To Interested: {0}", representAddTo.formatted_address));
+                if (toFormattedAdd != null)
+                {
+                    postCodeList.postCodeAddTo = toFormattedAdd;
+                    DBLogger.GetInstance().Log(DBLogger.ESeverity.Analytic, string.Format("To Interested: {0}", toFormattedAdd));
+                }
 
                 // calculate distance between postcode only for standard delivery
-                if (representAddFrom != null &&
-                    representAddTo != null)
+                if (fromFormattedAdd != null &&
+                    toFormattedAdd != null)
                 {
                     url = string.Format("https://maps.googleapis.com/maps/api/directions/json?region=my&origin={0}&destination={1}&mode=driving", deliverFrom, deliverTo);
                     using (var client = new HttpClient())
@@ -435,6 +473,19 @@ namespace WcfService.Controller
             
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
+        }
+
+        private string getAddFromLocal(string postcode)
+        {
+            Postcode postcodeClass = new Postcode();
+            string nameLocal;
+            var result = postcodeClass.PostcodeNameList.TryGetValue(postcode, out nameLocal);
+            if (result)
+            {
+                return postcode + ", " + nameLocal;
+            }
+
+            return "";
         }
 
         public Model.Response GeneratePriceDisposal()
@@ -544,7 +595,25 @@ namespace WcfService.Controller
                 return response;
             }
 
-            var transportCost = deliveryPriceDao.GetPrice(distance, lorryType);
+            // modify the tonne pass in to type id accordingly
+            var lorryId = 0;
+            switch (int.Parse(lorryType))
+            {
+                case (int)Configuration.LorryType.Lorry_1tonne:
+                    lorryId = 1;
+                    break;
+                case (int)Configuration.LorryType.Lorry_3tonne:
+                    lorryId = 2;
+                    break;
+                case (int)Configuration.LorryType.Lorry_5tonne:
+                    lorryId = 3;
+                    break;
+                default:
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
+                    return response;
+            }
+
+            var transportCost = deliveryPriceDao.GetPrice(distance, lorryId.ToString());
             if (transportCost == 0)
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
