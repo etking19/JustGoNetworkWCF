@@ -41,6 +41,9 @@
 		C2D373221D9A3DFD00905564 /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8821D7E98AD00C47170 /* OneSignal.framework */; };
 		C2D373231D9A3E0000905564 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8841D7E98C700C47170 /* SystemConfiguration.framework */; };
 		C2D373241D9A3E0100905564 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8841D7E98C700C47170 /* SystemConfiguration.framework */; };
+		C2E6577F1D9A442600B8E861 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6577E1D9A442600B8E861 /* StringConstant.swift */; };
+		C2E657801D9A44CE00B8E861 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6577E1D9A442600B8E861 /* StringConstant.swift */; };
+		C2E657811D9A44CF00B8E861 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6577E1D9A442600B8E861 /* StringConstant.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +65,7 @@
 		C2D372BE1D9A162A00905564 /* partner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = partner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D372E31D9A379D00905564 /* driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D372F91D9A3BAE00905564 /* lorry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lorry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2E6577E1D9A442600B8E861 /* StringConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstant.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				C29A440C1D7BFA5300D13EAA /* NetworkConstant.swift */,
+				C2E6577E1D9A442600B8E861 /* StringConstant.swift */,
 			);
 			name = Modal;
 			sourceTree = "<group>";
@@ -293,6 +298,7 @@
 			files = (
 				C2D372D11D9A213A00905564 /* RootVC.swift in Sources */,
 				C2D372D01D9A213300905564 /* AppDelegate.swift in Sources */,
+				C2E6577F1D9A442600B8E861 /* StringConstant.swift in Sources */,
 				C2D372D31D9A214200905564 /* SplashScreenVC.swift in Sources */,
 				C2D372D51D9A214700905564 /* NetworkConstant.swift in Sources */,
 				C2D372D21D9A213C00905564 /* ViewControllerExtension.swift in Sources */,
@@ -306,6 +312,7 @@
 			files = (
 				C2D3731B1D9A3C9400905564 /* AppDelegate.swift in Sources */,
 				C2D373151D9A3C8800905564 /* ViewControllerExtension.swift in Sources */,
+				C2E657801D9A44CE00B8E861 /* StringConstant.swift in Sources */,
 				C2D373111D9A3C8100905564 /* SplashScreenVC.swift in Sources */,
 				C2D373171D9A3C8B00905564 /* RootVC.swift in Sources */,
 				C2D3730D1D9A3C7200905564 /* NetworkConstant.swift in Sources */,
@@ -319,6 +326,7 @@
 			files = (
 				C2D3731C1D9A3C9400905564 /* AppDelegate.swift in Sources */,
 				C2D373161D9A3C8900905564 /* ViewControllerExtension.swift in Sources */,
+				C2E657811D9A44CF00B8E861 /* StringConstant.swift in Sources */,
 				C2D373121D9A3C8100905564 /* SplashScreenVC.swift in Sources */,
 				C2D373181D9A3C8C00905564 /* RootVC.swift in Sources */,
 				C2D3730E1D9A3C7200905564 /* NetworkConstant.swift in Sources */,
@@ -447,6 +455,7 @@
 				INFOPLIST_FILE = Justlorry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D PARTNER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.partner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "785e5b61-08e9-4f53-a7e1-bb598a10eba2";
@@ -472,6 +481,7 @@
 				INFOPLIST_FILE = Justlorry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D PARTNER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.partner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "785e5b61-08e9-4f53-a7e1-bb598a10eba2";
@@ -496,6 +506,7 @@
 				INFOPLIST_FILE = Justlorry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D DRIVER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.driver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "12f52e68-3525-4580-a794-14947aa82232";
@@ -520,6 +531,7 @@
 				INFOPLIST_FILE = Justlorry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D DRIVER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.driver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "12f52e68-3525-4580-a794-14947aa82232";
@@ -543,6 +555,7 @@
 				INFOPLIST_FILE = Justlorry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D LORRY";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.lorry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a59029d3-0ce4-4cac-be90-c61eb972b55f";
@@ -567,6 +580,7 @@
 				INFOPLIST_FILE = Justlorry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D LORRY";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.lorry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a59029d3-0ce4-4cac-be90-c61eb972b55f";
@@ -604,6 +618,7 @@
 				C2D372F31D9A379D00905564 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C2D373081D9A3BAE00905564 /* Build configuration list for PBXNativeTarget "lorry" */ = {
 			isa = XCConfigurationList;
@@ -612,6 +627,7 @@
 				C2D3730A1D9A3BAE00905564 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

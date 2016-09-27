@@ -4,13 +4,6 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Justlorry.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>0</integer>
-		</dict>
 		<key>driver.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -45,6 +38,11 @@
 			<true/>
 		</dict>
 		<key>C2D372F81D9A3BAE00905564</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C2E657691D9A42D000B8E861</key>
 		<dict>
 			<key>primary</key>
 			<true/>

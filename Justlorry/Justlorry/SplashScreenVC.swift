@@ -15,7 +15,7 @@ class SplashScreenVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.animation()
-        
+        self.titleLabel.text = splashTitle
         Timer.scheduledTimer(
             timeInterval: 2.5, target: self, selector: #selector(SplashScreenVC.showNextScreen), userInfo: nil, repeats: false
         )

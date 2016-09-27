@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         OneSignal.registerForPushNotifications()
         //TODO: depend on bundle id
-        OneSignal.initWithLaunchOptions(launchOptions, appId: "6d0d8142-7b77-42d8-9a62-5ddf8afc61f2", handleNotificationReceived: { (notification) in
+        OneSignal.initWithLaunchOptions(launchOptions, appId: appId, handleNotificationReceived: { (notification) in
                 self.notificationFromBackground = false
                 let result = notification?.payload
                 self.notificationMessage = (result?.title)!
