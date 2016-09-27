@@ -6,8 +6,20 @@
 	<dict>
 		<key>Justlorry.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>driver.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>lorry.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 		<key>partner.xcscheme</key>
 		<dict>
@@ -23,6 +35,16 @@
 			<true/>
 		</dict>
 		<key>C2D372BD1D9A162A00905564</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C2D372E21D9A379D00905564</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C2D372F81D9A3BAE00905564</key>
 		<dict>
 			<key>primary</key>
 			<true/>
