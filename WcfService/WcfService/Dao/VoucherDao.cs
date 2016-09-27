@@ -13,6 +13,33 @@ namespace WcfService.Dao
         private readonly string TABLE_VOUCHER = "vouchers";
         private readonly string TABLE_VOUCHER_TYPE = "voucher_type";
 
+        public bool IncreaseUsedCount(string voucherCode)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("UPDATE {0} SET used = used+1 " +
+                "WHERE code=@code;",
+                TABLE_VOUCHER, TABLE_VOUCHER_TYPE);
+
+                mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@code", voucherCode);
+                return (0 != PerformSqlNonQuery(mySqlCmd));
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return false;
+        }
+
         public Vouchers GetByVoucherCode(string voucherCode)
         {
             MySqlCommand mySqlCmd = null;

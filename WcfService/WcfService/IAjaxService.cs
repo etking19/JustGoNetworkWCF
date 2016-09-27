@@ -338,6 +338,14 @@ namespace WcfService
         [WebInvoke(Method = "POST", UriTemplate = "/voucher", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response ValidateVoucher(string promoCode);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/payment", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response PaymentMake(string uniqueId);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/payment/callback", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response PaymentCallback();
+
         // Driver
 
         [OperationContract]

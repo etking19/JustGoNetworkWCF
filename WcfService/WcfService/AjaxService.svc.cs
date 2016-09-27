@@ -262,5 +262,15 @@ namespace WcfService
         {
             return commonController.ValidateVoucher(promoCode);
         }
+
+        public Response PaymentMake(string uniqueId)
+        {
+            return commonController.MakePayment(uniqueId);
+        }
+
+        public Response PaymentCallback()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

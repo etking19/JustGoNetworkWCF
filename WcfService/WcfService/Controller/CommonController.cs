@@ -728,6 +728,12 @@ namespace WcfService.Controller
                 var responseCode = validateVoucher(promoCode, priceDetails.total, out voucherResult);
                 if(responseCode == Constant.ErrorCode.ESuccess)
                 {
+                    // first set the used voucher count
+                    if(voucherDao.IncreaseUsedCount(promoCode) == false)
+                    {
+                        DBLogger.GetInstance().Log(DBLogger.ESeverity.Warning, "voucherDao.IncreaseUsedCount(promoCode) in Common controller: " + promoCode);
+                    }
+
                     if (int.Parse(voucherResult.voucherType.id) == (int)Configuration.VoucherType.Percentage)
                     {
                         var discountedValue = voucherResult.discountValue * priceDetails.total;
@@ -753,6 +759,11 @@ namespace WcfService.Controller
                         priceDetails.discount = discountedValue;
                     }
                 }
+            }
+
+            if (priceDetails.total < 0)
+            {
+                priceDetails.total = 0;
             }
 
             response.payload = javaScriptSerializer.Serialize(priceDetails);
@@ -799,11 +810,8 @@ namespace WcfService.Controller
                 return Constant.ErrorCode.EVoucherNotValid;
             }
 
-            DateTime startDate = DateTime.ParseExact(result.startDate, "yyyy-MM-dd HH:mm:ss",
-                                       System.Globalization.CultureInfo.InvariantCulture);
-
-            DateTime endDate = DateTime.ParseExact(result.startDate, "yyyy-MM-dd HH:mm:ss",
-                                       System.Globalization.CultureInfo.InvariantCulture);
+            DateTime startDate = DateTime.Parse(result.startDate);
+            DateTime endDate = DateTime.Parse(result.endDate);
 
             if (DateTime.Now.CompareTo(startDate) < 0 ||
                 DateTime.Now.CompareTo(endDate) > 0)
@@ -823,6 +831,22 @@ namespace WcfService.Controller
             }
 
             return Constant.ErrorCode.ESuccess;
+        }
+
+        public Response MakePayment(string uniqueId)
+        {
+            try
+            {
+                // TODO:
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+
+            response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+            return response;
         }
     }
 }

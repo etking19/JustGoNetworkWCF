@@ -240,7 +240,7 @@ namespace WcfService.Controller
             // generate the unique job id
             var uniqueId = Utility.IdGenerator.Encode(ulong.Parse(jobId) + JOB_ID_PAD);
 
-            response.payload = javaScriptSerializer.Serialize(uniqueId);
+            response.payload = uniqueId;
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
 
             return response;
