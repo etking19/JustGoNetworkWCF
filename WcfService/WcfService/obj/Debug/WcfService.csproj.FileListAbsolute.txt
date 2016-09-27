@@ -30,12 +30,12 @@ C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\System.Web.Cors.dll
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\System.Web.Http.dll
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\System.Web.Http.WebHost.dll
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WebHttpCors.dll
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WebHttpCors.pdb
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\Newtonsoft.Json.xml
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\System.Net.Http.Formatting.xml
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\System.Web.Http.xml
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\System.Web.Http.WebHost.xml
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.csprojResolveAssemblyReference.cache
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.dll
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.pdb
-C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WebHttpCors.dll
-C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\WebHttpCors.pdb
-C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.csprojResolveAssemblyReference.cache

@@ -206,9 +206,11 @@ namespace WcfService
         Model.Response JobAdd(Model.JobDetails jobDetails);
 
         /// <summary>
-        /// jobId OR uniqueId OR ownerId (optional)
-        /// limit
-        /// skip
+        /// jobId OR uniqueId OR ownerId OR jobTypeId (optional)
+        /// fromDate (optional)
+        /// toDate (optional)
+        /// limit (optional)
+        /// skip (optional)
         /// </summary>
         /// <returns></returns>
         [OperationContract]

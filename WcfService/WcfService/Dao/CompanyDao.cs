@@ -221,7 +221,7 @@ namespace WcfService.Dao
                     "INNER JOIN {4} ON {4}.id={3}.activity_id " +
                     "INNER JOIN {5} ON {5}.id={3}.permission_id " +
                     "INNER JOIN {8} ON {8}.id={3}.role_id " +
-                    "INNER JOIN (SELECT {6}.company_id, AVG(rating) as rating FROM {6}) jobDelivery ON jobDelivery.company_id={0}.company_id " + 
+                    "LEFT JOIN (SELECT {6}.company_id, AVG(rating) as rating FROM {6}) jobDelivery ON jobDelivery.company_id={0}.company_id " + 
                     "WHERE {0}.user_id={7}",
                     "user_company", "companies", "user_role", "role_activity_permission", "activities", "permissions", "job_delivery", userId, "roles");
 
@@ -247,7 +247,7 @@ namespace WcfService.Dao
                             countryId = reader["country_id"].ToString(),
                             registrationNumber = reader["registration_number"].ToString(),
                             enabled = (int)reader["enabled"] == 0 ? false : true,
-                            rating = reader.GetFloat("rating"),
+                            rating = String.IsNullOrEmpty(reader["rating"].ToString()) ? 0 : reader.GetFloat("rating"),
                             rolePermissionList = new List<Model.Role>()
                         };
 

@@ -257,6 +257,10 @@ namespace WcfService.Controller
             var jobId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["jobId"];
             var uniqueId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["uniqueId"];
             var ownerId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["ownerId"];
+            
+            var jobTypeId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["jobTypeId"];
+            var fromDate = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["fromDate"];
+            var toDate = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["toDate"];
 
             var limit = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["limit"];
             var skip = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["skip"];
@@ -290,7 +294,30 @@ namespace WcfService.Controller
             else if(ownerId != null)
             {
                 // get by creator id
-                var result = jobDetailsDao.GetByOwnerId(ownerId, limit, skip);
+                var result = jobDetailsDao.GetByOwnerId(ownerId, fromDate, toDate, limit, skip);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if (jobTypeId != null)
+            {
+                var result = jobDetailsDao.GetByJobTypeId(jobTypeId, fromDate, toDate, limit, skip);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if(fromDate != null ||
+                toDate != null)
+            {
+                var result = jobDetailsDao.GetByDateRange(fromDate, toDate, limit, skip);
                 if (result == null)
                 {
                     response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);

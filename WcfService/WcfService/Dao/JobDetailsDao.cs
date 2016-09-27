@@ -145,11 +145,13 @@ namespace WcfService.Dao
                 string query = string.Format("SELECT * FROM {0} " +
                     "INNER JOIN (SELECT {3}.add_1 as add_from_1, {3}.add_2 as add_from_2, {3}.add_3 as add_from_3, {3}.state_id as state_from, {3}.country_id as country_from, {3}.postcode as postcode_from, {3}.gps_longitude as longitude_from, {3}.gps_latitude as latitude_from, {1}.*, {1}.address_id as addFromId, {1}.customer_name as customerFrom, {1}.customer_contact as contactFrom FROM {1} INNER JOIN {3} ON {1}.address_id={3}.id) addFrom ON {0}.id=addFrom.job_id " +
                     "INNER JOIN (SELECT {3}.add_1 as add_to_1, {3}.add_2 as add_to_2, {3}.add_3 as add_to_3, {3}.state_id as state_to, {3}.country_id as country_to, {3}.postcode as postcode_to, {3}.gps_longitude as longitude_to, {3}.gps_latitude as latitude_to, {2}.*, {2}.address_id as addToId, {2}.customer_name as customerTo, {2}.customer_contact as contactTo FROM {2} INNER JOIN {3} ON {2}.address_id={3}.id) addTo ON {0}.id=addTo.job_id " +
-                    "INNER JOIN {5} ON {5}.job_id={0}.id " + 
-                    "WHERE {0}.deleted=0 AND {0}.id={4};", 
-                    TABLE_NAME_JOB, TABLE_NAME_ADDFROM, TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS, jobId, TABLE_NAME_JOBORDERSTATUS);
+                    "INNER JOIN {4} ON {4}.job_id={0}.id " +
+                    "WHERE {0}.deleted=0 AND {0}.id=@jobId;", 
+                    TABLE_NAME_JOB, TABLE_NAME_ADDFROM, TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS, TABLE_NAME_JOBORDERSTATUS);
 
                 mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@jobId", jobId);
+
                 reader = PerformSqlQuery(mySqlCmd);
                 Model.JobDetails result = null;
                 List<Model.Address> fromAddList = new List<Model.Address>();
@@ -227,13 +229,14 @@ namespace WcfService.Dao
             return null;
         }
 
-        public List<Model.JobDetails> GetByOwnerId(string ownerId, string limit, string skip)
+        public List<Model.JobDetails> GetByJobTypeId(string jobTypeId, string dateFrom, string dateTo, string limit, string skip)
         {
             MySqlCommand mySqlCmd = null;
             MySqlDataReader reader = null;
             try
             {
-                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE deleted=0 AND owner_id={1} ORDER BY creation_date DESC ", TABLE_NAME_JOB, ownerId);
+                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE deleted=0 AND job_type_id=@jobTypeId AND (delivery_date >= @dateFrom OR @dateFrom IS NULL) AND (delivery_date <= @dateTo OR @dateTo IS NULL) ORDER BY delivery_date DESC ", 
+                    TABLE_NAME_JOB);
 
                 if (limit != null)
                 {
@@ -263,6 +266,123 @@ namespace WcfService.Dao
 
 
                 mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@jobTypeId", jobTypeId);
+                mySqlCmd.Parameters.AddWithValue("@dateFrom", dateFrom);
+                mySqlCmd.Parameters.AddWithValue("@dateTo", dateTo);
+
+                reader = PerformSqlQuery(mySqlCmd);
+                return getDetailsList(reader);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
+        }
+
+        public List<Model.JobDetails> GetByDateRange(string dateFrom, string dateTo, string limit, string skip)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE deleted=0 AND (delivery_date >= @dateFrom OR @dateFrom IS NULL) AND (delivery_date <= @dateTo OR @dateTo IS NULL) ORDER BY delivery_date DESC ",
+                    TABLE_NAME_JOB);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                query += ") jobDetails ";
+
+                // job_from
+                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
+                    TABLE_NAME_ADDFROM, TABLE_NAME_ADDRESS);
+
+                // job to
+                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
+                    TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS);
+
+                // job order status
+                query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
+
+                // reverse order
+                query += "ORDER BY creation_date DESC;";
+
+
+                mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@dateFrom", dateFrom);
+                mySqlCmd.Parameters.AddWithValue("@dateTo", dateTo);
+
+                reader = PerformSqlQuery(mySqlCmd);
+                return getDetailsList(reader);
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
+        }
+
+        public List<Model.JobDetails> GetByOwnerId(string ownerId, string dateFrom, string dateTo, string limit, string skip)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE deleted=0 AND owner_id=@ownerId AND (delivery_date >= @dateFrom OR @dateFrom IS NULL) AND (delivery_date <= @dateTo OR @dateTo IS NULL) ORDER BY delivery_date DESC ", 
+                    TABLE_NAME_JOB);
+
+                if (limit != null)
+                {
+                    query += string.Format("LIMIT {0} ", limit);
+                }
+
+                if (skip != null)
+                {
+                    query += string.Format("OFFSET {0} ", skip);
+                }
+
+                query += ") jobDetails ";
+
+                // job_from
+                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
+                    TABLE_NAME_ADDFROM, TABLE_NAME_ADDRESS);
+
+                // job to
+                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
+                    TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS);
+
+                // job order status
+                query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
+
+                // reverse order
+                query += "ORDER BY creation_date DESC;";
+
+
+                mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@ownerId", ownerId);
+                mySqlCmd.Parameters.AddWithValue("@dateFrom", dateFrom);
+                mySqlCmd.Parameters.AddWithValue("@dateTo", dateTo);
+
                 reader = PerformSqlQuery(mySqlCmd);
                 return getDetailsList(reader);
             }
@@ -285,7 +405,7 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
-                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE deleted=0 ORDER BY creation_date DESC ", TABLE_NAME_JOB);
+                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE deleted=0 ORDER BY delivery_date DESC ", TABLE_NAME_JOB);
 
                 if (limit != null)
                 {
