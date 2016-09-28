@@ -351,10 +351,12 @@ namespace WcfService.Controller
                 return response;
             }
 
+            var companyId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["companyId"];
+
             var limit = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["limit"];
             var skip = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["skip"];
 
-            var result = jobDetailsDao.GetOpenJobs(limit, skip);
+            var result = jobDetailsDao.GetOpenJobs(companyId, limit, skip);
             if (result == null)
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
@@ -546,6 +548,22 @@ namespace WcfService.Controller
         {
             var result = jobDeliveryDao.Add(jobId, companyId, driverId);
             if (result == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            // pre-caution step to avoid the job delivery cancelled
+            jobDeclineDao.Remove(jobId, companyId);
+
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
+        }
+
+        public Response DeclineJobDelivery(string jobId, string companyId)
+        {
+            var result = jobDeclineDao.Add(jobId, companyId);
+            if (result == false)
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;

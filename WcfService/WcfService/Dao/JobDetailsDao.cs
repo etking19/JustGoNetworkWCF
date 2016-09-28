@@ -15,6 +15,7 @@ namespace WcfService.Dao
         private readonly string TABLE_NAME_ADDTO = "job_to";
         private readonly string TABLE_NAME_JOBORDERSTATUS = "job_order_status";
         private readonly string TABLE_NAME_ADDRESS = "addresses";
+        private readonly string TABLE_NAME_DECLINED = "job_delivery_declined";
 
         public string AddOrder(string jobId, string modifyBy)
         {
@@ -553,13 +554,14 @@ namespace WcfService.Dao
             return jobDetailsList;
         }
 
-        public List<Model.JobDetails> GetOpenJobs(string limit, string skip)
+        public List<Model.JobDetails> GetOpenJobs(string companyId, string limit, string skip)
         {
             MySqlCommand mySqlCmd = null;
             MySqlDataReader reader = null;
             try
             {
-                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE id NOT IN (SELECT job_id FROM {1}) AND jobs.deleted=0 ORDER BY creation_date DESC ", TABLE_NAME_JOB, TABLE_NAME_JOBDELIVERY);
+                string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE id NOT IN (SELECT job_id FROM {1}) AND jobs.deleted=0 AND jobs.enabled<>0 ", 
+                    TABLE_NAME_JOB, TABLE_NAME_JOBDELIVERY);
 
                 if (limit != null)
                 {
@@ -584,8 +586,14 @@ namespace WcfService.Dao
                 // job order status
                 query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
 
+                if (companyId != null)
+                {
+                    query += string.Format("LEFT JOIN {0} ON {0}.job_id= jobDetails.id AND {0}.company_id={1} WHERE {0}.id IS NULL ",
+                        TABLE_NAME_DECLINED, companyId);
+                }
+
                 // reverse order
-                query += "ORDER BY creation_date DESC;";
+                query += "ORDER BY delivery_date ASC;";
 
 
                 mySqlCmd = new MySqlCommand(query);

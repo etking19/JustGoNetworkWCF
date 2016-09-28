@@ -137,6 +137,7 @@
     <Compile Include="Dao\FleetDao.cs" />
     <Compile Include="Dao\FleetTypeDao.cs" />
     <Compile Include="Dao\JobDeliveryDao.cs" />
+    <Compile Include="Dao\JobDeliveryDeclinedDao.cs" />
     <Compile Include="Dao\JobDetailsDao.cs" />
     <Compile Include="Dao\JobStatusDao.cs" />
     <Compile Include="Dao\JobTypeDao.cs" />

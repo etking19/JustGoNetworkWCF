@@ -198,6 +198,11 @@ namespace WcfService
             return jobController.AddJobDelivery(jobId, companyId, driverId);
         }
 
+        public Response JobDeliveryDecline(string jobId, string companyId)
+        {
+            return jobController.DeclineJobDelivery(jobId, companyId);
+        }
+
         public Response JobDeliveryUpdate(string jobId, string companyId, string driverId)
         {
             return jobController.UpdateJobDelivery(jobId, companyId, driverId);

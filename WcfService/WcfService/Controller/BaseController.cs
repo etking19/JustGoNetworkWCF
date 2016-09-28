@@ -33,6 +33,7 @@ namespace WcfService.Controller
         protected static JobDetailsDao jobDetailsDao = new JobDetailsDao();
         protected static JobDeliveryDao jobDeliveryDao = new JobDeliveryDao();
         protected static AddressDao addressDao = new AddressDao();
+        protected static JobDeliveryDeclinedDao jobDeclineDao = new JobDeliveryDeclinedDao();
 
         protected static SupportedAreaDao supportedAreaDao = new SupportedAreaDao();
         protected static DeliveryPriceDao deliveryPriceDao = new DeliveryPriceDao();

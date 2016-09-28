@@ -143,7 +143,7 @@ namespace WcfService
         Model.Response UserUpdateProfile(string userId, Model.User user);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/user/device/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/user/device", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserUpdateDevice(string userId, string identifier);
 
 
@@ -218,6 +218,7 @@ namespace WcfService
         Model.Response JobGet();
 
         /// <summary>
+        /// companyId (optional)
         /// limit (optional)
         /// skip (optional)
         /// </summary>
@@ -288,6 +289,11 @@ namespace WcfService
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/job/delivery", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDeliveryAdd(string jobId, string companyId, string driverId);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/job/delivery/decline", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryDecline(string jobId, string companyId);
+
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
