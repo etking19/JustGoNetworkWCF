@@ -9,6 +9,8 @@ namespace WcfService.Model
     [DataContract]
     public class JobDetails
     {
+        private float _amount = 0;
+
         [DataMember(IsRequired = false)]
         public string jobId { get; set; }
 
@@ -19,7 +21,34 @@ namespace WcfService.Model
         public string jobTypeId { get; set; }
 
         [DataMember(IsRequired = true)]
-        public float amount { get; set; }
+        public string fleetTypeId { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public float amount
+        {
+            get
+            {
+                return _amount;
+            }
+
+            set
+            {
+                this._amount = value;
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        public float amountPartner
+        {
+            get
+            {
+                return _amount * 0.9f;
+            }
+            set
+            {
+
+            }
+        }
 
         [DataMember(IsRequired = false)]
         public float amountPaid { get; set; }
@@ -28,7 +57,7 @@ namespace WcfService.Model
         public bool cashOnDelivery { get; set; }
 
         [DataMember(IsRequired = true)]
-        public int workerAsistance { get; set; }
+        public int workerAssistant { get; set; }
 
         [DataMember(IsRequired = true)]
         public string deliveryDate { get; set; }

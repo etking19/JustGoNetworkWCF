@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Web;
 using System.Web;
+using WcfService.Constant;
 using WcfService.Model;
 using WcfService.Model.Google;
 using WcfService.Utility;
@@ -12,8 +13,6 @@ namespace WcfService.Controller
 {
     public class JobController : BaseController
     {
-        private readonly ulong JOB_ID_PAD = 999999;
-
         public Response GetJobStatus()
         {
             if (WebOperationContext.Current == null)
@@ -26,7 +25,7 @@ namespace WcfService.Controller
             var jobId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["jobId"];
             if (uniqueId != null)
             {
-                jobId = decodeUniqueId(uniqueId);
+                jobId = Utils.DecodeUniqueId(uniqueId);
             }
 
             if (jobId == null)
@@ -60,6 +59,37 @@ namespace WcfService.Controller
             return response;
         }
 
+        public Response UpdateJobDeliveryStatus(string jobId, string statusId, string pickupErrId, string deliverErrId)
+        {
+            var result = jobDeliveryDao.UpdateJobStatus(jobId, statusId, pickupErrId, deliverErrId);
+            if (false == result)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                return response;
+            }
+
+            // notify owner status update
+            var jobDetails = jobDetailsDao.GetByJobId(jobId);
+            var clientIdentifiers = userDao.GetDeviceIdentifier(jobDetails.ownerUserId);
+            var uniqueId = Utils.EncodeUniqueId(jobId);
+            var msg = NotificationMsg.JobStatusUpdate_Desc + uniqueId;
+            if (clientIdentifiers != null)
+            {
+                // user have app installed and identifier found, send push notification
+                var extraData = Helper.PushNotification.ConstructExtraData(Helper.PushNotification.ECategories.OrderStatusUpdate, uniqueId);
+                Utility.UtilNotification.BroadCastMessage(clientIdentifiers.ToArray(), extraData, NotificationMsg.NewJob_Title, msg);
+            }
+            else
+            {
+                // no device record, send sms instead
+                var userObj = userDao.GetUserById(jobDetails.ownerUserId);
+                UtilSms.SendSms(userObj.contactNumber, msg);
+            }
+
+            response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+            return response;
+        }
+
         public Response AddJob(Model.JobDetails jobDetails, Model.Address[] addressesFrom,
             Model.Address[] addressTo)
         {
@@ -70,6 +100,23 @@ namespace WcfService.Controller
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                 return response;
+            }
+
+            // set the correct lorry type
+            switch (int.Parse(jobDetails.fleetTypeId))
+            {
+                case (int)Configuration.LorryType.Lorry_1tonne:
+                    jobDetails.fleetTypeId = "1";
+                    break;
+                case (int)Configuration.LorryType.Lorry_3tonne:
+                    jobDetails.fleetTypeId = "2";
+                    break;
+                case (int)Configuration.LorryType.Lorry_5tonne:
+                    jobDetails.fleetTypeId = "3";
+                    break;
+                default:
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
+                    return response;
             }
 
             // get the gps coordinate if not passed in
@@ -233,12 +280,23 @@ namespace WcfService.Controller
                 }
             }
 
-            // TODO: send notification to all partners
-
-
-
             // generate the unique job id
-            var uniqueId = Utility.IdGenerator.Encode(ulong.Parse(jobId) + JOB_ID_PAD);
+            var uniqueId = Utils.EncodeUniqueId(jobId);
+
+            // send notification to creator
+            var clientIdentifiers = userDao.GetDeviceIdentifier(userId);
+            var msg = NotificationMsg.NewJob_Desc + uniqueId;
+            if (clientIdentifiers != null)
+            {
+                // user have app installed and identifier found, send push notification
+                var extraData = Helper.PushNotification.ConstructExtraData(Helper.PushNotification.ECategories.OrderCreated, uniqueId);
+                Utility.UtilNotification.BroadCastMessage(clientIdentifiers.ToArray(), extraData, NotificationMsg.NewJob_Title, msg);
+            }
+            else
+            {
+                // no device record, send sms instead
+                UtilSms.SendSms(userObj.contactNumber, msg);
+            }
 
             response.payload = uniqueId;
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
@@ -281,7 +339,7 @@ namespace WcfService.Controller
             {
                 // get by job unique id
                 // convert to job id
-                var decodedJobId = decodeUniqueId(uniqueId);
+                var decodedJobId = Utils.DecodeUniqueId(uniqueId);
                 var result = jobDetailsDao.GetByJobId(decodedJobId);
                 if (result == null)
                 {
@@ -417,7 +475,12 @@ namespace WcfService.Controller
             return response;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="jobDetails"></param>
+        /// <returns></returns>
         public Response UpdateJob(string jobId, JobDetails jobDetails)
         {
             if (jobId == null ||
@@ -479,7 +542,7 @@ namespace WcfService.Controller
             {
                 try
                 {
-                    var jobId = decodeUniqueId(uniqueId).ToString();
+                    var jobId = Utils.DecodeUniqueId(uniqueId).ToString();
                     var result = jobDeliveryDao.Get(jobid);
                     if (result == null)
                     {
@@ -497,7 +560,7 @@ namespace WcfService.Controller
             }
             else if(companyId != null)
             {
-                var result = jobDeliveryDao.GetByDeliverCompany(companyId, limit, skip);
+                var result = jobDeliveryDao.GetByDeliverCompany(companyId, statusId, limit, skip);
                 if (result == null)
                 {
                     response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
@@ -508,7 +571,7 @@ namespace WcfService.Controller
             }
             else if(driverId != null)
             {
-                var result = jobDeliveryDao.GetByDriver(driverId, limit, skip);
+                var result = jobDeliveryDao.GetByDriver(driverId, statusId, limit, skip);
                 if (result == null)
                 {
                     response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
@@ -606,20 +669,37 @@ namespace WcfService.Controller
                 return response;
             }
 
-            var jobId = decodeUniqueId(uniqueId);
+            var jobId = Utils.DecodeUniqueId(uniqueId);
             if(false == jobDeliveryDao.UpdateRating(jobId, rating))
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;
             }
 
+            // notify company admin rating update
+            var companyAdminsIdentifiers = userDao.GetDeliveryComIdentifierByJobId(jobId, ((int)Configuration.Role.CompanyAdmin).ToString());
+
+            if (companyAdminsIdentifiers.Count > 0)
+            {
+                var jobDetails = jobDetailsDao.GetByJobId(jobId);
+                var extraData = Helper.PushNotification.ConstructExtraData(Helper.PushNotification.ECategories.RatingUpdate, jobId);
+
+                var description = NotificationMsg.JobRating_Desc.Replace("@rating", rating.ToString());
+                description = description.Replace("@jobId", jobId.ToString());
+                description = description.Replace("@from", jobDetails.addressFrom[0].address3);
+
+                Utility.UtilNotification.BroadCastMessage(
+                    companyAdminsIdentifiers.ToArray(),
+                    extraData,
+                    NotificationMsg.JobRating_Title,
+                    description
+                    );
+            }
+
+
+
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
-        }
-
-        private string decodeUniqueId(string uniqueId)
-        {
-            return (Utility.IdGenerator.Decode(uniqueId) -JOB_ID_PAD).ToString();
         }
     }
 }

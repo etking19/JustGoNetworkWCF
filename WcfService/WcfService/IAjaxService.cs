@@ -122,6 +122,7 @@ namespace WcfService
 
         /// <summary>
         /// userId OR username OR companyId
+        /// roleId (optional)
         /// limit (optional)
         /// skip (optional)
         /// </summary>
@@ -145,8 +146,6 @@ namespace WcfService
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/user/device", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserUpdateDevice(string userId, string identifier);
-
-
 
 
         // company
@@ -211,6 +210,9 @@ namespace WcfService
         /// toDate (optional)
         /// limit (optional)
         /// skip (optional)
+        /// companyId (optional)
+        /// driverId (optional)
+        /// jobStatusId (optional)
         /// </summary>
         /// <returns></returns>
         [OperationContract]
@@ -352,7 +354,7 @@ namespace WcfService
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/payment/callback", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response PaymentCallback();
+        void PaymentCallback(Model.BillPlz.Bill bill);
 
         // Driver
 

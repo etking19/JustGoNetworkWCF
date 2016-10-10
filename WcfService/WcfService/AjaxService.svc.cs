@@ -4,6 +4,7 @@ using System.Web;
 using WcfService.Constant;
 using WcfService.Controller;
 using WcfService.Model;
+using WcfService.Model.BillPlz;
 using WcfService.Utility;
 
 namespace WcfService
@@ -19,6 +20,7 @@ namespace WcfService
         private static FleetController fleetController = new FleetController();
         private static JobController jobController = new JobController();
         private static UserAuthHttpModule userAuthModule = new UserAuthHttpModule();
+        private static PaymentController paymentController = new PaymentController();
 
         public void GetOptions()
         {
@@ -230,7 +232,7 @@ namespace WcfService
 
         public Response JobDeliveryStatusUpdate(string jobId, string statusId, string pickupErrId, string deliverErrId)
         {
-            throw new NotImplementedException();
+            return jobController.UpdateJobDeliveryStatus(jobId, statusId, pickupErrId, deliverErrId);
         }
 
         public Response ActivityGet()
@@ -268,14 +270,14 @@ namespace WcfService
             return commonController.ValidateVoucher(promoCode);
         }
 
-        public Response PaymentMake(string uniqueId)
+        public void PaymentCallback(Bill bill)
         {
-            return commonController.MakePayment(uniqueId);
+            paymentController.PaymentCallback(bill);
         }
 
-        public Response PaymentCallback()
+        public Response PaymentMake(string uniqueId)
         {
-            throw new NotImplementedException();
+            return paymentController.RequestPayment(uniqueId);
         }
     }
 }

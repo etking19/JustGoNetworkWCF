@@ -51,12 +51,15 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
+                DateTime date = DateTime.Parse(payload.deliveryDate);
+
                 Dictionary<string, string> insertParam = new Dictionary<string, string>();
                 insertParam.Add("owner_id", payload.ownerUserId);
                 insertParam.Add("job_type_id", payload.jobTypeId);
                 insertParam.Add("amount", payload.amount.ToString());
-                insertParam.Add("worker_assistance", payload.workerAsistance.ToString());
-                insertParam.Add("delivery_date", payload.deliveryDate);
+                insertParam.Add("worker_assistance", payload.workerAssistant.ToString());
+                insertParam.Add("fleet_type_id", payload.fleetTypeId);
+                insertParam.Add("delivery_date", date.ToString("yyyy-MM-dd HH:mm:ss"));
                 insertParam.Add("remarks", payload.remarks.ToString());
                 insertParam.Add("created_by", payload.createdBy);
                 insertParam.Add("modify_by", payload.createdBy);
@@ -79,6 +82,45 @@ namespace WcfService.Dao
             return null;
         }
 
+        /// <summary>
+        /// return total amount paid
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="amountPaid"></param>
+        /// <returns></returns>
+        public float UpdatePaidAmount(string jobId, float amountPaid)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("UPDATE {0} SET amount_paid= amount_paid + @amountPaid WHERE id=@id; SELECT amount_paid FROM {0} WHERE id=@id", 
+                    TABLE_NAME_JOB);
+
+                mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@amountPaid", amountPaid);
+                mySqlCmd.Parameters.AddWithValue("@id", jobId);
+
+                
+                reader = PerformSqlQuery(mySqlCmd);
+                if(reader.Read())
+                {
+                    return reader.GetFloat("amount_paid");
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return 0;
+        }
+
         public bool Update(Model.JobDetails payload)
         {
             MySqlCommand mySqlCmd = null;
@@ -89,7 +131,8 @@ namespace WcfService.Dao
                 updateParam.Add("owner_id", payload.ownerUserId);
                 updateParam.Add("job_type_id", payload.jobTypeId);
                 updateParam.Add("amount", payload.amount.ToString());
-                updateParam.Add("worker_assistance", payload.workerAsistance.ToString());
+                updateParam.Add("fleet_type_id", payload.fleetTypeId);
+                updateParam.Add("worker_assistance", payload.workerAssistant.ToString());
                 updateParam.Add("delivery_date", payload.deliveryDate);
                 updateParam.Add("remarks", payload.remarks);
                 updateParam.Add("modify_by", payload.modifiedBy);
@@ -144,9 +187,9 @@ namespace WcfService.Dao
             try
             {
                 string query = string.Format("SELECT * FROM {0} " +
-                    "INNER JOIN (SELECT {3}.add_1 as add_from_1, {3}.add_2 as add_from_2, {3}.add_3 as add_from_3, {3}.state_id as state_from, {3}.country_id as country_from, {3}.postcode as postcode_from, {3}.gps_longitude as longitude_from, {3}.gps_latitude as latitude_from, {1}.*, {1}.address_id as addFromId, {1}.customer_name as customerFrom, {1}.customer_contact as contactFrom FROM {1} INNER JOIN {3} ON {1}.address_id={3}.id) addFrom ON {0}.id=addFrom.job_id " +
-                    "INNER JOIN (SELECT {3}.add_1 as add_to_1, {3}.add_2 as add_to_2, {3}.add_3 as add_to_3, {3}.state_id as state_to, {3}.country_id as country_to, {3}.postcode as postcode_to, {3}.gps_longitude as longitude_to, {3}.gps_latitude as latitude_to, {2}.*, {2}.address_id as addToId, {2}.customer_name as customerTo, {2}.customer_contact as contactTo FROM {2} INNER JOIN {3} ON {2}.address_id={3}.id) addTo ON {0}.id=addTo.job_id " +
-                    "INNER JOIN {4} ON {4}.job_id={0}.id " +
+                    "LEFT JOIN (SELECT {3}.add_1 as add_from_1, {3}.add_2 as add_from_2, {3}.add_3 as add_from_3, {3}.state_id as state_from, {3}.country_id as country_from, {3}.postcode as postcode_from, {3}.gps_longitude as longitude_from, {3}.gps_latitude as latitude_from, {1}.*, {1}.address_id as addFromId, {1}.customer_name as customerFrom, {1}.customer_contact as contactFrom FROM {1} INNER JOIN {3} ON {1}.address_id={3}.id) addFrom ON {0}.id=addFrom.job_id " +
+                    "LEFT JOIN (SELECT {3}.add_1 as add_to_1, {3}.add_2 as add_to_2, {3}.add_3 as add_to_3, {3}.state_id as state_to, {3}.country_id as country_to, {3}.postcode as postcode_to, {3}.gps_longitude as longitude_to, {3}.gps_latitude as latitude_to, {2}.*, {2}.address_id as addToId, {2}.customer_name as customerTo, {2}.customer_contact as contactTo FROM {2} INNER JOIN {3} ON {2}.address_id={3}.id) addTo ON {0}.id=addTo.job_id " +
+                    "INNER JOIN (SELECT job_status_id, job_id as jsId FROM {4} a inner join (select max(last_modified_date) last_modified_date, job_id as jsId2 from {4} group by job_id) b ON a.job_id=b.jsId2 AND a.last_modified_date=b.last_modified_date) jobStatus ON jobStatus.jsId={0}.id " +
                     "WHERE {0}.deleted=0 AND {0}.id=@jobId;", 
                     TABLE_NAME_JOB, TABLE_NAME_ADDFROM, TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS, TABLE_NAME_JOBORDERSTATUS);
 
@@ -166,10 +209,11 @@ namespace WcfService.Dao
                             jobId = reader["id"].ToString(),
                             ownerUserId = reader["owner_id"].ToString(),
                             jobTypeId = reader["job_type_id"].ToString(),
+                            fleetTypeId = reader["fleet_type_id"].ToString(),
                             amount = (float)reader["amount"],
                             amountPaid = (float)reader["amount_paid"],
                             cashOnDelivery = (int)reader["cash_on_delivery"] == 0 ? false : true,
-                            workerAsistance = (int)reader["worker_assistance"],
+                            workerAssistant = (int)reader["worker_assistance"],
                             deliveryDate = reader["delivery_date"].ToString(),
                             remarks = (string)reader["remarks"],
                             enabled = (int)reader["enabled"] == 0 ? false : true,
@@ -178,41 +222,56 @@ namespace WcfService.Dao
                             creationDate = reader["creation_date"].ToString(),
                             modifiedBy = reader["modify_by"].ToString(),
                             lastModifiedDate = reader["last_modified_date"].ToString(),
-                            jobStatusId = reader["job_status_id"].ToString(),
+                            jobStatusId = reader["job_status_id"] == null ? null : reader["job_status_id"].ToString(),
                             addressFrom = new List<Model.Address>(),
                             addressTo = new List<Model.Address>()
                         };
                     }
 
-                    result.addressFrom.Add(new Model.Address()
+                    try
                     {
-                        addressId = reader["addFromId"].ToString(),
-                        address1 = (string)reader["add_from_1"],
-                        address2 = (string)reader["add_from_2"],
-                        address3 = (string)reader["add_from_3"],
-                        stateId = reader["state_from"].ToString(),
-                        countryId = reader["country_from"].ToString(),
-                        postcode = (string)reader["postcode_from"],
-                        gpsLongitude = (float)reader["longitude_from"],
-                        gpsLatitude = (float)reader["latitude_from"],
-                        contactPerson = (string)reader["customerFrom"],
-                        contact = (string)reader["contactFrom"]
-                    });
+                        result.addressFrom.Add(new Model.Address()
+                        {
+                            addressId = reader["addFromId"].ToString(),
+                            address1 = (string)reader["add_from_1"],
+                            address2 = (string)reader["add_from_2"],
+                            address3 = (string)reader["add_from_3"],
+                            stateId = reader["state_from"].ToString(),
+                            countryId = reader["country_from"].ToString(),
+                            postcode = (string)reader["postcode_from"],
+                            gpsLongitude = (float)reader["longitude_from"],
+                            gpsLatitude = (float)reader["latitude_from"],
+                            contactPerson = (string)reader["customerFrom"],
+                            contact = (string)reader["contactFrom"]
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        // possible do not have from
+                    }
 
-                    result.addressTo.Add(new Model.Address()
+                    try
                     {
-                        addressId = reader["addToId"].ToString(),
-                        address1 = (string)reader["add_to_1"],
-                        address2 = (string)reader["add_to_2"],
-                        address3 = (string)reader["add_to_3"],
-                        stateId = reader["state_to"].ToString(),
-                        countryId = reader["country_to"].ToString(),
-                        postcode = (string)reader["postcode_to"],
-                        gpsLongitude = (float)reader["longitude_to"],
-                        gpsLatitude = (float)reader["latitude_to"],
-                        contactPerson = (string)reader["customerTo"],
-                        contact = (string)reader["contactTo"]
-                    });
+                        result.addressTo.Add(new Model.Address()
+                        {
+                            addressId = reader["addToId"].ToString(),
+                            address1 = (string)reader["add_to_1"],
+                            address2 = (string)reader["add_to_2"],
+                            address3 = (string)reader["add_to_3"],
+                            stateId = reader["state_to"].ToString(),
+                            countryId = reader["country_to"].ToString(),
+                            postcode = (string)reader["postcode_to"],
+                            gpsLongitude = (float)reader["longitude_to"],
+                            gpsLatitude = (float)reader["latitude_to"],
+                            contactPerson = (string)reader["customerTo"],
+                            contact = (string)reader["contactTo"]
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        // possible do not have to
+                    }
+
                 }
 
                 return result;
@@ -252,15 +311,16 @@ namespace WcfService.Dao
                 query += ") jobDetails ";
 
                 // job_from
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
                     TABLE_NAME_ADDFROM, TABLE_NAME_ADDRESS);
 
                 // job to
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
                     TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS);
 
                 // job order status
-                query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
+                query += string.Format("INNER JOIN (SELECT job_status_id, job_id as jsId FROM {0} a " +
+                                    "inner join (select max(last_modified_date) last_modified_date, job_id as jsId2 from {0} group by job_id) b ON a.job_id=b.jsId2 AND a.last_modified_date=b.last_modified_date) jobStatus ON  jobStatus.jsId=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
 
                 // reverse order
                 query += "ORDER BY creation_date DESC;";
@@ -309,15 +369,16 @@ namespace WcfService.Dao
                 query += ") jobDetails ";
 
                 // job_from
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
                     TABLE_NAME_ADDFROM, TABLE_NAME_ADDRESS);
 
                 // job to
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
                     TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS);
 
                 // job order status
-                query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
+                query += string.Format("INNER JOIN (SELECT job_status_id, job_id as jsId FROM {0} a " +
+                                    "inner join (select max(last_modified_date) last_modified_date, job_id as jsId2 from {0} group by job_id) b ON a.job_id=b.jsId2 AND a.last_modified_date=b.last_modified_date) jobStatus ON  jobStatus.jsId=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
 
                 // reverse order
                 query += "ORDER BY creation_date DESC;";
@@ -365,15 +426,16 @@ namespace WcfService.Dao
                 query += ") jobDetails ";
 
                 // job_from
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
                     TABLE_NAME_ADDFROM, TABLE_NAME_ADDRESS);
 
                 // job to
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
                     TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS);
 
                 // job order status
-                query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
+                query += string.Format("INNER JOIN (SELECT job_status_id, job_id as jsId FROM {0} a " +
+                                    "inner join (select max(last_modified_date) last_modified_date, job_id as jsId2 from {0} group by job_id) b ON a.job_id=b.jsId2 AND a.last_modified_date=b.last_modified_date AND job_status_id <> 1) jobStatus ON  jobStatus.jsId=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
 
                 // reverse order
                 query += "ORDER BY creation_date DESC;";
@@ -421,15 +483,16 @@ namespace WcfService.Dao
                 query += ") jobDetails ";
 
                 // job_from
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
                     TABLE_NAME_ADDFROM, TABLE_NAME_ADDRESS);
 
                 // job to
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
                     TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS);
 
                 // job order status
-                query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
+                query += string.Format("INNER JOIN (SELECT job_status_id, job_id as jsId FROM {0} a " +
+                                    "inner join (select max(last_modified_date) last_modified_date, job_id as jsId2 from {0} group by job_id) b ON a.job_id=b.jsId2 AND a.last_modified_date=b.last_modified_date) jobStatus ON  jobStatus.jsId=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
 
                 // reverse order
                 query += "ORDER BY creation_date DESC;";
@@ -462,49 +525,110 @@ namespace WcfService.Dao
                 if (existedResult != null)
                 {
                     // already have same job id
-                    existedResult.addressFrom.Add(new Model.Address()
+                    var addFromObj = new Model.Address();
+                    try
                     {
-                        addressId = reader["addFromId"].ToString(),
-                        address1 = (string)reader["add_from_1"],
-                        address2 = (string)reader["add_from_2"],
-                        address3 = (string)reader["add_from_3"],
-                        stateId = reader["state_from"].ToString(),
-                        countryId = reader["country_from"].ToString(),
-                        postcode = (string)reader["postcode_from"],
-                        gpsLongitude = (float)reader["longitude_from"],
-                        gpsLatitude = (float)reader["latitude_from"],
-                        contactPerson = (string)reader["customerFrom"],
-                        contact = (string)reader["contactFrom"]
-                    });
+                        addFromObj.addressId = reader["addFromId"].ToString();
+                        addFromObj.address1 = (string)reader["add_from_1"];
+                        addFromObj.address2 = (string)reader["add_from_2"];
+                        addFromObj.address3 = (string)reader["add_from_3"];
+                        addFromObj.stateId = reader["state_from"].ToString();
+                        addFromObj.countryId = reader["country_from"].ToString();
+                        addFromObj.postcode = (string)reader["postcode_from"];
+                        addFromObj.gpsLongitude = (float)reader["longitude_from"];
+                        addFromObj.gpsLatitude = (float)reader["latitude_from"];
+                        addFromObj.contactPerson = (string)reader["customerFrom"];
+                        addFromObj.contact = (string)reader["contactFrom"];
 
-                    existedResult.addressTo.Add(new Model.Address()
+                        existedResult.addressFrom.Add(addFromObj);
+                    }
+                    catch (Exception)
                     {
-                        addressId = reader["addToId"].ToString(),
-                        address1 = (string)reader["add_to_1"],
-                        address2 = (string)reader["add_to_2"],
-                        address3 = (string)reader["add_to_3"],
-                        stateId = reader["state_to"].ToString(),
-                        countryId = reader["country_to"].ToString(),
-                        postcode = (string)reader["postcode_to"],
-                        gpsLongitude = (float)reader["longitude_to"],
-                        gpsLatitude = (float)reader["latitude_to"],
-                        contactPerson = (string)reader["customerTo"],
-                        contact = (string)reader["contactTo"]
-                    });
+                        // possible do not have from address
+                    }
+
+                    var addToObj = new Model.Address();
+                    try
+                    {
+                        addToObj.addressId = reader["addToId"].ToString();
+                        addToObj.address1 = (string)reader["add_to_1"];
+                        addToObj.address2 = (string)reader["add_to_2"];
+                        addToObj.address3 = (string)reader["add_to_3"];
+                        addToObj.stateId = reader["state_to"].ToString();
+                        addToObj.countryId = reader["country_to"].ToString();
+                        addToObj.postcode = (string)reader["postcode_to"];
+                        addToObj.gpsLongitude = (float)reader["longitude_to"];
+                        addToObj.gpsLatitude = (float)reader["latitude_to"];
+                        addToObj.contactPerson = (string)reader["customerTo"];
+                        addToObj.contact = (string)reader["contactTo"];
+
+                        existedResult.addressTo.Add(addToObj);
+                    }
+                    catch (Exception)
+                    {
+                        // possible do not have to address
+                    }
 
                     continue;
                 }
 
                 // new job id
+                var addFromList = new List<Model.Address>();
+                var addFromObjNew = new Model.Address();
+                try
+                {
+                    addFromObjNew.addressId = reader["addFromId"].ToString();
+                    addFromObjNew.address1 = (string)reader["add_from_1"];
+                    addFromObjNew.address2 = (string)reader["add_from_2"];
+                    addFromObjNew.address3 = (string)reader["add_from_3"];
+                    addFromObjNew.stateId = reader["state_from"].ToString();
+                    addFromObjNew.countryId = reader["country_from"].ToString();
+                    addFromObjNew.postcode = (string)reader["postcode_from"];
+                    addFromObjNew.gpsLongitude = (float)reader["longitude_from"];
+                    addFromObjNew.gpsLatitude = (float)reader["latitude_from"];
+                    addFromObjNew.contactPerson = (string)reader["customerFrom"];
+                    addFromObjNew.contact = (string)reader["contactFrom"];
+
+                    addFromList.Add(addFromObjNew);
+                }
+                catch (Exception)
+                {
+                    // possible do not have from address
+                }
+
+                var addToList = new List<Model.Address>();
+                var addToObjNew = new Model.Address();
+                try
+                {
+                    addToObjNew.addressId = reader["addToId"].ToString();
+                    addToObjNew.address1 = (string)reader["add_to_1"];
+                    addToObjNew.address2 = (string)reader["add_to_2"];
+                    addToObjNew.address3 = (string)reader["add_to_3"];
+                    addToObjNew.stateId = reader["state_to"].ToString();
+                    addToObjNew.countryId = reader["country_to"].ToString();
+                    addToObjNew.postcode = (string)reader["postcode_to"];
+                    addToObjNew.gpsLongitude = (float)reader["longitude_to"];
+                    addToObjNew.gpsLatitude = (float)reader["latitude_to"];
+                    addToObjNew.contactPerson = (string)reader["customerTo"];
+                    addToObjNew.contact = (string)reader["contactTo"];
+
+                    addToList.Add(addToObjNew);
+                }
+                catch (Exception)
+                {
+                    // possible do not have to address
+                }
+
                 jobDetailsList.Add(new Model.JobDetails()
                 {
                     jobId = jobId,
                     ownerUserId = reader["owner_id"].ToString(),
                     jobTypeId = reader["job_type_id"].ToString(),
+                    fleetTypeId = reader["fleet_type_id"].ToString(),
                     amount = (float)reader["amount"],
                     amountPaid = (float)reader["amount_paid"],
                     cashOnDelivery = (int)reader["cash_on_delivery"] == 0 ? false : true,
-                    workerAsistance = (int)reader["worker_assistance"],
+                    workerAssistant = (int)reader["worker_assistance"],
                     deliveryDate = reader["delivery_date"].ToString(),
                     remarks = (string)reader["remarks"],
                     enabled = (int)reader["enabled"] == 0 ? false : true,
@@ -513,41 +637,9 @@ namespace WcfService.Dao
                     creationDate = reader["creation_date"].ToString(),
                     modifiedBy = reader["modify_by"].ToString(),
                     lastModifiedDate = reader["last_modified_date"].ToString(),
-                    jobStatusId = reader["job_status_id"].ToString(),
-                    addressFrom = new List<Model.Address>()
-                    {
-                        new Model.Address()
-                        {
-                            addressId = reader["addFromId"].ToString(),
-                            address1 = (string)reader["add_from_1"],
-                            address2 = (string)reader["add_from_2"],
-                            address3 = (string)reader["add_from_3"],
-                            stateId = reader["state_from"].ToString(),
-                            countryId = reader["country_from"].ToString(),
-                            postcode = (string)reader["postcode_from"],
-                            gpsLongitude = (float)reader["longitude_from"],
-                            gpsLatitude = (float)reader["latitude_from"],
-                            contactPerson = (string)reader["customerFrom"],
-                            contact = (string)reader["contactFrom"]
-                        }
-                    },
-                    addressTo = new List<Model.Address>()
-                    {
-                        new Model.Address()
-                        {
-                            addressId = reader["addToId"].ToString(),
-                            address1 = (string)reader["add_to_1"],
-                            address2 = (string)reader["add_to_2"],
-                            address3 = (string)reader["add_to_3"],
-                            stateId = reader["state_to"].ToString(),
-                            countryId = reader["country_to"].ToString(),
-                            postcode = (string)reader["postcode_to"],
-                            gpsLongitude = (float)reader["longitude_to"],
-                            gpsLatitude = (float)reader["latitude_to"],
-                            contactPerson = (string)reader["customerTo"],
-                            contact = (string)reader["contactTo"]
-                        }
-                    }
+                    jobStatusId = reader["job_status_id"] == null ? null : reader["job_status_id"].ToString(),
+                    addressFrom = addFromList,
+                    addressTo = addToList
                 });
             }
 
@@ -563,6 +655,12 @@ namespace WcfService.Dao
                 string query = string.Format("SELECT * FROM (SELECT * FROM {0} WHERE id NOT IN (SELECT job_id FROM {1}) AND jobs.deleted=0 AND jobs.enabled<>0 ", 
                     TABLE_NAME_JOB, TABLE_NAME_JOBDELIVERY);
 
+                if (companyId != null)
+                {
+                    query += string.Format("AND id NOT IN (SELECT job_id FROM {0} WHERE company_id={1}) ORDER BY creation_date DESC ",
+                        TABLE_NAME_DECLINED, companyId);
+                }
+
                 if (limit != null)
                 {
                     query += string.Format("LIMIT {0} ", limit);
@@ -576,24 +674,25 @@ namespace WcfService.Dao
                 query += ") jobDetails ";
 
                 // job_from
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_from_1, {1}.add_2 as add_from_2, {1}.add_3 as add_from_3, {1}.state_id as state_from, {1}.country_id as country_from, {1}.postcode as postcode_from, {1}.gps_longitude as longitude_from, {1}.gps_latitude as latitude_from, {0}.*, {0}.address_id as addFromId, {0}.customer_name as customerFrom, {0}.customer_contact as contactFrom FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addFrom ON jobDetails.id=addFrom.job_id ",
                     TABLE_NAME_ADDFROM, TABLE_NAME_ADDRESS);
 
                 // job to
-                query += string.Format("INNER JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
+                query += string.Format("LEFT JOIN (SELECT {1}.add_1 as add_to_1, {1}.add_2 as add_to_2, {1}.add_3 as add_to_3, {1}.state_id as state_to, {1}.country_id as country_to, {1}.postcode as postcode_to, {1}.gps_longitude as longitude_to, {1}.gps_latitude as latitude_to, {0}.*, {0}.address_id as addToId, {0}.customer_name as customerTo, {0}.customer_contact as contactTo FROM {0} INNER JOIN {1} ON {0}.address_id={1}.id) addTo ON jobDetails.id=addTo.job_id ",
                     TABLE_NAME_ADDTO, TABLE_NAME_ADDRESS);
 
                 // job order status
-                query += string.Format("INNER JOIN {0} ON {0}.job_id=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
+                query += string.Format("LEFT JOIN (SELECT job_status_id, job_id as jsId FROM {0} a " +
+                    "inner join (select max(last_modified_date) last_modified_date, job_id as jsId2 from {0} group by job_id) b ON a.job_id=b.jsId2 AND a.last_modified_date=b.last_modified_date AND job_status_id <> 1) jobStatus ON  jobStatus.jsId=jobDetails.id ", TABLE_NAME_JOBORDERSTATUS);
 
-                if (companyId != null)
-                {
-                    query += string.Format("LEFT JOIN {0} ON {0}.job_id= jobDetails.id AND {0}.company_id={1} WHERE {0}.id IS NULL ",
-                        TABLE_NAME_DECLINED, companyId);
-                }
+                //if (companyId != null)
+                //{
+                //    query += string.Format("LEFT JOIN {0} ON {0}.job_id= jobDetails.id AND {0}.company_id={1} WHERE {0}.id IS NULL ",
+                //        TABLE_NAME_DECLINED, companyId);
+                //}
 
                 // reverse order
-                query += "ORDER BY delivery_date ASC;";
+                query += "ORDER BY creation_date DESC;";
 
 
                 mySqlCmd = new MySqlCommand(query);

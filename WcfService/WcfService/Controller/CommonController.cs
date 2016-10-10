@@ -832,21 +832,5 @@ namespace WcfService.Controller
 
             return Constant.ErrorCode.ESuccess;
         }
-
-        public Response MakePayment(string uniqueId)
-        {
-            try
-            {
-                // TODO:
-            }
-            catch (Exception e)
-            {
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-            }
-
-            response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
-            return response;
-        }
     }
 }

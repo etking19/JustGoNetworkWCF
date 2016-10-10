@@ -25,11 +25,9 @@ namespace WcfService.Dao
                 insertParam.Add("driver_user_id", driverId);
 
                 mySqlCmd = GenerateAddCmd(TABLE_NAME, insertParam);
-                reader = mySqlCmd.ExecuteReader();
-                if (reader.Read())
-                {
-                    return (string)reader["id"];
-                }
+                PerformSqlNonQuery(mySqlCmd);
+
+                return mySqlCmd.LastInsertedId.ToString();
             }
             catch (Exception e)
             {
@@ -53,7 +51,7 @@ namespace WcfService.Dao
                 removeParams.Add("id", id);
 
                 mySqlCmd = GenerateRemoveCmd(TABLE_NAME, removeParams);
-                return (mySqlCmd.ExecuteNonQuery() != 0);
+                return (PerformSqlNonQuery(mySqlCmd) != 0);
             }
             catch (Exception e)
             {
@@ -156,7 +154,7 @@ namespace WcfService.Dao
             return null;
         }
 
-        public List<Model.JobDelivery> GetByDeliverCompany(string companyId, string limit, string skip)
+        public List<Model.JobDelivery> GetByDeliverCompany(string companyId, string statusId, string limit, string skip)
         {
             MySqlCommand mySqlCmd = null;
             MySqlDataReader reader = null;
@@ -165,8 +163,17 @@ namespace WcfService.Dao
                 string query = string.Format("SELECT {0}.*, {1}.id as Jid, {1}.job_status_id as JSid FROM {0} " +
                     "LEFT JOIN {1} ON {0}.job_id={1}.job_id " +
                     "INNER JOIN {3} ON {0}.job_id={3}.id " +
-                    "WHERE {0}.company_id={2} AND {3}.deleted=0 AND {3}.enabled=1 ORDER BY {0}.last_modified_date DESC ",
+                    "WHERE {0}.company_id=@company_id AND {3}.deleted=0 AND {3}.enabled=1 ",
                     TABLE_NAME, TABLE_ORDER_STATUS, companyId, TABLE_JOBS);
+
+                if (statusId != null)
+                {
+                    query += string.Format("AND {0}.job_status_id=@job_status_id ", 
+                        TABLE_ORDER_STATUS);
+                }
+
+                query += string.Format("ORDER BY {0}.last_modified_date DESC ",
+                    TABLE_NAME);
 
                 if (limit != null)
                 {
@@ -179,6 +186,9 @@ namespace WcfService.Dao
                 }
 
                 mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@company_id", companyId);
+                mySqlCmd.Parameters.AddWithValue("@job_status_id", statusId);
+
                 reader = PerformSqlQuery(mySqlCmd);
 
                 List<Model.JobDelivery> deliveryList = new List<Model.JobDelivery>();
@@ -211,7 +221,7 @@ namespace WcfService.Dao
             return null;
         }
 
-        public List<Model.JobDelivery> GetByDriver(string driverId, string limit, string skip)
+        public List<Model.JobDelivery> GetByDriver(string driverId, string statusId, string limit, string skip)
         {
             MySqlCommand mySqlCmd = null;
             MySqlDataReader reader = null;
@@ -220,8 +230,17 @@ namespace WcfService.Dao
                 string query = string.Format("SELECT {0}.*, {1}.id as Jid, {1}.job_status_id as JSid FROM {0} " +
                     "LEFT JOIN {1} ON {0}.job_id={1}.job_id " +
                     "INNER JOIN {3} ON {0}.job_id={3}.id " +
-                    "WHERE {0}.driver_user_id={2} AND {3}.deleted=0 AND {3}.enabled=1 ORDER BY {0}.last_modified_date DESC ",
+                    "WHERE {0}.driver_user_id=@driver_user_id AND {3}.deleted=0 AND {3}.enabled=1 ",
                     TABLE_NAME, TABLE_ORDER_STATUS, driverId, TABLE_JOBS);
+
+                if (statusId != null)
+                {
+                    query += string.Format("AND {0}.job_status_id=@job_status_id ",
+                        TABLE_ORDER_STATUS);
+                }
+
+                query += string.Format("ORDER BY {0}.last_modified_date DESC ",
+                    TABLE_NAME);
 
                 if (limit != null)
                 {
@@ -234,6 +253,9 @@ namespace WcfService.Dao
                 }
 
                 mySqlCmd = new MySqlCommand(query);
+                mySqlCmd.Parameters.AddWithValue("@driver_user_id", driverId);
+                mySqlCmd.Parameters.AddWithValue("@job_status_id", statusId);
+
                 reader = PerformSqlQuery(mySqlCmd);
 
                 List<Model.JobDelivery> deliveryList = new List<Model.JobDelivery>();
@@ -378,7 +400,7 @@ namespace WcfService.Dao
             return false;
         }
 
-        public bool UpdateJobDeliverStatus(string jobId, string statusId, string pickupErrId, string deliverErrId)
+        public bool UpdateJobStatus(string jobId, string statusId, string pickupErrId = null, string deliverErrId = null)
         {
             MySqlCommand mySqlCmd = null;
             MySqlDataReader reader = null;

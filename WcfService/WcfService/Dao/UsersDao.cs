@@ -14,6 +14,7 @@ namespace WcfService.Dao
         private readonly string TABLE_USER_DEVICE = "user_device";
         private readonly string TABLE_USER_ROLE = "user_role";
         private readonly string TABLE_SESSION = "user_session";
+        private readonly string TABLE_JOB_DELIVERY = "job_delivery";
 
         public Model.User GetUserById(string userId)
         {
@@ -21,10 +22,15 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
-                Dictionary<string, string> commandDic = new Dictionary<string, string>();
-                commandDic.Add("id", userId);
+                string query = string.Format("SELECT {0}.*, {1}.company_id as company_id, {2}.role_id as role_id FROM {0} " +
+                    "LEFT JOIN {1} ON {1}.user_id={0}.id " +
+                    "LEFT JOIN {2} ON {2}.user_id={0}.id " +
+                    "WHERE deleted=0 and enabled=1 and {0}.id=@user_id;",
+                    TABLE_USERS, TABLE_USER_COMPANY, TABLE_USER_ROLE);
 
-                command = GenerateQueryCmd(TABLE_USERS, commandDic);
+                command = new MySqlCommand(query);
+                command.Parameters.AddWithValue("@user_id", userId);
+
                 reader = PerformSqlQuery(command);
                 if(false == reader.Read())
                 {
@@ -46,16 +52,94 @@ namespace WcfService.Dao
             return null;
         }
 
+        public List<string> GetDeliveryComIdentifierByJobId(string jobId, string roleId)
+        {
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT {3}.identifier as identifier FROM {0} " +
+                    "INNER JOIN {1} ON {1}.user_id={0}.id " +
+                    "INNER JOIN {2} ON {2}.user_id={0}.id " +
+                    "INNER JOIN {3} ON {3}.user_id={0}.id " +
+                    "INNER JOIN {4} ON {4}.job_id={5} AND {4}.company_id={1}.company_id " +
+                    "WHERE deleted=0 and enabled=1 and role_id={6} ORDER BY creation_date DESC;",
+                    TABLE_USERS, TABLE_USER_COMPANY, TABLE_USER_ROLE, TABLE_USER_DEVICE, TABLE_JOB_DELIVERY, jobId, roleId);
+                command = new MySqlCommand(query);
+                reader = PerformSqlQuery(command);
+
+                List<string> userList = new List<string>();
+                while (reader.Read())
+                {
+                    userList.Add(reader["identifier"].ToString());
+                }
+
+                return userList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, command);
+            }
+
+            return null;
+        }
+
+        public List<string> GetUserIdentifiersByRoleId(string roleId)
+        {
+            MySqlCommand command = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                string query = string.Format("SELECT {3}.identifier as identifier FROM {0} " +
+                    "INNER JOIN {1} ON {1}.user_id={0}.id " +
+                    "INNER JOIN {2} ON {2}.user_id={0}.id " +
+                    "INNER JOIN {3} ON {3}.user_id={0}.id " + 
+                    "WHERE deleted=0 and enabled=1 and role_id={4} ORDER BY creation_date DESC;",
+                    TABLE_USERS, TABLE_USER_COMPANY, TABLE_USER_ROLE, TABLE_USER_DEVICE, roleId);
+                command = new MySqlCommand(query);
+                reader = PerformSqlQuery(command);
+
+                List<string> userList = new List<string>();
+                while (reader.Read())
+                {
+                    userList.Add(reader["identifier"].ToString());
+                }
+
+                return userList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, command);
+            }
+
+            return null;
+        }
+
         public Model.User GetUserByUsername(string username, bool password=false)
         {
             MySqlCommand command = null;
             MySqlDataReader reader = null;
             try
             {
-                Dictionary<string, string> commandDic = new Dictionary<string, string>();
-                commandDic.Add("username", username);
+                string query = string.Format("SELECT {0}.*, {1}.company_id as company_id, {2}.role_id as role_id FROM {0} " +
+                    "INNER JOIN {1} ON {1}.user_id={0}.id " +
+                    "INNER JOIN {2} ON {2}.user_id={0}.id " +
+                    "WHERE deleted=0 and enabled=1 and {0}.username=@username;",
+                    TABLE_USERS, TABLE_USER_COMPANY, TABLE_USER_ROLE);
 
-                command = GenerateQueryCmd(TABLE_USERS, commandDic);
+                command = new MySqlCommand(query);
+                command.Parameters.AddWithValue("@username", username);
+
                 reader = PerformSqlQuery(command);
                 if (false == reader.Read())
                 {
@@ -77,51 +161,17 @@ namespace WcfService.Dao
             return null;
         }
 
-        public List<Model.User> GetCompanyUserByRole(string companyId, string roleId)
+        public List<Model.User> GetUserByCompanyId(string companyId, string roleId, string limit, string skip)
         {
             MySqlCommand command = null;
             MySqlDataReader reader = null;
             try
             {
-                string query = string.Format("SELECT {0}.* FROM {0} " +
+                string query = string.Format("SELECT {0}.*, {1}.company_id as company_id, {2}.role_id as role_id FROM {0} " +
                     "INNER JOIN {1} ON {1}.user_id={0}.id " +
-                    "INNER JOIN {3} ON {3}.user_id={0}.id " +
-                    "WHERE company_id={2} and deleted=0 and enabled=1 and role_id={4} ORDER BY creation_date DESC;",
-                    TABLE_USERS, TABLE_USER_COMPANY, companyId, TABLE_USER_ROLE, roleId);
-                command = new MySqlCommand(query);
-                reader = PerformSqlQuery(command);
-
-                List<Model.User> userList = new List<Model.User>();
-                while (reader.Read())
-                {
-                    userList.Add(generateUserObj(reader));
-                }
-
-                return userList;
-            }
-            catch (Exception e)
-            {
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, e.Message);
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
-            }
-            finally
-            {
-                CleanUp(reader, command);
-            }
-
-            return null;
-        }
-
-        public List<Model.User> GetUserByCompanyId(string companyId, string limit, string skip)
-        {
-            MySqlCommand command = null;
-            MySqlDataReader reader = null;
-            try
-            {
-                string query = string.Format("SELECT {0}.* FROM {0} " +
-                    "INNER JOIN {1} ON {1}.company_id={2} AND {1}.user_id={0}.id " +
-                    "WHERE deleted=0 ORDER BY creation_date DESC ",
-                    TABLE_USERS, TABLE_USER_COMPANY, companyId);
+                    "INNER JOIN {2} ON {2}.user_id={0}.id " +
+                    "WHERE ({1}.company_id=@company_id OR @company_id IS NULL) and deleted=0 and ({2}.role_id=@role_id OR @role_id IS NULL) ORDER BY creation_date DESC ",
+                    TABLE_USERS, TABLE_USER_COMPANY, TABLE_USER_ROLE);
 
                 if (limit != null)
                 {
@@ -134,6 +184,9 @@ namespace WcfService.Dao
                 }
 
                 command = new MySqlCommand(query);
+                command.Parameters.AddWithValue("@company_id", companyId);
+                command.Parameters.AddWithValue("@role_id", roleId);
+
                 reader = PerformSqlQuery(command);
 
                 List<Model.User> userList = new List<Model.User>();
@@ -163,7 +216,12 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
-                string query = string.Format("SELECT * FROM {0} WHERE deleted=0 ORDER BY creation_date DESC ", TABLE_USERS);
+                string query = string.Format("SELECT {0}.*, {1}.company_id as company_id, {2}.role_id as role_id FROM {0} " +
+                    "INNER JOIN {1} ON {1}.user_id={0}.id " +
+                    "INNER JOIN {2} ON {2}.user_id={0}.id " +
+                    "WHERE deleted=0 ORDER BY creation_date DESC ",
+                    TABLE_USERS, TABLE_USER_COMPANY, TABLE_USER_ROLE);
+
                 if (limit != null)
                 {
                     query += string.Format("LIMIT {0} ", limit);
@@ -218,6 +276,8 @@ namespace WcfService.Dao
             user.deleted = (int)reader["deleted"] == 0 ? false : true;
             user.creationDate = reader["creation_date"].ToString();
             user.lastModifiedDate = reader["last_modified_date"].ToString();
+            user.companyId = reader["company_id"].ToString();
+            user.roleId = reader["role_id"].ToString();
 
             return user;
         }
@@ -436,6 +496,39 @@ namespace WcfService.Dao
             }
 
             return false;
+        }
+
+        public List<string> GetDeviceIdentifier(string userId)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> queryParams = new Dictionary<string, string>();
+                queryParams.Add("user_id", userId);
+
+                mySqlCmd = GenerateQueryCmd(TABLE_USER_DEVICE, queryParams);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                List<string> identifierList = new List<string>();
+                while (reader.Read())
+                {
+                    identifierList.Add(reader["identifier"].ToString());
+                }
+
+                return identifierList;
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
         }
     }
 }

@@ -39,5 +39,35 @@ namespace WcfService
             Lorry_5tonne = 5,
             Lorry_10tonne = 10
         }
+
+        public enum Role
+        {
+            MasterAdmin = 1,
+            CompanyAdmin = 2,
+            CompanyDriver = 3,
+            CorporateAdmin = 4,
+            CorporateClerk = 5,
+            Finance = 6,
+            PublicUsers = 7,
+            Clerk = 8
+        }
+
+        public enum DeliveryJobType
+        {
+            Standard = 1,
+            Disposal = 2
+        }
+
+        public enum JobStatus
+        {
+            PendingPayment = 1,
+            PaymentVerifying = 2,
+            OrderReceived = 3,
+            Ongoing_Pickup = 4,
+            Ongoing_Delivery = 5,
+            Deliveted = 6,
+            Error_Pickup = 7,
+            Error_Delivery = 8
+        }
     }
 }

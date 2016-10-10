@@ -39,5 +39,7 @@ namespace WcfService.Controller
         protected static DeliveryPriceDao deliveryPriceDao = new DeliveryPriceDao();
         protected static DeliveryAdditionalPriceDao deliveryAdditionalDao = new DeliveryAdditionalPriceDao();
         protected static VoucherDao voucherDao = new VoucherDao();
+
+        protected static PaymentsDao paymentsDao = new PaymentsDao();
     }
 }

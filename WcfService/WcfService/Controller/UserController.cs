@@ -140,6 +140,8 @@ namespace WcfService.Controller
             var username = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["username"];
             var companyId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["companyId"];
 
+            var roleId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["roleId"];
+
             if (userId != null)
             {
                 // return single user id
@@ -179,7 +181,7 @@ namespace WcfService.Controller
             else if(companyId != null)
             {
                 // get user by company id
-                response.payload = javaScriptSerializer.Serialize(userDao.GetUserByCompanyId(companyId, limit, skip));
+                response.payload = javaScriptSerializer.Serialize(userDao.GetUserByCompanyId(companyId, roleId, limit, skip));
             } 
             else
             {

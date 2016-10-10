@@ -118,11 +118,13 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Constant\ErrorCode.cs" />
     <Compile Include="Constant\ErrorMsg.cs" />
+    <Compile Include="Constant\NotificationMsg.cs" />
     <Compile Include="Controller\BaseController.cs" />
     <Compile Include="Controller\CommonController.cs" />
     <Compile Include="Controller\CompanyController.cs" />
     <Compile Include="Controller\FleetController.cs" />
     <Compile Include="Controller\JobController.cs" />
+    <Compile Include="Controller\PaymentController.cs" />
     <Compile Include="Controller\RoleController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Dao\ActivityDao.cs" />
@@ -154,9 +156,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\PushNotification.cs" />
     <Compile Include="IAjaxService.cs" />
     <Compile Include="Model\Activity.cs" />
     <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\BillPlz\Bill.cs" />
     <Compile Include="Model\Country.cs" />
     <Compile Include="Model\DeliveryError.cs" />
     <Compile Include="Model\DeliveryExtraService.cs" />
@@ -171,6 +175,7 @@
     <Compile Include="Model\JobStatus.cs" />
     <Compile Include="Model\JobType.cs" />
     <Compile Include="Model\Otp.cs" />
+    <Compile Include="Dao\PaymentsDao.cs" />
     <Compile Include="Model\Permission.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Model\PickupError.cs" />

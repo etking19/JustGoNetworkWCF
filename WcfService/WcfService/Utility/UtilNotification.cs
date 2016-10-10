@@ -5,40 +5,42 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace WcfService.Utility
 {
     public class UtilNotification
     {
-        public static void SendMessage(string identifier, string title, string message)
+        public static void SendMessage(string identifier, object extraData, string title, string message)
         {
-            byte[] byteArray = Encoding.UTF8.GetBytes("{"
-                                        + "\"app_id\": \"" + System.Configuration.ConfigurationManager.AppSettings["OneSignalAppId"] + "\","
-                                        + "\"contents\": {\"en\": \"" + message + "\"},"
-                                        + "\"headings\": {\"en\": \"" + title + "\"},"
-                                        + "\"include_player_ids\": [\"" + identifier + "\"]}");
+            var obj = new
+            {
+                app_id = System.Configuration.ConfigurationManager.AppSettings["OneSignalAppId"],
+                contents = new { en = message },
+                headings = new { en = title },
+                include_player_ids = new string[] { identifier },
+                data = extraData
+            };
+
+            var param = new JavaScriptSerializer().Serialize(obj);
+            byte[] byteArray = Encoding.UTF8.GetBytes(param);
 
             sendMsg(byteArray);
         }
 
-        public static void BroadCastMessage(string[] identifiers, string title, string message)
+        public static void BroadCastMessage(string[] identifiers, object extraData, string title, string message)
         {
-            string identifierList = string.Empty;
-            foreach(string identifier in identifiers)
+            var obj = new
             {
-                if(identifierList != string.Empty)
-                {
-                    identifierList += ",";
-                }
+                app_id = System.Configuration.ConfigurationManager.AppSettings["OneSignalAppId"],
+                contents = new { en = message },
+                headings = new { en = title },
+                include_player_ids = identifiers,
+                data = extraData
+            };
 
-                identifierList += ("\"" + identifier + "\"");
-            }
-
-            byte[] byteArray = Encoding.UTF8.GetBytes("{"
-                            + "\"app_id\": \"" + System.Configuration.ConfigurationManager.AppSettings["OneSignalAppId"] + "\","
-                            + "\"contents\": {\"en\": \"" + message + "\"},"
-                            + "\"headings\": {\"en\": \"" + title + "\"},"
-                            + "\"include_player_ids\": [" + identifierList  + "]}");
+            var param = new JavaScriptSerializer().Serialize(obj);
+            byte[] byteArray = Encoding.UTF8.GetBytes(param);
 
             sendMsg(byteArray);
         }

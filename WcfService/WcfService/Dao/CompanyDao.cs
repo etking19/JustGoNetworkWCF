@@ -65,7 +65,7 @@ namespace WcfService.Dao
                 var result = constructObj(reader);
 
                 // query the admin
-                var admins = new UsersDao().GetCompanyUserByRole(companyId, "2");  // fixed Company-admin to 2
+                var admins = new UsersDao().GetUserByCompanyId(companyId, "2", null, null);  // fixed Company-admin to 2
                 if(admins != null)
                 {
                     result.admin = admins.ToArray();
