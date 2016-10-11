@@ -18,7 +18,7 @@ class MainVC: UIViewController, UIWebViewDelegate{
         super.viewDidLoad()
         self.showLoading()
         webView.delegate = self
-        let myUrl = URL (string: justLorryUrl)
+        let myUrl = URL (string:  NetworkManager.sharedInstance.justLorryUrl)
         let requestObj = URLRequest(url: myUrl!)
         self.webView.scalesPageToFit = true
         self.webView.loadRequest(requestObj)

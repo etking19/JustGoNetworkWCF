@@ -8,10 +8,10 @@
 
 import UIKit
 
-class SplashScreenVC: UIViewController {
+class SplashScreenVC: UIViewController  {
 
     @IBOutlet weak var titleLabel: UILabel!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.animation()
@@ -19,6 +19,7 @@ class SplashScreenVC: UIViewController {
         Timer.scheduledTimer(
             timeInterval: 2.5, target: self, selector: #selector(SplashScreenVC.showNextScreen), userInfo: nil, repeats: false
         )
+
     }
 
     override func didReceiveMemoryWarning() {
