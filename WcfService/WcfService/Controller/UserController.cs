@@ -193,35 +193,6 @@ namespace WcfService.Controller
             return response;
         }
 
-        //public Response GetUser(string userId)
-        //{
-        //    var result = userDao.GetUserById(userId);
-        //    if(result == null)
-        //    {
-        //        response.payload = null;
-        //        response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
-        //        return response;
-        //    }
-
-        //    response.payload = javaScriptSerializer.Serialize(result);
-        //    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-        //    return response;
-        //}
-
-        //public Response GetUserList(string number, string skip)
-        //{
-        //    var result = userDao.GetAllUsers(number, skip);
-        //    if(result == null)
-        //    {
-        //        response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
-        //        return response;
-        //    }
-
-        //    response.payload = javaScriptSerializer.Serialize(result);
-        //    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
-        //    return response;
-        //}
-
         public Response UpdatePassword(string userId, string oldPw, string newPw)
         {
             var userData = userDao.GetUserById(userId);

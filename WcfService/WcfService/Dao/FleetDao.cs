@@ -17,12 +17,15 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
+                DateTime dateService = DateTime.Parse(payload.serviceDueDate);
+                DateTime dateRoadTax = DateTime.Parse(payload.roadTaxExpiry);
+
                 // add to job order status
                 Dictionary<string, string> insertParam = new Dictionary<string, string>();
                 insertParam.Add("registration_number", payload.registrationNumber);
                 insertParam.Add("fleet_types_id", payload.fleetTypeId);
-                insertParam.Add("road_tax_expired", payload.roadTaxExpiry);
-                insertParam.Add("service_due_date", payload.serviceDueDate);
+                insertParam.Add("road_tax_expired", dateRoadTax.ToString("yyyy-MM-dd HH:mm:ss"));
+                insertParam.Add("service_due_date", dateService.ToString("yyyy-MM-dd HH:mm:ss"));
                 insertParam.Add("service_due_mileage", payload.serviceDueMileage.ToString());
                 insertParam.Add("company_id", payload.companyId);
                 insertParam.Add("remarks", payload.remarks);

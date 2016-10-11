@@ -420,6 +420,7 @@ namespace WcfService.Dao
                     addParam.Clear();
                     addParam.Add("user_id", userId);
                     addParam.Add("role_id", user.roleId);
+                    addParam.Add("company_id", user.companyId);
                     mySqlCmd = GenerateAddCmd(TABLE_USER_ROLE, addParam);
                     PerformSqlNonQuery(mySqlCmd);
                 }
