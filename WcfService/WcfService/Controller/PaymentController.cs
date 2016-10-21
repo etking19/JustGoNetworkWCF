@@ -54,12 +54,18 @@ namespace WcfService.Controller
                 var usernameEncoded = Utils.Base64Encode(System.Configuration.ConfigurationManager.AppSettings["BillPlzApi"]);
                 request.Headers.Add("authorization", "Basic " + usernameEncoded + ":");
 
+                DateTime date = DateTime.Parse(jobDetails.deliveryDate);
+                var paymentDue = date.ToString("yyyy-MM-dd");
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, paymentDue);
+
                 var obj = new
                 {
                     collection_id = System.Configuration.ConfigurationManager.AppSettings["BillPlzCollectionId"],
                     description = string.Format("Booking id: {0}. Created on: {1}", orderId, jobDetails.creationDate),
                     email = ownerDetails.email,
+                    mobile = ownerDetails.contactNumber,
                     name = ownerDetails.displayName,
+                    due_at = paymentDue,
                     amount = jobDetails.amount * 100,
                     callback_url = System.Configuration.ConfigurationManager.AppSettings["BillPlzCallbackUrl"],
                     reference_1_label = "orderId",
