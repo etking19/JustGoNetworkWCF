@@ -195,9 +195,14 @@ namespace WcfService
             return jobController.GetJobDelivery();
         }
 
-        public Response JobDeliveryAdd(string jobId, string companyId, string driverId)
+        public Response JobDeliveryDriverGet()
         {
-            return jobController.AddJobDelivery(jobId, companyId, driverId);
+            return jobController.GetJobDeliveryDriver();
+        }
+
+        public Response JobDeliveryAdd(string jobId, string companyId, string driverId, string fleetId)
+        {
+            return jobController.AddJobDelivery(jobId, companyId, driverId, fleetId);
         }
 
         public Response JobDeliveryDecline(string jobId, string companyId)
@@ -205,9 +210,9 @@ namespace WcfService
             return jobController.DeclineJobDelivery(jobId, companyId);
         }
 
-        public Response JobDeliveryUpdate(string jobId, string companyId, string driverId)
+        public Response JobDeliveryUpdate(string jobId, string companyId, string driverId, string fleetId)
         {
-            return jobController.UpdateJobDelivery(jobId, companyId, driverId);
+            return jobController.UpdateJobDelivery(jobId, companyId, driverId, fleetId);
         }
 
         public Response JobDeliveryDelete(string jobId)

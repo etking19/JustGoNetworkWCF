@@ -55,6 +55,41 @@ namespace WcfService.Dao
             return null;
         }
 
+        public Model.BillPlz.Bill GetByJobId(string jobId)
+        {
+            MySqlCommand mySqlCmd = null;
+            MySqlDataReader reader = null;
+            try
+            {
+                Dictionary<string, string> queryParams = new Dictionary<string, string>();
+                queryParams.Add("job_id", jobId);
+
+                mySqlCmd = GenerateQueryCmd(TABLE_PAYMENTS, queryParams);
+                reader = PerformSqlQuery(mySqlCmd);
+
+                if (reader.Read())
+                {
+                    return new Model.BillPlz.Bill()
+                    {
+                        reference_1 = reader["job_id"].ToString(),           // this is unencoded jobid
+                        url = reader["url"].ToString()
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.Message);
+                DBLogger.GetInstance().Log(DBLogger.ESeverity.Info, e.StackTrace);
+            }
+            finally
+            {
+                CleanUp(reader, mySqlCmd);
+            }
+
+            return null;
+        }
+
+
         public Model.BillPlz.Bill Get(string paymentId)
         {
             MySqlCommand mySqlCmd = null;

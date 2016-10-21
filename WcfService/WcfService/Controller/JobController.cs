@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.ServiceModel.Web;
 using System.Web;
@@ -17,7 +18,7 @@ namespace WcfService.Controller
         {
             if (WebOperationContext.Current == null)
             {
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                 return response;
             }
 
@@ -79,11 +80,21 @@ namespace WcfService.Controller
                 var extraData = Helper.PushNotification.ConstructExtraData(Helper.PushNotification.ECategories.OrderStatusUpdate, uniqueId);
                 Utility.UtilNotification.BroadCastMessage(clientIdentifiers.ToArray(), extraData, NotificationMsg.NewJob_Title, msg);
             }
+            /* do not use SMS for job status update
             else
             {
                 // no device record, send sms instead
                 var userObj = userDao.GetUserById(jobDetails.ownerUserId);
                 UtilSms.SendSms(userObj.contactNumber, msg);
+            }
+            */
+
+            if (statusId == ((int)Configuration.JobStatus.Delivered).ToString())
+            {
+                // send email to notify user
+                User userDetails = userDao.GetUserById(jobDetails.ownerUserId);
+                UtilEmail.SendDelivered(userDetails.email, uniqueId, userDetails.displayName,
+                    ConfigurationManager.AppSettings.Get("RatingLink") + "?uniqueId=" + uniqueId);
             }
 
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
@@ -283,6 +294,10 @@ namespace WcfService.Controller
             // generate the unique job id
             var uniqueId = Utils.EncodeUniqueId(jobId);
 
+            // request the job payment
+            PaymentController controller = new PaymentController();
+            var paymentReq = controller.RequestPayment(uniqueId);
+
             // send notification to creator
             var clientIdentifiers = userDao.GetDeviceIdentifier(userId);
             var msg = NotificationMsg.NewJob_Desc + uniqueId;
@@ -292,11 +307,17 @@ namespace WcfService.Controller
                 var extraData = Helper.PushNotification.ConstructExtraData(Helper.PushNotification.ECategories.OrderCreated, uniqueId);
                 Utility.UtilNotification.BroadCastMessage(clientIdentifiers.ToArray(), extraData, NotificationMsg.NewJob_Title, msg);
             }
-            else
+
+            if (ConfigurationManager.AppSettings.Get("Debug") != "1")
             {
-                // no device record, send sms instead
+                // send sms together because no history of push notification
                 UtilSms.SendSms(userObj.contactNumber, msg);
             }
+
+            // send email to user
+            var fleetType = fleetTypeDao.Get(jobDetails.fleetTypeId);
+            var jobType = jobTypeDao.Get().Find(t => t.jobTypeId == jobDetails.jobTypeId);
+            UtilEmail.SendInvoice(uniqueId, (string)paymentReq.payload, userObj, jobDetails, fleetType.name, jobType.name);
 
             response.payload = uniqueId;
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
@@ -308,7 +329,7 @@ namespace WcfService.Controller
         {
             if (WebOperationContext.Current == null)
             {
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                 return response;
             }
 
@@ -405,7 +426,7 @@ namespace WcfService.Controller
         {
             if (WebOperationContext.Current == null)
             {
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                 return response;
             }
 
@@ -443,7 +464,7 @@ namespace WcfService.Controller
         {
             if (WebOperationContext.Current == null)
             {
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                 return response;
             }
 
@@ -509,6 +530,33 @@ namespace WcfService.Controller
             return response;
         }
 
+        public Response GetJobDeliveryDriver()
+        {
+            if (WebOperationContext.Current == null)
+            {
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
+                return response;
+            }
+
+            var jobId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["jobId"];
+
+            if (jobId != null)
+            {
+                var result = jobDeliveryDao.GetDriver(jobId);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                return response;
+            }
+
+            response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
+            return response;
+        }
 
         public Response GetJobDelivery()
         {
@@ -532,7 +580,7 @@ namespace WcfService.Controller
                 var result = jobDeliveryDao.Get(jobid);
                 if (result == null)
                 {
-                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                     return response;
                 }
 
@@ -546,7 +594,7 @@ namespace WcfService.Controller
                     var result = jobDeliveryDao.Get(jobid);
                     if (result == null)
                     {
-                        response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                        response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                         return response;
                     }
 
@@ -554,7 +602,7 @@ namespace WcfService.Controller
                 }
                 catch (Exception)
                 {
-                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                     return response;
                 }
             }
@@ -563,7 +611,7 @@ namespace WcfService.Controller
                 var result = jobDeliveryDao.GetByDeliverCompany(companyId, statusId, limit, skip);
                 if (result == null)
                 {
-                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                     return response;
                 }
 
@@ -574,7 +622,7 @@ namespace WcfService.Controller
                 var result = jobDeliveryDao.GetByDriver(driverId, statusId, limit, skip);
                 if (result == null)
                 {
-                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                     return response;
                 }
 
@@ -585,7 +633,7 @@ namespace WcfService.Controller
                 var result = jobDeliveryDao.GetByStatus(statusId, limit, skip);
                 if (result == null)
                 {
-                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                     return response;
                 }
 
@@ -596,7 +644,7 @@ namespace WcfService.Controller
                 var result = jobDeliveryDao.Get(limit, skip);
                 if (result == null)
                 {
-                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                     return response;
                 }
 
@@ -607,9 +655,9 @@ namespace WcfService.Controller
             return response;
         }
 
-        public Response AddJobDelivery(string jobId, string companyId, string driverId)
+        public Response AddJobDelivery(string jobId, string companyId, string driverId, string fleetId)
         {
-            var result = jobDeliveryDao.Add(jobId, companyId, driverId);
+            var result = jobDeliveryDao.Add(jobId, companyId, driverId, fleetId);
             if (result == null)
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
@@ -618,6 +666,17 @@ namespace WcfService.Controller
 
             // pre-caution step to avoid the job delivery cancelled
             jobDeclineDao.Remove(jobId, companyId);
+
+            // send email to notify user
+            JobDetails jobDetails = jobDetailsDao.GetByJobId(jobId);
+            User userDetails = userDao.GetUserById(jobDetails.ownerUserId);
+            User driverDetails = userDao.GetUserById(driverId);
+            Fleet fleetDetails = fleetDao.Get(fleetId);
+            JobType jobType = jobTypeDao.GetById(jobDetails.jobTypeId);
+            FleetType fleetType = fleetTypeDao.Get(jobDetails.fleetTypeId);
+
+            var uniqueId = Utils.EncodeUniqueId(jobId);
+            UtilEmail.SendOrderConfirmed(uniqueId, userDetails, jobDetails, driverDetails, fleetDetails, jobType, fleetType);
 
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
@@ -636,9 +695,9 @@ namespace WcfService.Controller
             return response;
         }
 
-        public Response UpdateJobDelivery(string jobId, string companyId, string driverId)
+        public Response UpdateJobDelivery(string jobId, string companyId, string driverId, string fleetId)
         {
-            if (false == jobDeliveryDao.Update(jobId, companyId, driverId))
+            if (false == jobDeliveryDao.Update(jobId, companyId, driverId, fleetId))
             {
                 response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
                 return response;

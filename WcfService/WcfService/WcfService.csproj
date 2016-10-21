@@ -63,8 +63,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\MySql.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http" />
@@ -170,6 +170,7 @@
     <Compile Include="Model\Google\Direction.cs" />
     <Compile Include="Model\Google\MapsGeocode.cs" />
     <Compile Include="Model\JobDelivery.cs" />
+    <Compile Include="Model\JobDeliveryDriver.cs" />
     <Compile Include="Model\JobDetails.cs" />
     <Compile Include="Model\JobOrderStatus.cs" />
     <Compile Include="Model\JobStatus.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Utility\IdGenerator.cs" />
     <Compile Include="Utility\Postcode.cs" />
     <Compile Include="Utility\UserAuthHttpModule.cs" />
+    <Compile Include="Utility\UtilEmail.cs" />
     <Compile Include="Utility\UtilNotification.cs" />
     <Compile Include="Utility\Utils.cs" />
     <Compile Include="Utility\UtilSms.cs" />
@@ -210,6 +212,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SendGrid\SendGrid.csproj">
+      <Project>{1c318867-440b-4eb9-99e3-c0cc2c556962}</Project>
+      <Name>SendGrid</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebHttpCors\WebHttpCors.csproj">
       <Project>{9045e552-71c6-497f-9c91-97906155c233}</Project>
       <Name>WebHttpCors</Name>

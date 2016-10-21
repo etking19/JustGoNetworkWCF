@@ -113,7 +113,7 @@ namespace WcfService
         Model.Response TokenCheck(string userId, string token);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/user/password/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/user/password/put", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserUpdatePassword(string userId, string oldPw, string newPw);
 
         [OperationContract]
@@ -132,7 +132,7 @@ namespace WcfService
         Model.Response UserGetProfile();
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/user/profile/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/user/profile/delete", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserDeleteProfile(string userId);
 
         [OperationContract]
@@ -140,7 +140,7 @@ namespace WcfService
         Model.Response UserAddProfile(Model.User user);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/user/profile/{userId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/user/profile/put", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response UserUpdateProfile(string userId, Model.User user);
 
         [OperationContract]
@@ -164,11 +164,11 @@ namespace WcfService
         Model.Response CompanyProfileAdd(Model.Company company);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/company/profile/{companyId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/company/profile/put", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response CompanyProfileUpdate(string companyId, Model.Company company);
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/company/profile/{companyId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/company/profile/delete", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response CompanyProfileDelete(string companyId);
 
 
@@ -190,11 +190,11 @@ namespace WcfService
         Model.Response FleetLorryAdd(Model.Fleet fleet);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/fleet/lorry/put", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response FleetLorryUpdate(string fleetId, Model.Fleet fleet);
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/fleet/lorry/{fleetId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/fleet/lorry/delete", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response FleetLorryDelete(string fleetId);
 
 
@@ -243,7 +243,7 @@ namespace WcfService
         /// <param name="jobId"></param>
         /// <returns></returns>
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/job/details/{jobId}", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/job/details/delete", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDetailsDelete(string jobId);
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace WcfService
         /// <param name="jobDetails"></param>
         /// <returns></returns>
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/job/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/job/put", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDetailsUpdate(string jobId, Model.JobDetails jobDetails);
 
 
@@ -289,8 +289,12 @@ namespace WcfService
         Model.Response JobDeliveryGet();
 
         [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/job/delivery/driver?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryDriverGet();
+
+        [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/job/delivery", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryAdd(string jobId, string companyId, string driverId);
+        Model.Response JobDeliveryAdd(string jobId, string companyId, string driverId, string fleetId);
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/job/delivery/decline", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -298,11 +302,11 @@ namespace WcfService
 
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        Model.Response JobDeliveryUpdate(string jobId, string companyId, string driverId);
+        [WebInvoke(Method = "POST", UriTemplate = "/job/delivery/put", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response JobDeliveryUpdate(string jobId, string companyId, string driverId, string fleetId);
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/job/delivery/delete", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDeliveryDelete(string jobId);
 
 

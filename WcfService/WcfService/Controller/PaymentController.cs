@@ -20,6 +20,16 @@ namespace WcfService.Controller
             {
                 // get info about the order
                 var jobId = Utils.DecodeUniqueId(orderId);
+
+                // get from existing database to see if record existed
+                var previousResult = paymentsDao.GetByJobId(jobId);
+                if (previousResult != null)
+                {
+                    response.payload = previousResult.url;
+                    response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
+                    return response;
+                }
+
                 var jobDetails = jobDetailsDao.GetByJobId(jobId);
                 if (jobDetails == null)
                 {
@@ -34,7 +44,7 @@ namespace WcfService.Controller
                     return response;
                 }
 
-                // send push notification if location was within boundary 
+                // send billplz request
                 var request = WebRequest.Create("https://www.billplz.com/api/v3/bills") as HttpWebRequest;
 
                 request.KeepAlive = true;

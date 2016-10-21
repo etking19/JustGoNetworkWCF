@@ -65,7 +65,7 @@ namespace WcfService
             OrderReceived = 3,
             Ongoing_Pickup = 4,
             Ongoing_Delivery = 5,
-            Deliveted = 6,
+            Delivered = 6,
             Error_Pickup = 7,
             Error_Delivery = 8
         }

@@ -57,6 +57,7 @@ namespace WcfService.Dao
                 insertParam.Add("owner_id", payload.ownerUserId);
                 insertParam.Add("job_type_id", payload.jobTypeId);
                 insertParam.Add("amount", payload.amount.ToString());
+                insertParam.Add("cash_on_delivery", payload.cashOnDelivery ? "1" : "0");
                 insertParam.Add("worker_assistance", payload.workerAssistant.ToString());
                 insertParam.Add("fleet_type_id", payload.fleetTypeId);
                 insertParam.Add("delivery_date", date.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -127,13 +128,16 @@ namespace WcfService.Dao
             MySqlDataReader reader = null;
             try
             {
+                DateTime date = DateTime.Parse(payload.deliveryDate);
+
                 Dictionary<string, string> updateParam = new Dictionary<string, string>();
                 updateParam.Add("owner_id", payload.ownerUserId);
                 updateParam.Add("job_type_id", payload.jobTypeId);
                 updateParam.Add("amount", payload.amount.ToString());
+                updateParam.Add("cash_on_delivery", payload.cashOnDelivery ? "1" : "0");
                 updateParam.Add("fleet_type_id", payload.fleetTypeId);
                 updateParam.Add("worker_assistance", payload.workerAssistant.ToString());
-                updateParam.Add("delivery_date", payload.deliveryDate);
+                updateParam.Add("delivery_date", date.ToString("yyyy-MM-dd HH:mm:ss"));
                 updateParam.Add("remarks", payload.remarks);
                 updateParam.Add("modify_by", payload.modifiedBy);
 

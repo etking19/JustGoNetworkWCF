@@ -21,6 +21,9 @@ namespace WcfService.Model
         [DataMember]
         public string driverUserId;
 
+        [DataMember]
+        public string fleetId { get; set; }
+
         public List<JobOrderStatus> orderStatusList { get; set; }
         
         public float rating { get; set; }

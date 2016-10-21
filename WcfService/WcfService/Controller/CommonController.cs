@@ -17,6 +17,33 @@ namespace WcfService.Controller
     {
         public Response Test()
         {
+            Model.User user = new User()
+            {
+                displayName = "test name",
+                contactNumber = "0126653573",
+                email = "denellwong@gmail.com"
+            };
+
+            Model.JobDetails details = new JobDetails()
+            {
+                addressFrom = new List<Model.Address>() { new Model.Address()
+                {
+                    address1 = "25, Jalan LP8/21",
+                    address2 = "Taman Lestari Perdana, 43300, Selangor, Malaysia"
+                } },
+
+                addressTo = new List<Model.Address>() { new Model.Address()
+                {
+                    address1 = "10, Jalan LP8/21",
+                    address2 = "Taman Lestari Perdana, 43300, Selangor, Malaysia"
+                }},
+                deliveryDate = "10/10/10 25:25:00",
+                amount = 10.52f
+            };
+
+            UtilEmail.SendInvoice("asdd", "http://10.01.123.123", user, details, "1 tonne lorry", "standard");
+
+
             response.payload = javaScriptSerializer.Serialize(commonDao.Test());
             response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.ESuccess);
             return response;
@@ -152,7 +179,20 @@ namespace WcfService.Controller
             }
 
             var countryId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["countryId"];
-            if(countryId != null)
+            var stateId = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["stateId"];
+
+            if (stateId != null)
+            {
+                var result = stateDao.Get(stateId);
+                if (result == null)
+                {
+                    response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EGeneralError);
+                    return response;
+                }
+
+                response.payload = javaScriptSerializer.Serialize(result);
+            }
+            else if (countryId != null)
             {
                 var result = stateDao.GetByCountryId(countryId);
                 if(result == null)

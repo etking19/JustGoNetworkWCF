@@ -39,3 +39,6 @@ C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.csprojResolveAssemblyReference.cache
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.dll
 C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\obj\Debug\WcfService.pdb
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\SendGrid.dll
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\SendGrid.CSharp.HTTP.Client.dll
+C:\Users\Denell Wong\Documents\GitHub\JustGoNetworkWCF\WcfService\WcfService\bin\SendGrid.pdb
