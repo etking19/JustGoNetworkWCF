@@ -366,5 +366,10 @@ namespace WcfService
         [WebInvoke(Method = "POST", UriTemplate = "/job/delivery/{jobId}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         Model.Response JobDeliveryStatusUpdate(string jobId, string statusId, string pickupErrId, string deliverErrId);
 
+
+        // statistic
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/statistic/driver/location?", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        Model.Response StatisticDriverLocation();
     }
 }

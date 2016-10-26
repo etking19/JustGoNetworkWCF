@@ -19,12 +19,13 @@
 			}
 			
 			.table_title {
-				width: 32%;
+				width: 20%;
 				font-weight: bold;
 			}
 			
 			.table_content {
-				width: 68%;
+				width: 80%;
+				word-break: break-all;
 			}
 			
 			.tr_spacing {
@@ -54,10 +55,10 @@
 				margin-bottom: 10px;
 			}
 			
-			.table-content {
+			.table-container {
 				background: #f2f2f2;
 				border-radius: 10px;
-				margin: 20px;
+				max-width: 90%;
 			}
 			
 			.div-important {
@@ -113,7 +114,7 @@
 							</tr>						
 						</table>
 						
-						<table border="0" cellpadding="0" cellspacing="10" class="table-content">
+						<table border="0" cellpadding="0" cellspacing="10" class="table-container">
 							<tr class="tr_spacing">
 								<td class="table_title">Order ID:</td>
 								<td class="table_content">{{orderId}}</td>

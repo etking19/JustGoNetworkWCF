@@ -126,6 +126,7 @@
     <Compile Include="Controller\JobController.cs" />
     <Compile Include="Controller\PaymentController.cs" />
     <Compile Include="Controller\RoleController.cs" />
+    <Compile Include="Controller\StatisticController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Dao\ActivityDao.cs" />
     <Compile Include="Dao\AddressDao.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Dao\PickUpErrorDao.cs" />
     <Compile Include="Dao\RoleDao.cs" />
     <Compile Include="Dao\StateDao.cs" />
+    <Compile Include="Dao\StatisticDao.cs" />
     <Compile Include="Dao\SupportedAreaDao.cs" />
     <Compile Include="Dao\UsersDao.cs" />
     <Compile Include="Dao\UserSessionDao.cs" />
@@ -165,6 +167,7 @@
     <Compile Include="Model\DeliveryError.cs" />
     <Compile Include="Model\DeliveryExtraService.cs" />
     <Compile Include="Model\Delivery\PriceDetails.cs" />
+    <Compile Include="Model\DriverLocation.cs" />
     <Compile Include="Model\Fleet.cs" />
     <Compile Include="Model\FleetType.cs" />
     <Compile Include="Model\Google\Direction.cs" />

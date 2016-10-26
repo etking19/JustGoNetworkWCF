@@ -622,9 +622,9 @@ namespace WcfService.Controller
             var labor = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["labor"];
 
             var assembleBed = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["assembleBed"];
-            var assemblyDining = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["assemblyDiningCount"];
-            var assemblyWardrobe = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["assemblyWardrobeCount"];
-            var assemblyTable = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["assemblyTableCount"];
+            var assemblyDining = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["assemblyDining"];
+            var assemblyWardrobe = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["assemblyWardrobe"];
+            var assemblyTable = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["assemblyTable"];
 
             var promoCode = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["promoCode"];
 
@@ -740,7 +740,7 @@ namespace WcfService.Controller
                 priceDetails.labor += addCost;
             }
 
-            if (assemblyTable != null)
+            if (assemblyWardrobe != null)
             {
                 var cost = additionalService.Find(t => t.name.CompareTo("assemble-wardrobe") == 0);
                 if (cost == null)

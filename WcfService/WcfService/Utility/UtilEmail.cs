@@ -43,6 +43,7 @@ namespace WcfService.Utility
             }
             catch (Exception)
             {
+                mail.Personalization[0].AddSubstitution("{{to}}", "");
             }
 
             dynamic response = await sg.client.mail.send.post(requestBody: mail.Get());
@@ -84,6 +85,7 @@ namespace WcfService.Utility
             }
             catch (Exception)
             {
+                mail.Personalization[0].AddSubstitution("{{to}}", "");
             }
 
             dynamic response = await sg.client.mail.send.post(requestBody: mail.Get());

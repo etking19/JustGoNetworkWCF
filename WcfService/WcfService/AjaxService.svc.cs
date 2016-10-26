@@ -21,6 +21,7 @@ namespace WcfService
         private static JobController jobController = new JobController();
         private static UserAuthHttpModule userAuthModule = new UserAuthHttpModule();
         private static PaymentController paymentController = new PaymentController();
+        private static StatisticController statisticController = new StatisticController();
 
         public void GetOptions()
         {
@@ -283,6 +284,11 @@ namespace WcfService
         public Response PaymentMake(string uniqueId)
         {
             return paymentController.RequestPayment(uniqueId);
+        }
+
+        public Response StatisticDriverLocation()
+        {
+            return statisticController.GetDriverLocation();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WcfService.Controller
         {
             if (WebOperationContext.Current == null)
             {
-                response = Utility.Utils.SetResponse(response, true, Constant.ErrorCode.EParameterError);
+                response = Utility.Utils.SetResponse(response, false, Constant.ErrorCode.EParameterError);
                 return response;
             }
 

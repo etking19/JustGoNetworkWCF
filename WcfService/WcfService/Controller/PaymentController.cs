@@ -56,14 +56,13 @@ namespace WcfService.Controller
 
                 DateTime date = DateTime.Parse(jobDetails.deliveryDate);
                 var paymentDue = date.ToString("yyyy-MM-dd");
-                DBLogger.GetInstance().Log(DBLogger.ESeverity.Error, paymentDue);
 
                 var obj = new
                 {
                     collection_id = System.Configuration.ConfigurationManager.AppSettings["BillPlzCollectionId"],
                     description = string.Format("Booking id: {0}. Created on: {1}", orderId, jobDetails.creationDate),
                     email = ownerDetails.email,
-                    mobile = ownerDetails.contactNumber,
+                    // mobile = ownerDetails.contactNumber, /* Not include because need the format defined +6xxxxx or 60xxxx ONLY */
                     name = ownerDetails.displayName,
                     due_at = paymentDue,
                     amount = jobDetails.amount * 100,

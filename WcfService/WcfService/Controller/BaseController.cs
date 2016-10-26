@@ -41,5 +41,6 @@ namespace WcfService.Controller
         protected static VoucherDao voucherDao = new VoucherDao();
 
         protected static PaymentsDao paymentsDao = new PaymentsDao();
+        protected static StatisticDao statisticDao = new StatisticDao();
     }
 }
