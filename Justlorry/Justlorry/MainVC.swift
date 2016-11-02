@@ -8,47 +8,34 @@
 
 import UIKit
 
-class MainVC: UIViewController, UIWebViewDelegate{
+class MainVC: UIViewController{
 
+    @IBOutlet weak var splashView: UIView!
     @IBOutlet weak var webView: UIWebView!
-    @IBOutlet weak var loadingView: UIView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showLoading()
-        webView.delegate = self
-        let myUrl = URL (string:  NetworkManager.sharedInstance.justLorryUrl)
-        let requestObj = URLRequest(url: myUrl!)
+        
+        splashView.isHidden = false
+        let url = URL (string:  NetworkManager.sharedInstance.justLorryUrl)
+        let requestObj = URLRequest(url: url!)
         self.webView.scalesPageToFit = true
+        // self.webView.addJavascriptInterfaces(MyJSInterface(), withName: "MyJSTest")
         self.webView.loadRequest(requestObj)
-
+        
+        Timer.scheduledTimer(
+            timeInterval: 5, target: self, selector: #selector(MainVC.hideSplashView), userInfo: nil, repeats: false
+        )
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //self.showLoading()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    func webViewDidFinishLoad(_ webView: UIWebView) {
-        self.hideLoading()
-    }
-    
-    //MARK: - Loading Indicator
-    func showLoading() {
-        activityIndicator.startAnimating()
-        UIView.animate(withDuration: 0.1, animations: { () -> Void in
-            self.loadingView.alpha = 1.0
-        })
-    }
-    
-    func hideLoading() {
-        activityIndicator.stopAnimating()
-        UIView.animate(withDuration: 0.1, animations: { () -> Void in
-            self.loadingView.alpha = 0.0
-        })
+    func hideSplashView(){
+        splashView.isHidden = true
     }
 }

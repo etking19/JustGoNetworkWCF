@@ -8,30 +8,26 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SplashScreenVC" customModule="driver" customModuleProvider="target">
             <connections>
-                <outlet property="titleLabel" destination="ps6-fM-Tvq" id="ify-fV-B82"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JustLorry" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ps6-fM-Tvq">
-                    <constraints>
-                        <constraint firstAttribute="height" constant="88" id="kTH-Zy-pxd"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="Baskerville-SemiBold" family="Baskerville" pointSize="50"/>
-                    <color key="textColor" red="0.25757575757575757" green="0.25757575757575757" blue="0.25757575757575757" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash@1x" translatesAutoresizingMaskIntoConstraints="NO" id="bhO-cS-seb"/>
             </subviews>
-            <color key="backgroundColor" red="0.67839805825242716" green="0.88615660808328822" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="ps6-fM-Tvq" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="XNt-Tz-jdh"/>
-                <constraint firstAttribute="trailing" secondItem="ps6-fM-Tvq" secondAttribute="trailing" constant="29" id="dsE-oe-bu7"/>
-                <constraint firstItem="ps6-fM-Tvq" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="16" id="rah-c3-U6w"/>
+                <constraint firstItem="bhO-cS-seb" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="9r0-ij-rJb"/>
+                <constraint firstItem="bhO-cS-seb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="107" id="jGj-qw-ZjT"/>
+                <constraint firstItem="bhO-cS-seb" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="z1g-Ld-e0E"/>
+                <constraint firstItem="bhO-cS-seb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="267" id="zhX-9L-JaS"/>
             </constraints>
         </view>
     </objects>
+    <resources>
+        <image name="splash@1x" width="471" height="379"/>
+    </resources>
 </document>

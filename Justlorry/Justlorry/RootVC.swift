@@ -15,8 +15,8 @@ class RootVC: UIViewController {
     @IBOutlet weak var notificationMsg: UILabel!
     
     override func viewDidAppear(_ animated: Bool) {
-        let splashScreen = SplashScreenVC(nibName: "SplashScreenVC", bundle: nil)
-        addViewController(splashScreen, toView: contentView)
+        let mainVC = MainVC(nibName: "MainVC", bundle: nil)
+        addViewController(mainVC, toView: contentView)
     }
     
     func showNotificationBanner(_ message:String) {

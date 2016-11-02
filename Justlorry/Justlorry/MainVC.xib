@@ -8,59 +8,47 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainVC" customModule="driver" customModuleProvider="target">
             <connections>
-                <outlet property="activityIndicator" destination="XNW-lC-9GG" id="xeq-Ms-310"/>
-                <outlet property="loadingView" destination="fDR-zS-EJx" id="mqH-rQ-jAe"/>
+                <outlet property="splashView" destination="aEZ-c4-2Wi" id="BoI-cN-rvL"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="webView" destination="8mE-fM-Y9O" id="vlZ-pM-AF3"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8mE-fM-Y9O">
                     <color key="backgroundColor" red="0.28958413004875183" green="0.31462949514389038" blue="0.32950475811958313" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </webView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fDR-zS-EJx">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aEZ-c4-2Wi">
                     <subviews>
-                        <view alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nse-Nb-qQh">
-                            <subviews>
-                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="XNW-lC-9GG">
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="37" id="Zye-tE-Qat"/>
-                                        <constraint firstAttribute="height" constant="37" id="rte-9j-qd0"/>
-                                    </constraints>
-                                </activityIndicatorView>
-                            </subviews>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstItem="XNW-lC-9GG" firstAttribute="centerX" secondItem="nse-Nb-qQh" secondAttribute="centerX" id="3sM-AY-tFd"/>
-                                <constraint firstItem="XNW-lC-9GG" firstAttribute="centerY" secondItem="nse-Nb-qQh" secondAttribute="centerY" id="zXg-lm-gDq"/>
-                            </constraints>
-                        </view>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash@1x" translatesAutoresizingMaskIntoConstraints="NO" id="7F1-gl-2Ph"/>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="nse-Nb-qQh" firstAttribute="centerY" secondItem="fDR-zS-EJx" secondAttribute="centerY" id="Mq8-Q3-pfq"/>
-                        <constraint firstItem="nse-Nb-qQh" firstAttribute="centerX" secondItem="fDR-zS-EJx" secondAttribute="centerX" id="Y4n-Tl-6Ic"/>
-                        <constraint firstItem="nse-Nb-qQh" firstAttribute="top" secondItem="fDR-zS-EJx" secondAttribute="top" id="lCr-ny-7gG"/>
-                        <constraint firstItem="nse-Nb-qQh" firstAttribute="leading" secondItem="fDR-zS-EJx" secondAttribute="leading" id="rGv-jR-aES"/>
+                        <constraint firstItem="7F1-gl-2Ph" firstAttribute="centerY" secondItem="aEZ-c4-2Wi" secondAttribute="centerY" id="Idx-pE-RBC"/>
+                        <constraint firstItem="7F1-gl-2Ph" firstAttribute="leading" secondItem="aEZ-c4-2Wi" secondAttribute="leading" constant="107" id="YEi-H8-RvG"/>
+                        <constraint firstItem="7F1-gl-2Ph" firstAttribute="centerX" secondItem="aEZ-c4-2Wi" secondAttribute="centerX" id="nzz-5P-9Od"/>
+                        <constraint firstItem="7F1-gl-2Ph" firstAttribute="top" secondItem="aEZ-c4-2Wi" secondAttribute="top" constant="267" id="oxj-BT-ZWn"/>
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.30980392156862746" green="0.61176470588235299" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="8mE-fM-Y9O" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="GAH-qv-OfI"/>
-                <constraint firstItem="8mE-fM-Y9O" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Qip-S2-4yj"/>
-                <constraint firstItem="fDR-zS-EJx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="U4q-Yg-Znu"/>
+                <constraint firstItem="8mE-fM-Y9O" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="16" id="GAH-qv-OfI"/>
+                <constraint firstItem="aEZ-c4-2Wi" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="K1G-98-obM"/>
+                <constraint firstItem="aEZ-c4-2Wi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="OeQ-IR-ODI"/>
+                <constraint firstItem="8mE-fM-Y9O" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="32" id="Qip-S2-4yj"/>
                 <constraint firstItem="8mE-fM-Y9O" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="XHL-OF-lQA"/>
-                <constraint firstItem="fDR-zS-EJx" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="cRJ-FZ-xty"/>
-                <constraint firstItem="fDR-zS-EJx" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="iYe-Je-PMv"/>
-                <constraint firstItem="fDR-zS-EJx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="kbX-t9-csv"/>
+                <constraint firstItem="aEZ-c4-2Wi" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="aDh-y7-lot"/>
+                <constraint firstItem="aEZ-c4-2Wi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="arQ-DR-d13"/>
                 <constraint firstItem="8mE-fM-Y9O" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="toN-Gl-c27"/>
             </constraints>
-            <point key="canvasLocation" x="173" y="351"/>
+            <point key="canvasLocation" x="172.5" y="350.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="splash@1x" width="471" height="379"/>
+    </resources>
 </document>

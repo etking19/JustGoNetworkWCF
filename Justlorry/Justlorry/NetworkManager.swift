@@ -16,7 +16,7 @@ class NetworkManager{
         
     }
     
-    let justLorryUrl = "http://booking.justlorry.com/staging/mobile/"
+    let justLorryUrl = "https://m.justlorry.com/?identifier="
     
     #if LORRY
     let appId = "6d0d8142-7b77-42d8-9a62-5ddf8afc61f2"
