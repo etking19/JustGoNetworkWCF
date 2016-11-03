@@ -24,7 +24,7 @@ class MainVC: UIViewController{
         self.webView.loadRequest(requestObj)
         
         Timer.scheduledTimer(
-            timeInterval: 5, target: self, selector: #selector(MainVC.hideSplashView), userInfo: nil, repeats: false
+            timeInterval: 8, target: self, selector: #selector(MainVC.hideSplashView), userInfo: nil, repeats: false
         )
     }
     

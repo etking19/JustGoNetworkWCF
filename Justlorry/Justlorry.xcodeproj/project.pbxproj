@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C2D02D891DCB5EDE003C1370 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
+		C2D02D8A1DCB5EDF003C1370 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
 		C2D372D01D9A213300905564 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A43F41D7BF2CD00D13EAA /* AppDelegate.swift */; };
 		C2D372D11D9A213A00905564 /* RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BC30D81D82A3DD007FEBC9 /* RootVC.swift */; };
 		C2D372D21D9A213C00905564 /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29BBCFD1D82A197003868A8 /* ViewControllerExtension.swift */; };
-		C2D372D31D9A214200905564 /* SplashScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27A74BF1D7D736D00F6E44E /* SplashScreenVC.swift */; };
 		C2D372D41D9A214400905564 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A44071D7BF89800D13EAA /* MainVC.swift */; };
 		C2D372D61D9A217F00905564 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
 		C2D372D91D9A21D000905564 /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8821D7E98AD00C47170 /* OneSignal.framework */; };
@@ -22,8 +23,6 @@
 		C2D3730C1D9A3C5300905564 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A44071D7BF89800D13EAA /* MainVC.swift */; };
 		C2D3730F1D9A3C7D00905564 /* MainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C29A44081D7BF89800D13EAA /* MainVC.xib */; };
 		C2D373101D9A3C7D00905564 /* MainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C29A44081D7BF89800D13EAA /* MainVC.xib */; };
-		C2D373111D9A3C8100905564 /* SplashScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27A74BF1D7D736D00F6E44E /* SplashScreenVC.swift */; };
-		C2D373121D9A3C8100905564 /* SplashScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27A74BF1D7D736D00F6E44E /* SplashScreenVC.swift */; };
 		C2D373131D9A3C8500905564 /* SplashScreenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */; };
 		C2D373141D9A3C8500905564 /* SplashScreenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */; };
 		C2D373151D9A3C8800905564 /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29BBCFD1D82A197003868A8 /* ViewControllerExtension.swift */; };
@@ -53,7 +52,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C27A74BF1D7D736D00F6E44E /* SplashScreenVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenVC.swift; sourceTree = "<group>"; };
 		C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashScreenVC.xib; sourceTree = "<group>"; };
 		C29A43F41D7BF2CD00D13EAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 			children = (
 				C29A44071D7BF89800D13EAA /* MainVC.swift */,
 				C29A44081D7BF89800D13EAA /* MainVC.xib */,
-				C27A74BF1D7D736D00F6E44E /* SplashScreenVC.swift */,
 				C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */,
 				C29BBCFD1D82A197003868A8 /* ViewControllerExtension.swift */,
 				C2BC30D81D82A3DD007FEBC9 /* RootVC.swift */,
@@ -317,6 +314,7 @@
 			files = (
 				C2D3730F1D9A3C7D00905564 /* MainVC.xib in Resources */,
 				C2D373131D9A3C8500905564 /* SplashScreenVC.xib in Resources */,
+				C2D02D891DCB5EDE003C1370 /* Assets.xcassets in Resources */,
 				C2D373191D9A3C9000905564 /* RootVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,6 +325,7 @@
 			files = (
 				C2D373101D9A3C7D00905564 /* MainVC.xib in Resources */,
 				C2D373141D9A3C8500905564 /* SplashScreenVC.xib in Resources */,
+				C2D02D8A1DCB5EDF003C1370 /* Assets.xcassets in Resources */,
 				C2D3731A1D9A3C9100905564 /* RootVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,7 +341,6 @@
 				C2D372D11D9A213A00905564 /* RootVC.swift in Sources */,
 				C2D372D01D9A213300905564 /* AppDelegate.swift in Sources */,
 				C2E6577F1D9A442600B8E861 /* StringConstant.swift in Sources */,
-				C2D372D31D9A214200905564 /* SplashScreenVC.swift in Sources */,
 				C2E6578C1D9A6DD400B8E861 /* LocationManager.swift in Sources */,
 				C2D372D21D9A213C00905564 /* ViewControllerExtension.swift in Sources */,
 				C2D372D41D9A214400905564 /* MainVC.swift in Sources */,
@@ -357,7 +355,6 @@
 				C2D3731B1D9A3C9400905564 /* AppDelegate.swift in Sources */,
 				C2D373151D9A3C8800905564 /* ViewControllerExtension.swift in Sources */,
 				C2E657801D9A44CE00B8E861 /* StringConstant.swift in Sources */,
-				C2D373111D9A3C8100905564 /* SplashScreenVC.swift in Sources */,
 				C2E6578D1D9A6DD400B8E861 /* LocationManager.swift in Sources */,
 				C2D373171D9A3C8B00905564 /* RootVC.swift in Sources */,
 				C2D3730B1D9A3C5200905564 /* MainVC.swift in Sources */,
@@ -372,7 +369,6 @@
 				C2D3731C1D9A3C9400905564 /* AppDelegate.swift in Sources */,
 				C2D373161D9A3C8900905564 /* ViewControllerExtension.swift in Sources */,
 				C2E657811D9A44CF00B8E861 /* StringConstant.swift in Sources */,
-				C2D373121D9A3C8100905564 /* SplashScreenVC.swift in Sources */,
 				C2E6578E1D9A6DD400B8E861 /* LocationManager.swift in Sources */,
 				C2D373181D9A3C8C00905564 /* RootVC.swift in Sources */,
 				C2D3730C1D9A3C5300905564 /* MainVC.swift in Sources */,
@@ -436,7 +432,8 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "7bd8054c-4bb9-45a1-841f-96eb8cbeb034";
+				PROVISIONING_PROFILE = "d0cade02-e525-4b92-8677-4c75c224468f";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.justsupplychain.lorry";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -478,7 +475,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "7bd8054c-4bb9-45a1-841f-96eb8cbeb034";
+				PROVISIONING_PROFILE = "d0cade02-e525-4b92-8677-4c75c224468f";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.justsupplychain.lorry";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
@@ -597,6 +595,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_ENTITLEMENTS = lorry/lorry.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 97SH3T6D8D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -608,8 +607,8 @@
 				OTHER_SWIFT_FLAGS = "-D LORRY";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.lorry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "12f52e68-3525-4580-a794-14947aa82232";
-				PROVISIONING_PROFILE_SPECIFIER = lorry;
+				PROVISIONING_PROFILE = "d0cade02-e525-4b92-8677-4c75c224468f";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.justsupplychain.lorry";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "JustLorry-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -623,6 +622,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_ENTITLEMENTS = lorry/lorry.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 97SH3T6D8D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -634,8 +634,8 @@
 				OTHER_SWIFT_FLAGS = "-D LORRY";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.lorry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "12f52e68-3525-4580-a794-14947aa82232";
-				PROVISIONING_PROFILE_SPECIFIER = lorry;
+				PROVISIONING_PROFILE = "d0cade02-e525-4b92-8677-4c75c224468f";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.justsupplychain.lorry";
 				SWIFT_OBJC_BRIDGING_HEADER = "JustLorry-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
