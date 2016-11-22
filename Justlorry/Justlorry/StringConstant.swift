@@ -19,3 +19,7 @@ let splashTitle = "Partner"
 #if DRIVER
 let splashTitle = "Driver"
 #endif
+
+let UserId = "UserId"
+let firstPushSubscribeUser = "firstPushSubscribeUser"
+

@@ -20,8 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         OneSignal.setLogLevel(.LL_VERBOSE, visualLevel: .LL_NONE)
 
-        OneSignal.registerForPushNotifications()
-        //TODO: depend on bundle id
+        OneSignal.registerForPushNotifications()        
         OneSignal.initWithLaunchOptions(launchOptions, appId:  NetworkManager.sharedInstance.appId, handleNotificationReceived: { (notification) in
                 self.notificationFromForeground = true
                 let result = notification?.payload

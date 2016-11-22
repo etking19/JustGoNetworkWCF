@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  Justlorry
+
+  Created by GlWoon on 22/11/2016.
+  Copyright © 2016 Justlorry. All rights reserved.
+*/
+
+//Notification
+"notification_title" = "Notification";
+"notification_message" = "Would you like to be alerted?";
+"notification_button_decline" = "No,thanks";
+"notification_button_setting" = "Setting";
