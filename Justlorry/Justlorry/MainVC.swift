@@ -8,11 +8,11 @@
 
 import UIKit
 
-class MainVC: UIViewController{
+class MainVC: UIViewController {
 
     @IBOutlet weak var splashView: UIView!
-    @IBOutlet weak var webView: UIWebView!
-    
+    @IBOutlet weak var webView: EasyJSWebView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,14 +29,16 @@ class MainVC: UIViewController{
             DispatchQueue.main.async {
                 PushManager.sharedInstance.subscribePush()
                 self.splashView.isHidden = false
-                let url = URL (string:  NetworkManager.sharedInstance.justLorryUrl + userId!)
+                let url = URL (string:  NetworkManager.sharedInstance.url + userId!)
                 let requestObj = URLRequest(url: url!)
                 self.webView.scalesPageToFit = true
-                // self.webView.addJavascriptInterfaces(MyJSInterface(), withName: "MyJSTest")
+                #if !LORRY
+                    self.webView.addJavascriptInterfaces(MyJSInterface(), withName: "JSCall")
+                #endif
                 self.webView.loadRequest(requestObj)
                 
                 Timer.scheduledTimer(
-                    timeInterval: 8, target: self, selector: #selector(MainVC.hideSplashView), userInfo: nil, repeats: false
+                    timeInterval: 10, target: self, selector: #selector(MainVC.hideSplashView), userInfo: nil, repeats: false
                 )
             }
            

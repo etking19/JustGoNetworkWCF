@@ -11,32 +11,35 @@ import CoreLocation
 protocol LocationManagerDelegate {
     func updateLocation(latitude:CLLocationDegrees, longitude:CLLocationDegrees)
 }
- class LocationManager:NSObject, CLLocationManagerDelegate  {
-    private var locationManager: CLLocationManager!
-    private var delegate:LocationManagerDelegate?
 
-    init(delegate:LocationManagerDelegate){
-        super.init()
-        locationManager = CLLocationManager()
-        locationManager.distanceFilter = 5
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.delegate = self
-        self.delegate = delegate
-    }
+class LocationManager:NSObject, CLLocationManagerDelegate  {
+    private var locationManager: CLLocationManager!
+    var delegate:LocationManagerDelegate?
+    static let _sharedInstance = LocationManager()
     
     func startTrackLocation() {
+        locationManager = CLLocationManager()
+        locationManager.distanceFilter = 10
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        
         let status = CLLocationManager.authorizationStatus()
         if status == .notDetermined || status == .denied || status == .authorizedWhenInUse {
-            locationManager.requestAlwaysAuthorization()
+            if #available(iOS 9.0, *) {
+                locationManager.allowsBackgroundLocationUpdates = true
+            } else {
+                locationManager.requestAlwaysAuthorization()
+            }
             locationManager.requestWhenInUseAuthorization()
         }
-
+            
         locationManager.startUpdatingLocation()
     }
     
     func stopTracking() {
         if let locationManager = self.locationManager{
             locationManager.stopUpdatingLocation()
+            self.locationManager = nil;
         }
     }
     

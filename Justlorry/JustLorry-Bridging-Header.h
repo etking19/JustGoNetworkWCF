@@ -10,6 +10,10 @@
 #define JustLorry_Bridging_Header_h
 
 #import <OneSignal/OneSignal.h>
+#import "MyJSInterface.h"
+#import "EasyJSDataFunction.h"
+#import "EasyJSWebView.h"
+#import "EasyJSWebViewProxyDelegate.h"
 
 
 #endif /* JustLorry_Bridging_Header_h */
