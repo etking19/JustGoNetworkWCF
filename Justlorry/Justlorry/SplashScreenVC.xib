@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SplashScreenVC" customModule="driver" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SplashScreenVC" customModule="lorry" customModuleProvider="target">
             <connections>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -19,12 +19,15 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash@1x" translatesAutoresizingMaskIntoConstraints="NO" id="bhO-cS-seb">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splashLorry" translatesAutoresizingMaskIntoConstraints="NO" id="bhO-cS-seb">
                     <rect key="frame" x="126.66666666666669" y="301.66666666666669" width="161" height="133"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="133" id="Swh-iQ-Q87"/>
                         <constraint firstAttribute="width" constant="161" id="ZJa-Kn-OsK"/>
                     </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="imageName" value="splashImage"/>
+                    </userDefinedRuntimeAttributes>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -35,6 +38,6 @@
         </view>
     </objects>
     <resources>
-        <image name="splash@1x" width="460" height="368"/>
+        <image name="splashLorry" width="460" height="368"/>
     </resources>
 </document>

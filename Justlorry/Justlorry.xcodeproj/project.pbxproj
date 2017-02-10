@@ -7,70 +7,75 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C20F5D7C1DEC1D0E000797F0 /* JSEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20F5D7A1DEC1D00000797F0 /* JSEventManager.swift */; };
+		C21F86511E49ECD400FA813B /* easyjs-inject.js in Resources */ = {isa = PBXBuildFile; fileRef = C21F864A1E49ECD400FA813B /* easyjs-inject.js */; };
+		C21F86521E49ECD400FA813B /* EasyJSDataFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = C21F864C1E49ECD400FA813B /* EasyJSDataFunction.m */; };
+		C21F86531E49ECD400FA813B /* EasyJSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C21F864E1E49ECD400FA813B /* EasyJSWebView.m */; };
+		C21F86541E49ECD400FA813B /* EasyJSWebViewProxyDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C21F86501E49ECD400FA813B /* EasyJSWebViewProxyDelegate.m */; };
+		C21F86571E49ED1700FA813B /* MyJSInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = C21F86561E49ED1700FA813B /* MyJSInterface.m */; };
+		C21F86581E49F49900FA813B /* JSEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20F5D7A1DEC1D00000797F0 /* JSEventManager.swift */; };
+		C21F86591E49F4F600FA813B /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6578B1D9A6DD400B8E861 /* LocationManager.swift */; };
+		C21F865E1E49FB4000FA813B /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21F865D1E49FB4000FA813B /* UIImageExtension.swift */; };
 		C22E9A831DE453AA00E983D4 /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22E9A821DE453AA00E983D4 /* PushManager.swift */; };
-		C22E9A841DE453AA00E983D4 /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22E9A821DE453AA00E983D4 /* PushManager.swift */; };
 		C22E9A851DE453AA00E983D4 /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22E9A821DE453AA00E983D4 /* PushManager.swift */; };
 		C22E9A881DE455C200E983D4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C22E9A871DE455C200E983D4 /* Localizable.strings */; };
-		C22E9A891DE455C200E983D4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C22E9A871DE455C200E983D4 /* Localizable.strings */; };
 		C22E9A8A1DE455C200E983D4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C22E9A871DE455C200E983D4 /* Localizable.strings */; };
-		C2D02D891DCB5EDE003C1370 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
-		C2D02D8A1DCB5EDF003C1370 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
+		C25EBB8F1E4D88DB0034FCF5 /* ImageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EBB8E1E4D88DB0034FCF5 /* ImageTypes.swift */; };
+		C25EBB9B1E4D917E0034FCF5 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EBB9A1E4D917E0034FCF5 /* Images.swift */; };
+		C25EBB9F1E4D91AC0034FCF5 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EBB9E1E4D91AC0034FCF5 /* Images.swift */; };
+		C25EBBA01E4D927B0034FCF5 /* EasyJSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C21F864E1E49ECD400FA813B /* EasyJSWebView.m */; };
+		C25EBBA11E4D928A0034FCF5 /* EasyJSWebViewProxyDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C21F86501E49ECD400FA813B /* EasyJSWebViewProxyDelegate.m */; };
+		C25EBBA21E4D929B0034FCF5 /* EasyJSDataFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = C21F864C1E49ECD400FA813B /* EasyJSDataFunction.m */; };
+		C25EBBA41E4D92A10034FCF5 /* easyjs-inject.js in Resources */ = {isa = PBXBuildFile; fileRef = C21F864A1E49ECD400FA813B /* easyjs-inject.js */; };
+		C25EBBA81E4D93660034FCF5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
+		C25EBBA91E4D936F0034FCF5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
+		C25EBBAA1E4D93F60034FCF5 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21F865D1E49FB4000FA813B /* UIImageExtension.swift */; };
+		C25EBBAB1E4D94090034FCF5 /* ImageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EBB8E1E4D88DB0034FCF5 /* ImageTypes.swift */; };
 		C2D372D01D9A213300905564 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A43F41D7BF2CD00D13EAA /* AppDelegate.swift */; };
 		C2D372D11D9A213A00905564 /* RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BC30D81D82A3DD007FEBC9 /* RootVC.swift */; };
 		C2D372D21D9A213C00905564 /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29BBCFD1D82A197003868A8 /* ViewControllerExtension.swift */; };
 		C2D372D41D9A214400905564 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A44071D7BF89800D13EAA /* MainVC.swift */; };
-		C2D372D61D9A217F00905564 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */; };
 		C2D372D91D9A21D000905564 /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8821D7E98AD00C47170 /* OneSignal.framework */; };
 		C2D372DA1D9A21D300905564 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8841D7E98C700C47170 /* SystemConfiguration.framework */; };
 		C2D372DB1D9A232C00905564 /* RootVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2BC30D91D82A3DD007FEBC9 /* RootVC.xib */; };
 		C2D372DC1D9A232F00905564 /* SplashScreenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */; };
 		C2D372DD1D9A234200905564 /* MainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C29A44081D7BF89800D13EAA /* MainVC.xib */; };
-		C2D3730B1D9A3C5200905564 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A44071D7BF89800D13EAA /* MainVC.swift */; };
 		C2D3730C1D9A3C5300905564 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A44071D7BF89800D13EAA /* MainVC.swift */; };
-		C2D3730F1D9A3C7D00905564 /* MainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C29A44081D7BF89800D13EAA /* MainVC.xib */; };
 		C2D373101D9A3C7D00905564 /* MainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C29A44081D7BF89800D13EAA /* MainVC.xib */; };
-		C2D373131D9A3C8500905564 /* SplashScreenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */; };
 		C2D373141D9A3C8500905564 /* SplashScreenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */; };
-		C2D373151D9A3C8800905564 /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29BBCFD1D82A197003868A8 /* ViewControllerExtension.swift */; };
 		C2D373161D9A3C8900905564 /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29BBCFD1D82A197003868A8 /* ViewControllerExtension.swift */; };
-		C2D373171D9A3C8B00905564 /* RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BC30D81D82A3DD007FEBC9 /* RootVC.swift */; };
 		C2D373181D9A3C8C00905564 /* RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BC30D81D82A3DD007FEBC9 /* RootVC.swift */; };
-		C2D373191D9A3C9000905564 /* RootVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2BC30D91D82A3DD007FEBC9 /* RootVC.xib */; };
 		C2D3731A1D9A3C9100905564 /* RootVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2BC30D91D82A3DD007FEBC9 /* RootVC.xib */; };
-		C2D3731B1D9A3C9400905564 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A43F41D7BF2CD00D13EAA /* AppDelegate.swift */; };
 		C2D3731C1D9A3C9400905564 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29A43F41D7BF2CD00D13EAA /* AppDelegate.swift */; };
-		C2D373211D9A3DFD00905564 /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8821D7E98AD00C47170 /* OneSignal.framework */; };
 		C2D373221D9A3DFD00905564 /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8821D7E98AD00C47170 /* OneSignal.framework */; };
-		C2D373231D9A3E0000905564 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8841D7E98C700C47170 /* SystemConfiguration.framework */; };
 		C2D373241D9A3E0100905564 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29DE8841D7E98C700C47170 /* SystemConfiguration.framework */; };
 		C2DC7A931DA3F883005A3D9B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC7A921DA3F883005A3D9B /* NetworkManager.swift */; };
-		C2DC7A941DA3F883005A3D9B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC7A921DA3F883005A3D9B /* NetworkManager.swift */; };
 		C2DC7A951DA3F883005A3D9B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC7A921DA3F883005A3D9B /* NetworkManager.swift */; };
-		C2DD2BE31DE59D4700BC3D3D /* easyjs-inject.js in Resources */ = {isa = PBXBuildFile; fileRef = C2DD2BDB1DE59D4700BC3D3D /* easyjs-inject.js */; };
-		C2DD2BE41DE59D4700BC3D3D /* easyjs-inject.js in Resources */ = {isa = PBXBuildFile; fileRef = C2DD2BDB1DE59D4700BC3D3D /* easyjs-inject.js */; };
-		C2DD2BE51DE59D4700BC3D3D /* EasyJSDataFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BDD1DE59D4700BC3D3D /* EasyJSDataFunction.m */; };
-		C2DD2BE61DE59D4700BC3D3D /* EasyJSDataFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BDD1DE59D4700BC3D3D /* EasyJSDataFunction.m */; };
-		C2DD2BE71DE59D4700BC3D3D /* EasyJSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BDF1DE59D4700BC3D3D /* EasyJSWebView.m */; };
-		C2DD2BE81DE59D4700BC3D3D /* EasyJSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BDF1DE59D4700BC3D3D /* EasyJSWebView.m */; };
-		C2DD2BE91DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BE11DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m */; };
-		C2DD2BEA1DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BE11DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m */; };
-		C2DD2BEE1DE59D6900BC3D3D /* MyJSInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BEC1DE59D6900BC3D3D /* MyJSInterface.m */; };
 		C2DD2BF01DE59D9000BC3D3D /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BEF1DE59D9000BC3D3D /* RestApiManager.swift */; };
-		C2DD2BF11DE59D9000BC3D3D /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DD2BEF1DE59D9000BC3D3D /* RestApiManager.swift */; };
 		C2E6577F1D9A442600B8E861 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6577E1D9A442600B8E861 /* StringConstant.swift */; };
-		C2E657801D9A44CE00B8E861 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6577E1D9A442600B8E861 /* StringConstant.swift */; };
 		C2E657811D9A44CF00B8E861 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6577E1D9A442600B8E861 /* StringConstant.swift */; };
 		C2E657841D9A483800B8E861 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2E657831D9A483800B8E861 /* CoreLocation.framework */; };
-		C2E657851D9A484000B8E861 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2E657831D9A483800B8E861 /* CoreLocation.framework */; };
 		C2E657861D9A484000B8E861 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2E657831D9A483800B8E861 /* CoreLocation.framework */; };
-		C2E6578D1D9A6DD400B8E861 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6578B1D9A6DD400B8E861 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C20F5D7A1DEC1D00000797F0 /* JSEventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSEventManager.swift; sourceTree = "<group>"; };
+		C21F864A1E49ECD400FA813B /* easyjs-inject.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "easyjs-inject.js"; sourceTree = "<group>"; };
+		C21F864B1E49ECD400FA813B /* EasyJSDataFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyJSDataFunction.h; sourceTree = "<group>"; };
+		C21F864C1E49ECD400FA813B /* EasyJSDataFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasyJSDataFunction.m; sourceTree = "<group>"; };
+		C21F864D1E49ECD400FA813B /* EasyJSWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyJSWebView.h; sourceTree = "<group>"; };
+		C21F864E1E49ECD400FA813B /* EasyJSWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasyJSWebView.m; sourceTree = "<group>"; };
+		C21F864F1E49ECD400FA813B /* EasyJSWebViewProxyDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyJSWebViewProxyDelegate.h; sourceTree = "<group>"; };
+		C21F86501E49ECD400FA813B /* EasyJSWebViewProxyDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasyJSWebViewProxyDelegate.m; sourceTree = "<group>"; };
+		C21F86551E49ED1700FA813B /* MyJSInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyJSInterface.h; sourceTree = "<group>"; };
+		C21F86561E49ED1700FA813B /* MyJSInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyJSInterface.m; sourceTree = "<group>"; };
+		C21F865D1E49FB4000FA813B /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		C22E9A821DE453AA00E983D4 /* PushManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
 		C22E9A871DE455C200E983D4 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		C25EBB8E1E4D88DB0034FCF5 /* ImageTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTypes.swift; sourceTree = "<group>"; };
+		C25EBB9A1E4D917E0034FCF5 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Images.swift; path = lorry/Images.swift; sourceTree = "<group>"; };
+		C25EBB9E1E4D91AC0034FCF5 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Images.swift; path = partner/Images.swift; sourceTree = "<group>"; };
+		C25EBBB41E4D99160034FCF5 /* LorryConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LorryConfig.xcconfig; sourceTree = "<group>"; };
+		C25EBBB51E4D99210034FCF5 /* PartnerConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PartnerConfig.xcconfig; sourceTree = "<group>"; };
 		C27A74C01D7D736D00F6E44E /* SplashScreenVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashScreenVC.xib; sourceTree = "<group>"; };
 		C29A43F41D7BF2CD00D13EAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C29A43FB1D7BF2CD00D13EAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -85,21 +90,11 @@
 		C2BC30D81D82A3DD007FEBC9 /* RootVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootVC.swift; sourceTree = "<group>"; };
 		C2BC30D91D82A3DD007FEBC9 /* RootVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootVC.xib; sourceTree = "<group>"; };
 		C2D372BE1D9A162A00905564 /* partner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = partner.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2D372E31D9A379D00905564 /* driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D372F91D9A3BAE00905564 /* lorry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lorry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2DC7A8F1DA3F004005A3D9B /* driver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = driver.entitlements; path = driver/driver.entitlements; sourceTree = "<group>"; };
 		C2DC7A901DA3F058005A3D9B /* partner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = partner.entitlements; path = partner/partner.entitlements; sourceTree = "<group>"; };
 		C2DC7A911DA3F061005A3D9B /* lorry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lorry.entitlements; path = lorry/lorry.entitlements; sourceTree = "<group>"; };
 		C2DC7A921DA3F883005A3D9B /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		C2DD2BDB1DE59D4700BC3D3D /* easyjs-inject.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "easyjs-inject.js"; sourceTree = "<group>"; };
-		C2DD2BDC1DE59D4700BC3D3D /* EasyJSDataFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyJSDataFunction.h; sourceTree = "<group>"; };
-		C2DD2BDD1DE59D4700BC3D3D /* EasyJSDataFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasyJSDataFunction.m; sourceTree = "<group>"; };
-		C2DD2BDE1DE59D4700BC3D3D /* EasyJSWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyJSWebView.h; sourceTree = "<group>"; };
-		C2DD2BDF1DE59D4700BC3D3D /* EasyJSWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasyJSWebView.m; sourceTree = "<group>"; };
-		C2DD2BE01DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyJSWebViewProxyDelegate.h; sourceTree = "<group>"; };
-		C2DD2BE11DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasyJSWebViewProxyDelegate.m; sourceTree = "<group>"; };
-		C2DD2BEB1DE59D6900BC3D3D /* MyJSInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyJSInterface.h; sourceTree = "<group>"; };
-		C2DD2BEC1DE59D6900BC3D3D /* MyJSInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyJSInterface.m; sourceTree = "<group>"; };
 		C2DD2BEF1DE59D9000BC3D3D /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		C2E6577E1D9A442600B8E861 /* StringConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstant.swift; sourceTree = "<group>"; };
 		C2E657831D9A483800B8E861 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -114,16 +109,6 @@
 				C2E657841D9A483800B8E861 /* CoreLocation.framework in Frameworks */,
 				C2D372DA1D9A21D300905564 /* SystemConfiguration.framework in Frameworks */,
 				C2D372D91D9A21D000905564 /* OneSignal.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C2D372E01D9A379D00905564 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C2E657851D9A484000B8E861 /* CoreLocation.framework in Frameworks */,
-				C2D373231D9A3E0000905564 /* SystemConfiguration.framework in Frameworks */,
-				C2D373211D9A3DFD00905564 /* OneSignal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,13 +133,59 @@
 			name = Location;
 			sourceTree = "<group>";
 		};
+		C21F86491E49ECD400FA813B /* EasyJSWebView */ = {
+			isa = PBXGroup;
+			children = (
+				C21F86551E49ED1700FA813B /* MyJSInterface.h */,
+				C21F86561E49ED1700FA813B /* MyJSInterface.m */,
+				C21F864A1E49ECD400FA813B /* easyjs-inject.js */,
+				C21F864B1E49ECD400FA813B /* EasyJSDataFunction.h */,
+				C21F864C1E49ECD400FA813B /* EasyJSDataFunction.m */,
+				C21F864D1E49ECD400FA813B /* EasyJSWebView.h */,
+				C21F864E1E49ECD400FA813B /* EasyJSWebView.m */,
+				C21F864F1E49ECD400FA813B /* EasyJSWebViewProxyDelegate.h */,
+				C21F86501E49ECD400FA813B /* EasyJSWebViewProxyDelegate.m */,
+			);
+			name = EasyJSWebView;
+			path = Justlorry/EasyJSWebView;
+			sourceTree = SOURCE_ROOT;
+		};
 		C22E9A861DE4558400E983D4 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				C25EBB951E4D8EC50034FCF5 /* partner */,
+				C25EBB921E4D8EA40034FCF5 /* lorry */,
 				C29DE8811D7E988100C47170 /* JustLorry-Bridging-Header.h */,
 				C22E9A871DE455C200E983D4 /* Localizable.strings */,
+				C21F865D1E49FB4000FA813B /* UIImageExtension.swift */,
+				C25EBB8E1E4D88DB0034FCF5 /* ImageTypes.swift */,
 			);
 			name = Resource;
+			sourceTree = "<group>";
+		};
+		C25EBB921E4D8EA40034FCF5 /* lorry */ = {
+			isa = PBXGroup;
+			children = (
+				C25EBB9A1E4D917E0034FCF5 /* Images.swift */,
+			);
+			name = lorry;
+			sourceTree = "<group>";
+		};
+		C25EBB951E4D8EC50034FCF5 /* partner */ = {
+			isa = PBXGroup;
+			children = (
+				C25EBB9E1E4D91AC0034FCF5 /* Images.swift */,
+			);
+			name = partner;
+			sourceTree = "<group>";
+		};
+		C25EBBAD1E4D982A0034FCF5 /* config */ = {
+			isa = PBXGroup;
+			children = (
+				C25EBBB41E4D99160034FCF5 /* LorryConfig.xcconfig */,
+				C25EBBB51E4D99210034FCF5 /* PartnerConfig.xcconfig */,
+			);
+			path = config;
 			sourceTree = "<group>";
 		};
 		C29A43E81D7BF2CD00D13EAA = {
@@ -173,7 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				C2D372BE1D9A162A00905564 /* partner.app */,
-				C2D372E31D9A379D00905564 /* driver.app */,
 				C2D372F91D9A3BAE00905564 /* lorry.app */,
 			);
 			name = Products;
@@ -182,8 +212,9 @@
 		C29A43F31D7BF2CD00D13EAA /* Justlorry */ = {
 			isa = PBXGroup;
 			children = (
+				C25EBBAD1E4D982A0034FCF5 /* config */,
 				C20F5D791DEC1CB7000797F0 /* Location */,
-				C2DD2BE21DE59D4700BC3D3D /* EasyJSWebView */,
+				C21F86491E49ECD400FA813B /* EasyJSWebView */,
 				C22E9A861DE4558400E983D4 /* Resource */,
 				C29A440B1D7BF9F500D13EAA /* Modal */,
 				C29A44061D7BF6F600D13EAA /* Views/View Controllers */,
@@ -220,23 +251,6 @@
 			name = Modal;
 			sourceTree = "<group>";
 		};
-		C2DD2BE21DE59D4700BC3D3D /* EasyJSWebView */ = {
-			isa = PBXGroup;
-			children = (
-				C2DD2BEB1DE59D6900BC3D3D /* MyJSInterface.h */,
-				C2DD2BEC1DE59D6900BC3D3D /* MyJSInterface.m */,
-				C2DD2BDB1DE59D4700BC3D3D /* easyjs-inject.js */,
-				C2DD2BDC1DE59D4700BC3D3D /* EasyJSDataFunction.h */,
-				C2DD2BDD1DE59D4700BC3D3D /* EasyJSDataFunction.m */,
-				C2DD2BDE1DE59D4700BC3D3D /* EasyJSWebView.h */,
-				C2DD2BDF1DE59D4700BC3D3D /* EasyJSWebView.m */,
-				C2DD2BE01DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.h */,
-				C2DD2BE11DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m */,
-			);
-			name = EasyJSWebView;
-			path = ../../../JustGoNetworkWCF/Justlorry/Justlorry/EasyJSWebView;
-			sourceTree = "<group>";
-		};
 		C2E657821D9A483700B8E861 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,23 +279,6 @@
 			name = partner;
 			productName = partner;
 			productReference = C2D372BE1D9A162A00905564 /* partner.app */;
-			productType = "com.apple.product-type.application";
-		};
-		C2D372E21D9A379D00905564 /* driver */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C2D372F41D9A379D00905564 /* Build configuration list for PBXNativeTarget "driver" */;
-			buildPhases = (
-				C2D372DF1D9A379D00905564 /* Sources */,
-				C2D372E01D9A379D00905564 /* Frameworks */,
-				C2D372E11D9A379D00905564 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = driver;
-			productName = driver;
-			productReference = C2D372E31D9A379D00905564 /* driver.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C2D372F81D9A3BAE00905564 /* lorry */ = {
@@ -321,16 +318,6 @@
 							};
 						};
 					};
-					C2D372E21D9A379D00905564 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 97SH3T6D8D;
-						ProvisioningStyle = Manual;
-						SystemCapabilities = {
-							com.apple.Push = {
-								enabled = 1;
-							};
-						};
-					};
 					C2D372F81D9A3BAE00905564 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 97SH3T6D8D;
@@ -357,7 +344,6 @@
 			projectRoot = "";
 			targets = (
 				C2D372BD1D9A162A00905564 /* partner */,
-				C2D372E21D9A379D00905564 /* driver */,
 				C2D372F81D9A3BAE00905564 /* lorry */,
 			);
 		};
@@ -368,25 +354,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2DD2BE31DE59D4700BC3D3D /* easyjs-inject.js in Resources */,
 				C22E9A881DE455C200E983D4 /* Localizable.strings in Resources */,
 				C2D372DD1D9A234200905564 /* MainVC.xib in Resources */,
-				C2D372D61D9A217F00905564 /* Assets.xcassets in Resources */,
+				C21F86511E49ECD400FA813B /* easyjs-inject.js in Resources */,
 				C2D372DB1D9A232C00905564 /* RootVC.xib in Resources */,
+				C25EBBA81E4D93660034FCF5 /* Assets.xcassets in Resources */,
 				C2D372DC1D9A232F00905564 /* SplashScreenVC.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C2D372E11D9A379D00905564 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C2DD2BE41DE59D4700BC3D3D /* easyjs-inject.js in Resources */,
-				C22E9A891DE455C200E983D4 /* Localizable.strings in Resources */,
-				C2D3730F1D9A3C7D00905564 /* MainVC.xib in Resources */,
-				C2D373131D9A3C8500905564 /* SplashScreenVC.xib in Resources */,
-				C2D02D891DCB5EDE003C1370 /* Assets.xcassets in Resources */,
-				C2D373191D9A3C9000905564 /* RootVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,8 +370,9 @@
 				C22E9A8A1DE455C200E983D4 /* Localizable.strings in Resources */,
 				C2D373101D9A3C7D00905564 /* MainVC.xib in Resources */,
 				C2D373141D9A3C8500905564 /* SplashScreenVC.xib in Resources */,
-				C2D02D8A1DCB5EDF003C1370 /* Assets.xcassets in Resources */,
 				C2D3731A1D9A3C9100905564 /* RootVC.xib in Resources */,
+				C25EBBA91E4D936F0034FCF5 /* Assets.xcassets in Resources */,
+				C25EBBA41E4D92A10034FCF5 /* easyjs-inject.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,38 +383,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2DD2BE71DE59D4700BC3D3D /* EasyJSWebView.m in Sources */,
 				C2DC7A931DA3F883005A3D9B /* NetworkManager.swift in Sources */,
+				C21F86521E49ECD400FA813B /* EasyJSDataFunction.m in Sources */,
 				C2D372D11D9A213A00905564 /* RootVC.swift in Sources */,
-				C2DD2BE91DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m in Sources */,
+				C25EBB9F1E4D91AC0034FCF5 /* Images.swift in Sources */,
+				C25EBB8F1E4D88DB0034FCF5 /* ImageTypes.swift in Sources */,
 				C2DD2BF01DE59D9000BC3D3D /* RestApiManager.swift in Sources */,
 				C2D372D01D9A213300905564 /* AppDelegate.swift in Sources */,
+				C21F86531E49ECD400FA813B /* EasyJSWebView.m in Sources */,
 				C2E6577F1D9A442600B8E861 /* StringConstant.swift in Sources */,
-				C2DD2BE51DE59D4700BC3D3D /* EasyJSDataFunction.m in Sources */,
 				C2D372D21D9A213C00905564 /* ViewControllerExtension.swift in Sources */,
+				C21F865E1E49FB4000FA813B /* UIImageExtension.swift in Sources */,
 				C2D372D41D9A214400905564 /* MainVC.swift in Sources */,
+				C21F86541E49ECD400FA813B /* EasyJSWebViewProxyDelegate.m in Sources */,
+				C21F86591E49F4F600FA813B /* LocationManager.swift in Sources */,
+				C21F86571E49ED1700FA813B /* MyJSInterface.m in Sources */,
+				C21F86581E49F49900FA813B /* JSEventManager.swift in Sources */,
 				C22E9A831DE453AA00E983D4 /* PushManager.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C2D372DF1D9A379D00905564 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C2DD2BE81DE59D4700BC3D3D /* EasyJSWebView.m in Sources */,
-				C20F5D7C1DEC1D0E000797F0 /* JSEventManager.swift in Sources */,
-				C2DC7A941DA3F883005A3D9B /* NetworkManager.swift in Sources */,
-				C2D3731B1D9A3C9400905564 /* AppDelegate.swift in Sources */,
-				C2DD2BEA1DE59D4700BC3D3D /* EasyJSWebViewProxyDelegate.m in Sources */,
-				C2DD2BF11DE59D9000BC3D3D /* RestApiManager.swift in Sources */,
-				C2D373151D9A3C8800905564 /* ViewControllerExtension.swift in Sources */,
-				C2E657801D9A44CE00B8E861 /* StringConstant.swift in Sources */,
-				C2E6578D1D9A6DD400B8E861 /* LocationManager.swift in Sources */,
-				C2DD2BE61DE59D4700BC3D3D /* EasyJSDataFunction.m in Sources */,
-				C2D373171D9A3C8B00905564 /* RootVC.swift in Sources */,
-				C2D3730B1D9A3C5200905564 /* MainVC.swift in Sources */,
-				C2DD2BEE1DE59D6900BC3D3D /* MyJSInterface.m in Sources */,
-				C22E9A841DE453AA00E983D4 /* PushManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,13 +407,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C25EBBA21E4D929B0034FCF5 /* EasyJSDataFunction.m in Sources */,
+				C25EBBA11E4D928A0034FCF5 /* EasyJSWebViewProxyDelegate.m in Sources */,
 				C2DC7A951DA3F883005A3D9B /* NetworkManager.swift in Sources */,
 				C2D3731C1D9A3C9400905564 /* AppDelegate.swift in Sources */,
 				C2D373161D9A3C8900905564 /* ViewControllerExtension.swift in Sources */,
 				C2E657811D9A44CF00B8E861 /* StringConstant.swift in Sources */,
 				C2D373181D9A3C8C00905564 /* RootVC.swift in Sources */,
+				C25EBBA01E4D927B0034FCF5 /* EasyJSWebView.m in Sources */,
+				C25EBB9B1E4D917E0034FCF5 /* Images.swift in Sources */,
 				C2D3730C1D9A3C5300905564 /* MainVC.swift in Sources */,
+				C25EBBAB1E4D94090034FCF5 /* ImageTypes.swift in Sources */,
 				C22E9A851DE453AA00E983D4 /* PushManager.swift in Sources */,
+				C25EBBAA1E4D93F60034FCF5 /* UIImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,12 +533,14 @@
 		};
 		C2D372CD1D9A162A00905564 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C25EBBB51E4D99210034FCF5 /* PartnerConfig.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconPartner;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_ENTITLEMENTS = partner/partner.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 97SH3T6D8D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -585,8 +552,8 @@
 				OTHER_SWIFT_FLAGS = "-D PARTNER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.partner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "785e5b61-08e9-4f53-a7e1-bb598a10eba2";
-				PROVISIONING_PROFILE_SPECIFIER = partner;
+				PROVISIONING_PROFILE = "0f06c668-1c7b-4b4f-b532-974758b4cf97";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.justsupplychain.partner";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "JustLorry-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -595,12 +562,14 @@
 		};
 		C2D372CE1D9A162A00905564 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C25EBBB51E4D99210034FCF5 /* PartnerConfig.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconPartner;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_ENTITLEMENTS = partner/partner.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 97SH3T6D8D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -612,67 +581,17 @@
 				OTHER_SWIFT_FLAGS = "-D PARTNER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.partner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "785e5b61-08e9-4f53-a7e1-bb598a10eba2";
-				PROVISIONING_PROFILE_SPECIFIER = partner;
+				PROVISIONING_PROFILE = "0f06c668-1c7b-4b4f-b532-974758b4cf97";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.justsupplychain.partner";
 				SWIFT_OBJC_BRIDGING_HEADER = "JustLorry-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
-		C2D372F21D9A379D00905564 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_ENTITLEMENTS = driver/driver.entitlements;
-				DEVELOPMENT_TEAM = 97SH3T6D8D;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				INFOPLIST_FILE = Justlorry/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-D DRIVER";
-				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.driver;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "12f52e68-3525-4580-a794-14947aa82232";
-				PROVISIONING_PROFILE_SPECIFIER = driver;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "JustLorry-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		C2D372F31D9A379D00905564 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_ENTITLEMENTS = driver/driver.entitlements;
-				DEVELOPMENT_TEAM = 97SH3T6D8D;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				INFOPLIST_FILE = Justlorry/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-D DRIVER";
-				PRODUCT_BUNDLE_IDENTIFIER = com.justsupplychain.driver;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "12f52e68-3525-4580-a794-14947aa82232";
-				PROVISIONING_PROFILE_SPECIFIER = driver;
-				SWIFT_OBJC_BRIDGING_HEADER = "JustLorry-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
 		C2D373091D9A3BAE00905564 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C25EBBB41E4D99160034FCF5 /* LorryConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -700,6 +619,7 @@
 		};
 		C2D3730A1D9A3BAE00905564 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C25EBBB41E4D99160034FCF5 /* LorryConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -741,15 +661,6 @@
 			buildConfigurations = (
 				C2D372CD1D9A162A00905564 /* Debug */,
 				C2D372CE1D9A162A00905564 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C2D372F41D9A379D00905564 /* Build configuration list for PBXNativeTarget "driver" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C2D372F21D9A379D00905564 /* Debug */,
-				C2D372F31D9A379D00905564 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

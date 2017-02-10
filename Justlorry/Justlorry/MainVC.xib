@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainVC" customModule="driver" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainVC" customModule="lorry" customModuleProvider="target">
             <connections>
                 <outlet property="splashView" destination="aEZ-c4-2Wi" id="BoI-cN-rvL"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -28,12 +28,15 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aEZ-c4-2Wi">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash@1x" translatesAutoresizingMaskIntoConstraints="NO" id="7F1-gl-2Ph">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splashLorry" translatesAutoresizingMaskIntoConstraints="NO" id="7F1-gl-2Ph">
                             <rect key="frame" x="79.5" y="217.5" width="161" height="133"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="161" id="4dE-DX-VYT"/>
                                 <constraint firstAttribute="height" constant="133" id="n6j-z5-gir"/>
                             </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="imageName" value="splashImage"/>
+                            </userDefinedRuntimeAttributes>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -43,7 +46,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.30980392156862746" green="0.61176470588235299" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.078431372549019607" green="0.59999999999999998" blue="0.28235294117647058" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="8mE-fM-Y9O" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="16" id="GAH-qv-OfI"/>
                 <constraint firstItem="aEZ-c4-2Wi" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="K1G-98-obM"/>
@@ -58,6 +61,6 @@
         </view>
     </objects>
     <resources>
-        <image name="splash@1x" width="471" height="379"/>
+        <image name="splashLorry" width="471" height="379"/>
     </resources>
 </document>
